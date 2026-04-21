@@ -3,91 +3,79 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Esquiú Shop — Lubricentro & Ferretería</title>
+<title>Esquiú Shop Pro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#0d0d0d;
-  --surface:#161616;
-  --surface2:#1e1e1e;
-  --border:#2a2a2a;
-  --text:#f0ece4;
-  --muted:#6b6560;
-  --amber:#e8a020;
-  --amber-dim:#7a5010;
-  --blue:#2a6fd4;
-  --blue-dim:#153568;
-  --green:#27a05a;
-  --red:#c0392b;
-  --font-head:'Barlow Condensed',sans-serif;
-  --font-body:'Barlow',sans-serif;
-  --r:6px;
+  --bg:#0d0d0d;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+  --text:#f0ece4;--muted:#6b6560;--amber:#e8a020;--amber-dim:#7a5010;
+  --blue:#2a6fd4;--blue-dim:#153568;--green:#27a05a;--red:#c0392b;
+  --font-head:'Barlow Condensed',sans-serif;--font-body:'Barlow',sans-serif;--r:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;min-height:100vh;overflow-x:hidden}
-
-/* ── NAV ── */
-nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
-.nav-logo{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:0.04em;color:var(--text);cursor:pointer;user-select:none}
+nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
+.nav-logo{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:.04em;color:var(--text);cursor:pointer;user-select:none}
 .nav-logo span{color:var(--amber)}
 .nav-right{display:flex;align-items:center;gap:12px}
 .nav-link{font-size:13px;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:4px;transition:color .15s}
 .nav-link:hover{color:var(--text)}
-.cart-btn{position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:6px 12px;cursor:pointer;font-size:13px;color:var(--text);display:flex;align-items:center;gap:6px;transition:border-color .15s}
+.cart-btn{position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:6px 14px;cursor:pointer;font-size:13px;color:var(--text);display:flex;align-items:center;gap:6px;transition:border-color .15s}
 .cart-btn:hover{border-color:var(--amber)}
 .cart-count{background:var(--amber);color:#000;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;position:absolute;top:-7px;right:-7px}
-
-/* ── PAGES ── */
 .page{display:none;animation:fadeIn .2s ease}
 .page.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── HOME SPLIT ── */
-.home-split{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 56px);overflow:hidden}
+/* ── HOME ── */
+.home-split{display:grid;grid-template-columns:1fr auto 1fr;height:calc(100vh - 56px);overflow:hidden}
 @media(max-width:640px){.home-split{grid-template-columns:1fr;height:auto}}
-.home-panel{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:40px 32px;overflow:hidden;min-height:280px;transition:filter .2s}
+.home-panel{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:40px 32px;overflow:hidden;min-height:280px}
 .home-panel:hover .panel-overlay{opacity:1}
 .panel-overlay{position:absolute;inset:0;transition:opacity .3s;opacity:0;pointer-events:none}
 .panel-lubri{background:linear-gradient(160deg,#0a1628 0%,#0d1f3c 100%)}
-.panel-lubri .panel-overlay{background:radial-gradient(circle at 60% 40%,rgba(42,111,212,0.25),transparent 70%)}
+.panel-lubri .panel-overlay{background:radial-gradient(circle at 60% 40%,rgba(42,111,212,.25),transparent 70%)}
 .panel-ferr{background:linear-gradient(160deg,#1a0d00 0%,#2d1500 100%)}
-.panel-ferr .panel-overlay{background:radial-gradient(circle at 40% 60%,rgba(232,160,32,0.2),transparent 70%)}
-.panel-divider{width:1px;background:var(--border);position:relative;z-index:2}
+.panel-ferr .panel-overlay{background:radial-gradient(circle at 40% 60%,rgba(232,160,32,.2),transparent 70%)}
+.panel-divider{width:1px;background:var(--border)}
 .panel-icon{font-size:52px;margin-bottom:16px;position:relative;z-index:1}
-.panel-title{font-family:var(--font-head);font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:0.03em;text-transform:uppercase;position:relative;z-index:1;line-height:1}
+.panel-title{font-family:var(--font-head);font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:.03em;text-transform:uppercase;position:relative;z-index:1;line-height:1}
 .panel-sub{font-size:13px;color:var(--muted);margin-top:8px;position:relative;z-index:1;text-align:center}
-.panel-cta{margin-top:20px;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;position:relative;z-index:1;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.panel-cta{margin-top:20px;padding:8px 24px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;position:relative;z-index:1;border:none;cursor:pointer;transition:transform .15s}
 .panel-cta:hover{transform:translateY(-2px)}
 .cta-blue{background:var(--blue);color:#fff}
 .cta-amber{background:var(--amber);color:#000}
 .home-strip{background:var(--surface);border-top:1px solid var(--border);padding:10px 24px;display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
-.strip-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.strip-item{font-size:12px;color:var(--muted)}
 
 /* ── CATALOG ── */
 .catalog-hero{padding:28px 24px 0;border-bottom:1px solid var(--border);margin-bottom:24px}
 .catalog-hero-inner{max-width:1100px;margin:0 auto}
 .breadcrumb{font-size:12px;color:var(--muted);margin-bottom:10px;cursor:pointer}
 .breadcrumb:hover{color:var(--text)}
-.catalog-title{font-family:var(--font-head);font-size:36px;font-weight:800;letter-spacing:0.03em;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.catalog-title{font-family:var(--font-head);font-size:36px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;display:flex;align-items:center;gap:12px}
 .catalog-badges{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 20px}
 .badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:500}
 .badge-blue{background:var(--blue-dim);color:#7eb4f5}
 .badge-amber{background:var(--amber-dim);color:#f5c060}
-.catalog-controls{max-width:1100px;margin:0 auto 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.search-input{flex:1;min-width:200px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .15s}
+.catalog-controls{max-width:1100px;padding:0 24px;margin:0 auto 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .15s}
 .search-input:focus{border-color:var(--amber)}
 .search-input::placeholder{color:var(--muted)}
+.filter-select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;color:var(--text);font-size:12px;outline:none;cursor:pointer;font-family:var(--font-body)}
+.filter-select:focus{border-color:var(--amber)}
 .filter-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:7px 14px;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
 .filter-btn:hover,.filter-btn.active{background:var(--amber);border-color:var(--amber);color:#000}
 .filter-btn-blue:hover,.filter-btn-blue.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.catalog-grid{max-width:1100px;margin:0 auto 40px;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.catalog-grid{max-width:1100px;margin:0 auto 40px;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
 .prod-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
 .prod-card:hover{border-color:var(--amber);transform:translateY(-3px)}
-.prod-img{width:100%;height:140px;object-fit:cover;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:40px}
+.prod-img{width:100%;height:145px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:42px;overflow:hidden}
+.prod-img img{width:100%;height:100%;object-fit:cover}
 .prod-body{padding:12px;flex:1;display:flex;flex-direction:column}
-.prod-cat{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.prod-cat{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
 .prod-name{font-family:var(--font-head);font-size:16px;font-weight:700;line-height:1.2;margin-bottom:4px;color:var(--text)}
 .prod-desc{font-size:12px;color:var(--muted);line-height:1.4;flex:1}
 .prod-badges{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
@@ -96,21 +84,24 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-fi
 .add-btn{background:var(--amber);color:#000;border:none;border-radius:var(--r);padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap}
 .add-btn:hover{background:#f0b030}
 .add-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
-.no-stock{font-size:11px;color:var(--red)}
+.loading-grid{grid-column:1/-1;padding:60px 20px;text-align:center;color:var(--muted)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── CART DRAWER ── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
 .overlay.open{opacity:1;pointer-events:all}
-.cart-drawer{position:fixed;right:0;top:0;height:100%;width:min(420px,100vw);background:var(--surface);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.cart-drawer{position:fixed;right:0;top:0;height:100%;width:min(440px,100vw);background:var(--surface);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
 .cart-drawer.open{transform:translateX(0)}
 .drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.drawer-title{font-family:var(--font-head);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em}
+.drawer-title{font-family:var(--font-head);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .close-btn{background:var(--surface2);border:1px solid var(--border);border-radius:4px;width:30px;height:30px;cursor:pointer;color:var(--muted);font-size:18px;display:flex;align-items:center;justify-content:center;transition:color .15s}
 .close-btn:hover{color:var(--text)}
 .cart-items{flex:1;overflow-y:auto;padding:16px}
 .cart-empty{text-align:center;padding:40px 20px;color:var(--muted)}
 .cart-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
-.cart-item-img{width:52px;height:52px;border-radius:4px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;border:1px solid var(--border)}
+.cart-item-img{width:52px;height:52px;border-radius:4px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;border:1px solid var(--border);overflow:hidden}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
 .cart-item-info{flex:1;min-width:0}
 .cart-item-name{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:2px}
 .cart-item-cat{font-size:11px;color:var(--muted)}
@@ -120,34 +111,54 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-fi
 .cart-item-price{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--amber);white-space:nowrap}
 .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px;margin-top:2px;transition:color .15s}
 .del-btn:hover{color:var(--red)}
-.cart-footer{padding:16px 20px;border-top:1px solid var(--border)}
-.cart-form{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.cart-footer{padding:16px 20px;border-top:1px solid var(--border);overflow-y:auto;max-height:55vh}
 .form-input{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .15s;width:100%}
 .form-input:focus{border-color:var(--amber)}
 .form-input::placeholder{color:var(--muted)}
-.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
-.cart-total-label{font-size:14px;color:var(--muted)}
-.cart-total-val{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--amber)}
-.cart-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.cart-total-label{font-size:13px;color:var(--muted)}
+.cart-total-val{font-family:var(--font-head);font-size:26px;font-weight:800;color:var(--amber)}
+.cart-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .wa-btn{background:#1a7a37;color:#fff;border:none;border-radius:var(--r);padding:11px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
 .wa-btn:hover{background:#208040}
-.wa-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
 .mp-btn{background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:11px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
 .mp-btn:hover{background:#1a5ab5}
-.clear-btn{width:100%;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-top:8px;padding:4px;transition:color .15s}
+.share-btn{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);margin-top:6px;transition:border-color .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.share-btn:hover{border-color:var(--amber);color:var(--amber)}
+.clear-btn{width:100%;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-top:6px;padding:4px;transition:color .15s}
 .clear-btn:hover{color:var(--red)}
+.shipping-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.shipping-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.shipping-row{display:flex;gap:8px}
+.shipping-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:7px 10px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s;font-family:var(--font-body)}
+.shipping-input:focus{border-color:var(--amber)}
+.shipping-input::placeholder{color:var(--muted)}
+.shipping-calc-btn{background:var(--amber);color:#000;border:none;border-radius:var(--r);padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.shipping-result{margin-top:8px;font-size:12px;padding:6px 10px;border-radius:4px;display:none}
+.shipping-ok{background:rgba(39,160,90,.15);border:1px solid rgba(39,160,90,.3);color:#5dd68a}
+.shipping-consult{background:rgba(232,160,32,.1);border:1px solid rgba(232,160,32,.3);color:var(--amber)}
+.cross-banner{background:linear-gradient(135deg,var(--surface2),#1a1a2e);border:1px solid var(--blue-dim);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.cross-title{font-size:11px;color:#7eb4f5;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.cross-item{display:flex;align-items:center;gap:10px}
+.cross-img{width:40px;height:40px;border-radius:4px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(--border);overflow:hidden}
+.cross-img img{width:100%;height:100%;object-fit:cover}
+.cross-info{flex:1;min-width:0}
+.cross-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cross-price{font-size:12px;color:var(--amber);font-weight:600}
+.cross-add{background:var(--blue);color:#fff;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.cross-add:hover{background:#1a5ab5}
 
 /* ── ADMIN LOGIN ── */
 .admin-login-wrap{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 30%,#0d1f3c,var(--bg) 70%)}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:36px 32px;width:100%;max-width:380px}
-.login-title{font-family:var(--font-head);font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+.login-title{font-family:var(--font-head);font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
 .login-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
 .form-group{margin-bottom:16px}
-.form-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px}
+.form-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px}
 .login-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .15s}
 .login-input:focus{border-color:var(--blue)}
 .login-input::placeholder{color:#3a3a3a}
-.login-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:12px;font-family:var(--font-head);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;margin-top:8px;transition:background .15s}
+.login-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:12px;font-family:var(--font-head);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;margin-top:8px;transition:background .15s}
 .login-btn:hover{background:#1a5ab5}
 .login-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
 .login-error{background:#2d0f0f;border:1px solid #5a1a1a;border-radius:var(--r);padding:10px 14px;color:#f07070;font-size:13px;margin-bottom:16px}
@@ -157,28 +168,28 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-fi
 /* ── ADMIN DASHBOARD ── */
 .admin-wrap{max-width:1100px;margin:0 auto;padding:24px}
 .admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.admin-heading{font-family:var(--font-head);font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em}
+.admin-heading{font-family:var(--font-head);font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
 .admin-heading span{color:var(--amber)}
 .logout-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:7px 14px;color:var(--muted);font-size:13px;cursor:pointer;transition:color .15s,border-color .15s}
 .logout-btn:hover{color:var(--red);border-color:var(--red)}
 .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px}
-.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .stat-val{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--amber)}
 .admin-controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.admin-search{flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--text);font-size:13px;outline:none}
+.admin-search{flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font-body)}
 .admin-search:focus{border-color:var(--amber)}
 .admin-search::placeholder{color:var(--muted)}
-.admin-select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--text);font-size:13px;outline:none;cursor:pointer}
+.admin-sel{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--text);font-size:13px;outline:none;cursor:pointer;font-family:var(--font-body)}
 .new-prod-btn{background:var(--amber);color:#000;border:none;border-radius:var(--r);padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
 .new-prod-btn:hover{background:#f0b030}
 .admin-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .admin-table{width:100%;border-collapse:collapse;font-size:13px}
 .admin-table thead{background:var(--surface2)}
-.admin-table th{text-align:left;padding:10px 14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:500;border-bottom:1px solid var(--border)}
+.admin-table th{text-align:left;padding:10px 14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:500;border-bottom:1px solid var(--border)}
 .admin-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
 .admin-table tr:last-child td{border-bottom:none}
-.admin-table tr:hover td{background:rgba(255,255,255,0.02)}
+.admin-table tr:hover td{background:rgba(255,255,255,.02)}
 .td-img{width:44px;height:44px;border-radius:4px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid var(--border);flex-shrink:0;overflow:hidden}
 .td-img img{width:100%;height:100%;object-fit:cover}
 .store-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
@@ -189,23 +200,23 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-fi
 .edit-btn:hover{border-color:var(--blue);color:#7eb4f5}
 .del-row-btn{background:transparent;border:1px solid transparent;border-radius:4px;padding:4px 8px;color:var(--muted);font-size:11px;cursor:pointer;transition:all .15s}
 .del-row-btn:hover{border-color:var(--red);color:var(--red)}
-.admin-footer{margin-top:10px;font-size:12px;color:var(--muted);padding:0 4px}
+.admin-footer-txt{margin-top:10px;font-size:12px;color:var(--muted)}
 
 /* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
-.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface)}
-.modal-title{font-family:var(--font-head);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em}
+.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1}
+.modal-title{font-family:var(--font-head);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .modal-body{padding:20px 24px}
 .modal-field{margin-bottom:14px}
-.modal-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px}
+.modal-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px}
 .modal-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .15s}
 .modal-input:focus{border-color:var(--amber)}
 .modal-input::placeholder{color:#3a3a3a}
 textarea.modal-input{resize:vertical;min-height:72px}
 .modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.modal-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;color:var(--text);font-size:13px;outline:none}
+.modal-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;color:var(--text);font-size:13px;outline:none;font-family:var(--font-body)}
 .badge-toggle-group{display:flex;flex-wrap:wrap;gap:8px}
 .badge-toggle{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none}
 .badge-toggle.on{background:var(--amber-dim);border-color:var(--amber);color:var(--amber)}
@@ -218,37 +229,35 @@ textarea.modal-input{resize:vertical;min-height:72px}
 .save-btn:hover{background:#f0b030}
 .save-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
 .modal-error{background:#2d0f0f;border:1px solid #5a1a1a;border-radius:var(--r);padding:8px 12px;color:#f07070;font-size:12px;margin-bottom:12px}
-
-/* ── CONFIRM MODAL ── */
 .confirm-modal{max-width:360px}
-.confirm-text{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:4px}
-.confirm-name{font-weight:600;color:var(--text)}
+.confirm-text{font-size:14px;color:var(--muted);line-height:1.5}
+.confirm-name{font-weight:600;color:var(--text);margin:10px 0;font-size:15px}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-size:13px;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.toast{position:fixed;bottom:24px;right:24px;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-size:13px;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{border-color:var(--green)}
 .toast.error{border-color:var(--red)}
-
-/* ── UTIL ── */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
 input[type=number]{-moz-appearance:textfield}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 select option{background:var(--surface2)}
+.db-status{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:500}
+.db-ok{background:rgba(39,160,90,.15);color:#5dd68a;border:1px solid rgba(39,160,90,.3)}
+.db-err{background:rgba(192,57,43,.15);color:#e07070;border:1px solid rgba(192,57,43,.3)}
+.db-loading{background:rgba(232,160,32,.1);color:var(--amber);border:1px solid rgba(232,160,32,.3)}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav>
-  <div class="nav-logo" onclick="goHome()">Esquiú <span>Shop</span></div>
+  <div class="nav-logo" onclick="goHome()">Esquiú <span>Shop</span> <span id="db-badge" class="db-status db-loading" style="font-size:10px;vertical-align:middle">● conectando</span></div>
   <div class="nav-right">
     <span class="nav-link" onclick="showPage('lubricentro')">Lubricentro</span>
     <span class="nav-link" onclick="showPage('ferreteria')">Ferretería</span>
-    <span class="nav-link" onclick="showPage('admin-login')" id="nav-admin-link" style="font-size:11px">Admin ⚙</span>
+    <span class="nav-link" onclick="showPage('admin-login')" style="font-size:11px">Admin ⚙</span>
     <div class="cart-btn" onclick="toggleCart()">
       🛒 Carrito
       <div class="cart-count" id="cart-count" style="display:none">0</div>
@@ -256,7 +265,7 @@ select option{background:var(--surface2)}
   </div>
 </nav>
 
-<!-- ═══════════════════════ HOME ═══════════════════════ -->
+<!-- HOME -->
 <div class="page active" id="page-home">
   <div class="home-split">
     <div class="home-panel panel-lubri" onclick="showPage('lubricentro')">
@@ -283,7 +292,7 @@ select option{background:var(--surface2)}
   </div>
 </div>
 
-<!-- ═══════════════════════ LUBRICENTRO ═══════════════════════ -->
+<!-- LUBRICENTRO -->
 <div class="page" id="page-lubricentro">
   <div class="catalog-hero">
     <div class="catalog-hero-inner">
@@ -296,17 +305,20 @@ select option{background:var(--surface2)}
       </div>
     </div>
   </div>
-  <div class="catalog-controls" style="padding:0 24px;max-width:1100px;margin:0 auto 16px">
+  <div class="catalog-controls">
     <input class="search-input" placeholder="Buscar aceite, filtro, aditivo…" id="lubri-search" oninput="renderCatalog('lubricentro')"/>
+    <select class="filter-select" id="lubri-marca" onchange="renderCatalog('lubricentro')">
+      <option value="">Todas las marcas</option>
+    </select>
     <button class="filter-btn filter-btn-blue active" onclick="setFilter('lubricentro','Todos',this)">Todos</button>
-    <button class="filter-btn filter-btn-blue" onclick="setFilter('lubricentro','Aceites Motor',this)">Aceites Motor</button>
+    <button class="filter-btn filter-btn-blue" onclick="setFilter('lubricentro','Aceites Motor',this)">Aceites</button>
     <button class="filter-btn filter-btn-blue" onclick="setFilter('lubricentro','Filtros',this)">Filtros</button>
     <button class="filter-btn filter-btn-blue" onclick="setFilter('lubricentro','Aditivos',this)">Aditivos</button>
   </div>
-  <div class="catalog-grid" id="grid-lubricentro"></div>
+  <div class="catalog-grid" id="grid-lubricentro"><div class="loading-grid"><div class="spinner"></div>Cargando productos…</div></div>
 </div>
 
-<!-- ═══════════════════════ FERRETERÍA ═══════════════════════ -->
+<!-- FERRETERÍA -->
 <div class="page" id="page-ferreteria">
   <div class="catalog-hero">
     <div class="catalog-hero-inner">
@@ -319,18 +331,21 @@ select option{background:var(--surface2)}
       </div>
     </div>
   </div>
-  <div class="catalog-controls" style="padding:0 24px;max-width:1100px;margin:0 auto 16px">
+  <div class="catalog-controls">
     <input class="search-input" placeholder="Buscar herramienta, motosierra, carpa…" id="ferr-search" oninput="renderCatalog('ferreteria')"/>
+    <select class="filter-select" id="ferr-marca" onchange="renderCatalog('ferreteria')">
+      <option value="">Todas las marcas</option>
+    </select>
     <button class="filter-btn active" onclick="setFilter('ferreteria','Todos',this)">Todos</button>
     <button class="filter-btn" onclick="setFilter('ferreteria','Bosques y Jardines',this)">Jardín</button>
     <button class="filter-btn" onclick="setFilter('ferreteria','Herramientas Eléctricas',this)">Eléctricas</button>
     <button class="filter-btn" onclick="setFilter('ferreteria','Herramientas Manuales',this)">Manuales</button>
     <button class="filter-btn" onclick="setFilter('ferreteria','Hogar y Camping',this)">Camping</button>
   </div>
-  <div class="catalog-grid" id="grid-ferreteria"></div>
+  <div class="catalog-grid" id="grid-ferreteria"><div class="loading-grid"><div class="spinner"></div>Cargando productos…</div></div>
 </div>
 
-<!-- ═══════════════════════ ADMIN LOGIN ═══════════════════════ -->
+<!-- ADMIN LOGIN -->
 <div class="page" id="page-admin-login">
   <div class="admin-login-wrap">
     <div class="login-card">
@@ -339,43 +354,24 @@ select option{background:var(--surface2)}
       <div id="login-error" class="login-error" style="display:none"></div>
       <div class="form-group">
         <label class="form-label">Usuario</label>
-        <!-- readOnly inicial: el browser NO autocompleta campos readonly -->
-        <input
-          id="login-email"
-          type="email"
-          class="login-input"
-          placeholder="admin@esquiu.com"
-          name="esquiu-user-nofill"
-          autocomplete="off"
-          readonly
-          onfocus="this.removeAttribute('readonly')"
-          onclick="this.removeAttribute('readonly')"
-        />
+        <input id="login-email" type="email" class="login-input" placeholder="admin@esquiu.com"
+          name="esquiu-nofill-user" autocomplete="off" readonly
+          onfocus="this.removeAttribute('readonly')" onclick="this.removeAttribute('readonly')"/>
       </div>
       <div class="form-group">
         <label class="form-label">Contraseña</label>
-        <input
-          id="login-pass"
-          type="password"
-          class="login-input"
-          placeholder="••••••••"
-          name="esquiu-pass-nofill"
-          autocomplete="new-password"
-          readonly
-          onfocus="this.removeAttribute('readonly')"
-          onclick="this.removeAttribute('readonly')"
-          onkeydown="if(event.key==='Enter')doLogin()"
-        />
+        <input id="login-pass" type="password" class="login-input" placeholder="••••••••"
+          name="esquiu-nofill-pass" autocomplete="new-password" readonly
+          onfocus="this.removeAttribute('readonly')" onclick="this.removeAttribute('readonly')"
+          onkeydown="if(event.key==='Enter')doLogin()"/>
       </div>
       <button class="login-btn" id="login-btn" onclick="doLogin()">Ingresar al panel</button>
-      <div class="security-note">
-        🔒 <strong>Seguridad:</strong> los campos no se autocompletan para proteger las credenciales. Ingresalas manualmente cada vez.
-      </div>
+      <div class="security-note">🔒 <strong>Seguridad:</strong> campos con readOnly inicial — el browser no puede autocompletar credenciales.</div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════ ADMIN DASHBOARD ═══════════════════════ -->
+<!-- ADMIN DASHBOARD -->
 <div class="page" id="page-admin">
   <div class="admin-wrap">
     <div class="admin-topbar">
@@ -385,7 +381,7 @@ select option{background:var(--surface2)}
     <div class="admin-stats" id="admin-stats"></div>
     <div class="admin-controls">
       <input class="admin-search" placeholder="Buscar producto…" id="admin-search" oninput="renderAdminTable()"/>
-      <select class="admin-select" id="admin-filter-store" onchange="renderAdminTable()">
+      <select class="admin-sel" id="admin-filter-store" onchange="renderAdminTable()">
         <option value="">Todas las tiendas</option>
         <option value="lubricentro">Lubricentro</option>
         <option value="ferreteria">Ferretería</option>
@@ -394,25 +390,18 @@ select option{background:var(--surface2)}
     </div>
     <div class="admin-table-wrap">
       <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Imagen</th>
-            <th>Producto</th>
-            <th>Tienda</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th></th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th>Img</th><th>Producto</th><th>Marca</th><th>Tienda</th>
+          <th>Categoría</th><th>Precio</th><th>Stock</th><th></th>
+        </tr></thead>
         <tbody id="admin-tbody"></tbody>
       </table>
     </div>
-    <div class="admin-footer" id="admin-footer"></div>
+    <div class="admin-footer-txt" id="admin-footer"></div>
   </div>
 </div>
 
-<!-- ═══════════════════════ CART DRAWER ═══════════════════════ -->
+<!-- CART DRAWER -->
 <div class="overlay" id="overlay" onclick="toggleCart()"></div>
 <div class="cart-drawer" id="cart-drawer">
   <div class="drawer-head">
@@ -423,7 +412,7 @@ select option{background:var(--surface2)}
   <div class="cart-footer" id="cart-footer"></div>
 </div>
 
-<!-- ═══════════════════════ PRODUCT MODAL ═══════════════════════ -->
+<!-- PRODUCT MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <div class="modal-head">
@@ -439,9 +428,15 @@ select option{background:var(--surface2)}
           <option value="lubricentro">Lubricentro Esquiú</option>
         </select>
       </div>
-      <div class="modal-field">
-        <label class="modal-label">Nombre del producto *</label>
-        <input type="text" class="modal-input" id="m-nombre" maxlength="100" placeholder="Ej: Taladro Percutor Bosch GSB 550"/>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label class="modal-label">Nombre *</label>
+          <input type="text" class="modal-input" id="m-nombre" maxlength="100" placeholder="Ej: Taladro GSB 550"/>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Marca</label>
+          <input type="text" class="modal-input" id="m-marca" maxlength="40" placeholder="Ej: Bosch"/>
+        </div>
       </div>
       <div class="modal-field">
         <label class="modal-label">Categoría *</label>
@@ -449,7 +444,7 @@ select option{background:var(--surface2)}
       </div>
       <div class="modal-field">
         <label class="modal-label">Descripción</label>
-        <textarea class="modal-input" id="m-desc" maxlength="280" placeholder="Características técnicas del producto…"></textarea>
+        <textarea class="modal-input" id="m-desc" maxlength="280" placeholder="Características técnicas…"></textarea>
       </div>
       <div class="modal-row">
         <div class="modal-field">
@@ -462,18 +457,22 @@ select option{background:var(--surface2)}
         </div>
       </div>
       <div class="modal-field">
-        <label class="modal-label">URL de imagen (o emoji/ícono)</label>
-        <input type="text" class="modal-input" id="m-imagen" placeholder="https://… o deja vacío para usar emoji automático"/>
+        <label class="modal-label">ID sugerencia (cross-sell)</label>
+        <input type="text" class="modal-input" id="m-sugerencia" maxlength="30" placeholder="ID de producto relacionado"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">URL de imagen</label>
+        <input type="text" class="modal-input" id="m-imagen" placeholder="https://… (opcional)"/>
         <div class="img-preview" id="m-img-preview">📦</div>
       </div>
       <div class="modal-field">
         <label class="modal-label">Etiquetas</label>
-        <div class="badge-toggle-group" id="badge-toggles">
-          <div class="badge-toggle" onclick="toggleBadgeOpt(this)" data-badge="Envío en Córdoba Capital">Envío en Córdoba Capital</div>
-          <div class="badge-toggle" onclick="toggleBadgeOpt(this)" data-badge="3 Cuotas Sin Interés">3 Cuotas S/I</div>
-          <div class="badge-toggle" onclick="toggleBadgeOpt(this)" data-badge="6 Cuotas Sin Interés">6 Cuotas S/I</div>
-          <div class="badge-toggle" onclick="toggleBadgeOpt(this)" data-badge="Retiro en sucursal">Retiro en sucursal</div>
-          <div class="badge-toggle" onclick="toggleBadgeOpt(this)" data-badge="Oferta">Oferta</div>
+        <div class="badge-toggle-group">
+          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="Envío en Córdoba Capital">Envío Córdoba</div>
+          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="3 Cuotas Sin Interés">3 Cuotas S/I</div>
+          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="6 Cuotas Sin Interés">6 Cuotas S/I</div>
+          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="Retiro en sucursal">Retiro sucursal</div>
+          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="Oferta">Oferta</div>
         </div>
       </div>
     </div>
@@ -484,7 +483,7 @@ select option{background:var(--surface2)}
   </div>
 </div>
 
-<!-- Confirm delete modal -->
+<!-- CONFIRM MODAL -->
 <div class="modal-overlay" id="confirm-overlay">
   <div class="modal confirm-modal">
     <div class="modal-head">
@@ -492,8 +491,8 @@ select option{background:var(--surface2)}
       <button class="close-btn" onclick="closeConfirm()">×</button>
     </div>
     <div class="modal-body">
-      <p class="confirm-text">Vas a eliminar permanentemente el producto:</p>
-      <p class="confirm-name" id="confirm-name" style="margin:10px 0;font-size:15px"></p>
+      <p class="confirm-text">Vas a eliminar permanentemente:</p>
+      <p class="confirm-name" id="confirm-name"></p>
       <p class="confirm-text">Esta acción no se puede deshacer.</p>
     </div>
     <div class="modal-footer">
@@ -503,189 +502,320 @@ select option{background:var(--surface2)}
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<script>
-// ═══════════════════════════════════════════════════════════════
-// ESTADO GLOBAL
-// ═══════════════════════════════════════════════════════════════
-const ADMIN_USER = 'admin@esquiu.com';
-const ADMIN_PASS = 'esquiu2024';
-let isAdmin = false;
-let activeFilters = { lubricentro: 'Todos', ferreteria: 'Todos' };
-let cart = [];
-let editingId = null;
-let deleteId  = null;
-let toastTimer = null;
-let imgPreviewTimer = null;
+<!-- FIREBASE SDK v9 modular via CDN -->
+<script type="module">
+import { initializeApp }               from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-// ═══════════════════════════════════════════════════════════════
-// MOCK DATA
-// ═══════════════════════════════════════════════════════════════
+// ── Firebase config ──────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyD973HXMYJHlsnfLF7lNvuojAVPA5bYurI",
+  authDomain:        "lubricentroesquiu-1759a-decf7.firebaseapp.com",
+  projectId:         "lubricentroesquiu-1759a-decf7",
+  storageBucket:     "lubricentroesquiu-1759a-decf7.firebasestorage.app",
+  messagingSenderId: "278186039850",
+  appId:             "1:278186039850:web:7bbded30fe4752d4a98153"
+};
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+// ── CONSTANTES ───────────────────────────────────────────────
+const WA_NUMBER     = '5493511234567';
+const SHIPPING_RATES = {'5000':1500,'5008':2000,'5016':2500,'5152':4000};
 const EMOJIS = {
   'Aceites Motor':'🛢️','Filtros':'🔵','Aditivos':'⚗️',
   'Bosques y Jardines':'🌿','Herramientas Eléctricas':'⚡',
   'Herramientas Manuales':'🧰','Hogar y Camping':'⛺',
 };
-function getEmoji(cat){ return EMOJIS[cat]||'📦'; }
+const getEmoji = cat => EMOJIS[cat] || '📦';
 
-let products = [
-  // LUBRICENTRO
-  {id:'l001',store:'lubricentro',categoria:'Aceites Motor',nombre:'Aceite 10W40 Semisintético x 4L',descripcion:'Vehículos nafteros y diesel modernos. API SN/CF. Alta protección en arranques en frío.',precio:18500,stock:40,imagen:'',badges:['Envío en Córdoba Capital']},
-  {id:'l002',store:'lubricentro',categoria:'Aceites Motor',nombre:'Aceite 15W40 Mineral x 4L',descripcion:'Flotas de camiones y maquinaria pesada. API CI-4. Excelente estabilidad térmica.',precio:14200,stock:35,imagen:'',badges:[]},
-  {id:'l003',store:'lubricentro',categoria:'Aceites Motor',nombre:'Aceite 5W30 Full Sintético x 4L',descripcion:'Alta performance, máxima protección en frío y calor extremo. Ideal autos nuevos.',precio:26800,stock:20,imagen:'',badges:['3 Cuotas Sin Interés','Envío en Córdoba Capital']},
-  {id:'l004',store:'lubricentro',categoria:'Aceites Motor',nombre:'Aceite 20W50 Mineral x 5L',descripcion:'Motor a gasolina uso intensivo. Buen rendimiento en climas cálidos.',precio:12900,stock:28,imagen:'',badges:[]},
-  {id:'l005',store:'lubricentro',categoria:'Filtros',nombre:'Filtro de Aceite Bosch P7044',descripcion:'Compatible Volkswagen, Renault, Peugeot. Alta capacidad de retención de partículas.',precio:4200,stock:60,imagen:'',badges:[]},
-  {id:'l006',store:'lubricentro',categoria:'Filtros',nombre:'Filtro de Aire Bosch S0236',descripcion:'Motor limpio, mejor rendimiento y consumo. Fácil instalación.',precio:3800,stock:45,imagen:'',badges:[]},
-  {id:'l007',store:'lubricentro',categoria:'Filtros',nombre:'Filtro de Habitáculo Bosch C3040',descripcion:'Carbón activo bicapa. Filtra polvo, polen y alérgenos. Mejor calidad de aire interior.',precio:5100,stock:30,imagen:'',badges:[]},
-  {id:'l008',store:'lubricentro',categoria:'Aditivos',nombre:'Aditivo Limpiador de Inyectores STP',descripcion:'1 frasco por tanque. Limpia inyectores en 1 uso. Mejora arranque y aceleración.',precio:3600,stock:25,imagen:'',badges:[]},
-  {id:'l009',store:'lubricentro',categoria:'Aditivos',nombre:'Antifricción de Motor Ceratec',descripcion:'Reduce desgaste, baja temperatura y ruido. Se mezcla con cualquier aceite de motor.',precio:8900,stock:15,imagen:'',badges:['3 Cuotas Sin Interés']},
-  // FERRETERÍA
-  {id:'f001',store:'ferreteria',categoria:'Bosques y Jardines',nombre:'Motoguadaña Echo SRM-2305',descripcion:'Motor 2T 21.2cc, cabezal multifunción, arnés de seguridad incluido.',precio:189000,stock:5,imagen:'',badges:['Envío en Córdoba Capital','3 Cuotas Sin Interés']},
-  {id:'f002',store:'ferreteria',categoria:'Bosques y Jardines',nombre:'Motosierra Husqvarna 135',descripcion:'Espada 35cm, motor 38.2cc, peso 4.4kg. Ideal uso doméstico e intensivo.',precio:312000,stock:3,imagen:'',badges:['6 Cuotas Sin Interés','Envío en Córdoba Capital']},
-  {id:'f003',store:'ferreteria',categoria:'Bosques y Jardines',nombre:'Cortacercos Gamma 550W',descripcion:'Barra doble 510mm, guía ajustable, cable 10m. Corte limpio y parejo.',precio:67000,stock:8,imagen:'',badges:['Envío en Córdoba Capital']},
-  {id:'f004',store:'ferreteria',categoria:'Herramientas Eléctricas',nombre:'Taladro Percutor Bosch GSB 550',descripcion:'550W, 2800RPM, portabrocas 13mm, maletín plástico incluido.',precio:98000,stock:12,imagen:'',badges:['3 Cuotas Sin Interés']},
-  {id:'f005',store:'ferreteria',categoria:'Herramientas Eléctricas',nombre:'Amoladora Angular Bosch GWS 750',descripcion:'750W, disco 115mm, cambio rápido de accesorios sin herramientas.',precio:74500,stock:10,imagen:'',badges:['Envío en Córdoba Capital']},
-  {id:'f006',store:'ferreteria',categoria:'Herramientas Eléctricas',nombre:'Rotomartillo Bosch GBH 2-26 DRE',descripcion:'800W, SDS-Plus, 3 modos operación, maletín y set de 5 brocas.',precio:198000,stock:4,imagen:'',badges:['6 Cuotas Sin Interés']},
-  {id:'f007',store:'ferreteria',categoria:'Herramientas Manuales',nombre:'Caja de Herramientas Stanley 92 pzas',descripcion:'Set completo con llaves combinadas, destornilladores, alicates y nivel.',precio:145000,stock:7,imagen:'',badges:['Envío en Córdoba Capital']},
-  {id:'f008',store:'ferreteria',categoria:'Herramientas Manuales',nombre:'Carburo de Calcio x 1kg',descripcion:'Grado industrial. Para soldadura autógena y generación de acetileno.',precio:4800,stock:50,imagen:'',badges:[]},
-  {id:'f009',store:'ferreteria',categoria:'Herramientas Manuales',nombre:'Discos de Corte Metal 115mm x10u',descripcion:'Disco fino 1mm para amoladora. Corte limpio y preciso en acero.',precio:9200,stock:30,imagen:'',badges:[]},
-  {id:'f010',store:'ferreteria',categoria:'Hogar y Camping',nombre:'Carpa Darwin 4 Personas',descripcion:'Doble techo impermeable, varillas fibra de vidrio, bolso transporte.',precio:87000,stock:6,imagen:'',badges:['Envío en Córdoba Capital','3 Cuotas Sin Interés']},
-];
+// ── ESTADO ───────────────────────────────────────────────────
+let products      = [];
+let cart          = [];
+let shippingCost  = 0;
+let activeFilters = { lubricentro:'Todos', ferreteria:'Todos' };
+let editingId     = null;
+let deleteId      = null;
+let isAdmin       = false;
+let toastTimer    = null;
+let imgTimer      = null;
 
-// ═══════════════════════════════════════════════════════════════
-// SANITIZACIÓN
-// ═══════════════════════════════════════════════════════════════
-function sanitize(s){
-  if(typeof s!=='string') return '';
+// ── SANITIZACIÓN ─────────────────────────────────────────────
+const sanitize = s => {
+  if(typeof s !== 'string') return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
           .replace(/"/g,'&quot;').replace(/'/g,'&#x27;').trim().slice(0,500);
-}
-function genId(store){
-  return store[0]+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+};
+
+// ── FIREBASE: CARGAR PRODUCTOS ───────────────────────────────
+async function loadProducts(){
+  const badge = document.getElementById('db-badge');
+  try {
+    badge.className='db-status db-loading'; badge.textContent='● conectando';
+    const snap = await getDocs(collection(db,'productos'));
+    products = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    badge.className='db-status db-ok'; badge.textContent='● Firebase';
+    buildMarcaSelect('lubricentro');
+    buildMarcaSelect('ferreteria');
+    renderCatalog('lubricentro');
+    renderCatalog('ferreteria');
+    if(isAdmin) renderAdmin();
+  } catch(e){
+    badge.className='db-status db-err'; badge.textContent='● sin conexión';
+    showToast('Error al conectar con Firestore: '+e.message,'error');
+    // fallback: mostrar mensaje vacío en grids
+    ['lubricentro','ferreteria'].forEach(s=>{
+      const g=document.getElementById('grid-'+s);
+      if(g) g.innerHTML='<div class="loading-grid" style="color:var(--red)">⚠ No se pudieron cargar los productos. Verificá la conexión y las reglas de Firestore.</div>';
+    });
+  }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// NAVEGACIÓN
-// ═══════════════════════════════════════════════════════════════
-function showPage(name){
+// ── FIREBASE: GUARDAR PRODUCTO ───────────────────────────────
+async function fbSave(payload, docId=null){
+  if(docId){
+    await updateDoc(doc(db,'productos',docId), { ...payload, updatedAt:serverTimestamp() });
+  } else {
+    await addDoc(collection(db,'productos'), { ...payload, createdAt:serverTimestamp() });
+  }
+  await loadProducts();
+}
+
+// ── FIREBASE: ELIMINAR ───────────────────────────────────────
+async function fbDelete(docId){
+  await deleteDoc(doc(db,'productos',docId));
+  await loadProducts();
+}
+
+// ── AUTH ─────────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  isAdmin = !!user;
+});
+
+window.doLogin = async function(){
+  const email  = document.getElementById('login-email').value.trim();
+  const pass   = document.getElementById('login-pass').value;
+  const btn    = document.getElementById('login-btn');
+  const errEl  = document.getElementById('login-error');
+  btn.disabled=true; btn.textContent='Verificando…'; errEl.style.display='none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    isAdmin=true;
+    document.getElementById('login-email').value='';
+    document.getElementById('login-pass').value='';
+    btn.disabled=false; btn.textContent='Ingresar al panel';
+    showPage('admin');
+    showToast('Bienvenido al panel ✓','success');
+  } catch(e){
+    errEl.textContent = 'Credenciales incorrectas. Verificá e intentá de nuevo.';
+    errEl.style.display='block';
+    btn.disabled=false; btn.textContent='Ingresar al panel';
+  }
+};
+
+window.doLogout = async function(){
+  await signOut(auth);
+  isAdmin=false;
+  showPage('admin-login');
+  showToast('Sesión cerrada','success');
+};
+
+// ── NAVEGACIÓN ───────────────────────────────────────────────
+window.showPage = function(name){
   if(name==='admin' && !isAdmin){ showPage('admin-login'); return; }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const el = document.getElementById('page-'+name);
+  const el=document.getElementById('page-'+name);
   if(el){ el.classList.add('active'); window.scrollTo(0,0); }
-  if(name==='lubricentro'||name==='ferreteria') renderCatalog(name);
+  if(name==='lubricentro'||name==='ferreteria'){ buildMarcaSelect(name); renderCatalog(name); }
   if(name==='admin') renderAdmin();
-  document.getElementById('nav-admin-link').style.display = isAdmin?'inline':'inline';
-}
-function goHome(){ showPage('home'); }
+};
+window.goHome = () => showPage('home');
 
-// ═══════════════════════════════════════════════════════════════
-// CATÁLOGO
-// ═══════════════════════════════════════════════════════════════
-function setFilter(store, cat, btn){
-  activeFilters[store] = cat;
-  const context = store==='lubricentro'?'.filter-btn-blue':'.filter-btn:not(.filter-btn-blue)';
+// ── FILTROS ──────────────────────────────────────────────────
+function buildMarcaSelect(store){
+  const sel=document.getElementById(store==='lubricentro'?'lubri-marca':'ferr-marca');
+  if(!sel) return;
+  const cur=sel.value;
+  const marcas=[...new Set(products.filter(p=>p.store===store).map(p=>p.marca).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las marcas</option>'+
+    marcas.map(m=>`<option value="${sanitize(m)}" ${m===cur?'selected':''}>${sanitize(m)}</option>`).join('');
+}
+
+window.setFilter = function(store,cat,btn){
+  activeFilters[store]=cat;
   document.querySelectorAll('#page-'+store+' .filter-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   renderCatalog(store);
-}
+};
 
 function renderCatalog(store){
-  const grid = document.getElementById('grid-'+store);
+  const grid=document.getElementById('grid-'+store);
   if(!grid) return;
-  const q = (document.getElementById(store==='lubricentro'?'lubri-search':'ferr-search')?.value||'').toLowerCase();
-  const cat = activeFilters[store]||'Todos';
-  const filtered = products.filter(p=>{
+  const q    =(document.getElementById(store==='lubricentro'?'lubri-search':'ferr-search')?.value||'').toLowerCase();
+  const cat  =activeFilters[store]||'Todos';
+  const marca=document.getElementById(store==='lubricentro'?'lubri-marca':'ferr-marca')?.value||'';
+  const filtered=products.filter(p=>{
     if(p.store!==store) return false;
     if(cat!=='Todos' && p.categoria!==cat) return false;
-    if(q && !p.nombre.toLowerCase().includes(q) && !p.descripcion.toLowerCase().includes(q)) return false;
+    if(marca && p.marca!==marca) return false;
+    if(q && !p.nombre?.toLowerCase().includes(q) && !p.descripcion?.toLowerCase().includes(q)) return false;
     return true;
   });
   if(!filtered.length){
-    grid.innerHTML='<div style="grid-column:1/-1;padding:60px 20px;text-align:center;color:var(--muted)"><div style="font-size:40px;margin-bottom:12px">🔍</div><div>No encontramos productos para tu búsqueda.</div></div>';
+    grid.innerHTML='<div class="loading-grid">🔍 No encontramos productos para tu búsqueda.</div>';
     return;
   }
-  grid.innerHTML = filtered.map(p=>{
-    const emoji = getEmoji(p.categoria);
-    const imgHTML = p.imagen
-      ? `<img src="${sanitize(p.imagen)}" alt="${sanitize(p.nombre)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${emoji}'">`
-      : emoji;
-    const storeColor = p.store==='lubricentro'?'var(--blue)':'var(--amber)';
-    const badgesHTML = p.badges.map(b=>`<span class="badge" style="background:${p.store==='lubricentro'?'var(--blue-dim)':'var(--amber-dim)'};color:${p.store==='lubricentro'?'#7eb4f5':'#f5c060'}">${sanitize(b)}</span>`).join('');
-    const disabled = p.stock===0;
+  const dimC =store==='lubricentro'?'var(--blue-dim)':'var(--amber-dim)';
+  const txtC =store==='lubricentro'?'#7eb4f5':'#f5c060';
+  grid.innerHTML=filtered.map(p=>{
+    const emoji=getEmoji(p.categoria);
+    const imgH=p.imagen?`<img src="${sanitize(p.imagen)}" alt="${sanitize(p.nombre)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:42px">${emoji}</span>`;
+    const bH=(p.badges||[]).map(b=>`<span class="badge" style="background:${dimC};color:${txtC}">${sanitize(b)}</span>`).join('');
+    const disabled=p.stock===0;
     return `<div class="prod-card">
-      <div class="prod-img">${imgHTML}</div>
+      <div class="prod-img">${imgH}</div>
       <div class="prod-body">
-        <div class="prod-cat">${sanitize(p.categoria)}</div>
-        <div class="prod-name">${sanitize(p.nombre)}</div>
-        <div class="prod-desc">${sanitize(p.descripcion)}</div>
-        <div class="prod-badges">${badgesHTML}</div>
+        <div class="prod-cat">${sanitize(p.categoria||'')} · <span style="color:${txtC}">${sanitize(p.marca||'')}</span></div>
+        <div class="prod-name">${sanitize(p.nombre||'')}</div>
+        <div class="prod-desc">${sanitize(p.descripcion||'')}</div>
+        <div class="prod-badges">${bH}</div>
         <div class="prod-footer">
-          <div class="prod-price">$${Number(p.precio).toLocaleString('es-AR')}</div>
+          <div class="prod-price">$${Number(p.precio||0).toLocaleString('es-AR')}</div>
           <button class="add-btn" ${disabled?'disabled':''} onclick="addToCart('${p.id}')">
             ${disabled?'Sin stock':'+ Agregar'}
           </button>
         </div>
-        ${disabled?`<div class="no-stock" style="margin-top:4px">Sin stock disponible</div>`:''}
+        ${disabled?`<div style="font-size:11px;color:var(--red);margin-top:4px">Sin stock disponible</div>`:''}
       </div>
     </div>`;
   }).join('');
 }
+window.renderCatalog = renderCatalog;
 
-// ═══════════════════════════════════════════════════════════════
-// CARRITO
-// ═══════════════════════════════════════════════════════════════
-function addToCart(id){
-  const p = products.find(x=>x.id===id);
+// ── CARRITO ──────────────────────────────────────────────────
+window.addToCart = function(id){
+  const p=products.find(x=>x.id===id);
   if(!p||p.stock===0) return;
-  const ex = cart.find(x=>x.id===id);
-  if(ex){ ex.qty = Math.min(ex.qty+1, p.stock); }
+  const ex=cart.find(x=>x.id===id);
+  if(ex){ ex.qty=Math.min(ex.qty+1,p.stock); }
   else { cart.push({id,qty:1}); }
   updateCartUI();
   showToast('Agregado al carrito ✓','success');
-}
-function removeFromCart(id){ cart = cart.filter(x=>x.id!==id); updateCartUI(); }
-function changeCartQty(id, d){
-  const item = cart.find(x=>x.id===id);
-  const prod = products.find(x=>x.id===id);
+};
+window.removeFromCart = function(id){ cart=cart.filter(x=>x.id!==id); updateCartUI(); };
+window.changeCartQty = function(id,d){
+  const item=cart.find(x=>x.id===id);
+  const prod=products.find(x=>x.id===id);
   if(!item) return;
-  item.qty = Math.max(1, Math.min(item.qty+d, prod?.stock||999));
-  if(item.qty<1) removeFromCart(id);
+  item.qty=Math.max(1,Math.min(item.qty+d,prod?.stock||999));
   updateCartUI();
-}
-function clearCart(){ cart=[]; updateCartUI(); }
+};
+window.clearCart = function(){ cart=[]; shippingCost=0; updateCartUI(); };
 
-function cartTotal(){
-  return cart.reduce((a,i)=>{
+const cartSubtotal = () => cart.reduce((a,i)=>{ const p=products.find(x=>x.id===i.id); return a+(p?p.precio*i.qty:0); },0);
+const cartCount    = () => cart.reduce((a,i)=>a+i.qty,0);
+
+// ── ENVÍO POR CP ─────────────────────────────────────────────
+window.calcShipping = function(){
+  const cp=(document.getElementById('shipping-cp')?.value||'').trim();
+  const res=document.getElementById('shipping-result');
+  if(!res) return;
+  res.style.display='block';
+  const cost=SHIPPING_RATES[cp];
+  if(cost!==undefined){
+    shippingCost=cost;
+    res.className='shipping-result shipping-ok';
+    res.textContent=`Envío a CP ${cp}: $${cost.toLocaleString('es-AR')}`;
+  } else {
+    shippingCost=0;
+    res.className='shipping-result shipping-consult';
+    res.textContent='Consultar envío por WhatsApp (CP fuera de zona fija)';
+  }
+  updateCartUI();
+};
+
+// ── CROSS-SELL ───────────────────────────────────────────────
+function buildCrossSell(){
+  const ids=[...new Set(cart.map(i=>{
     const p=products.find(x=>x.id===i.id);
-    return a+(p?p.precio*i.qty:0);
-  },0);
+    return p?.sugerenciaId||null;
+  }).filter(Boolean))];
+  const suggestions=ids.map(sid=>products.find(p=>p.id===sid)).filter(p=>p&&!cart.find(c=>c.id===p.id));
+  if(!suggestions.length) return '';
+  const s=suggestions[0];
+  const emoji=getEmoji(s.categoria);
+  const imgH=s.imagen?`<img src="${sanitize(s.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:20px">${emoji}</span>`;
+  return `<div class="cross-banner">
+    <div class="cross-title">💡 También podrías necesitar</div>
+    <div class="cross-item">
+      <div class="cross-img">${imgH}</div>
+      <div class="cross-info">
+        <div class="cross-name">${sanitize(s.nombre)}</div>
+        <div class="cross-price">$${Number(s.precio).toLocaleString('es-AR')}</div>
+      </div>
+      <button class="cross-add" onclick="addToCart('${s.id}')">+ Agregar</button>
+    </div>
+  </div>`;
 }
-function cartCount(){ return cart.reduce((a,i)=>a+i.qty,0); }
 
+// ── LINK COMPARTIBLE ─────────────────────────────────────────
+window.copyCartLink = function(){
+  if(!cart.length){ showToast('El carrito está vacío','error'); return; }
+  const param=cart.map(i=>`${i.id}:${i.qty}`).join(',');
+  const url=window.location.origin+window.location.pathname+'?cart='+encodeURIComponent(param);
+  navigator.clipboard.writeText(url).then(()=>{
+    showToast('Link copiado al portapapeles ✓','success');
+  }).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=url; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('Link copiado al portapapeles ✓','success');
+  });
+};
+
+function loadCartFromURL(){
+  const params=new URLSearchParams(window.location.search);
+  const cp=params.get('cart');
+  if(!cp) return;
+  try {
+    const items=decodeURIComponent(cp).split(',').map(s=>{
+      const [id,qty]=s.split(':');
+      return {id:id.trim(),qty:Math.max(1,parseInt(qty)||1)};
+    }).filter(i=>products.find(p=>p.id===i.id));
+    if(items.length){ cart=items; updateCartUI(); toggleCart(); showToast(`Carrito cargado (${items.length} producto${items.length!==1?'s':''})`, 'success'); }
+  } catch(e){}
+}
+
+// ── RENDER CARRITO ───────────────────────────────────────────
 function updateCartUI(){
-  const cnt = cartCount();
-  const countEl = document.getElementById('cart-count');
-  countEl.textContent = cnt;
-  countEl.style.display = cnt>0?'flex':'none';
-  const list = document.getElementById('cart-items-list');
-  const footer = document.getElementById('cart-footer');
+  const cnt=cartCount();
+  const countEl=document.getElementById('cart-count');
+  countEl.textContent=cnt;
+  countEl.style.display=cnt>0?'flex':'none';
+
+  const list  =document.getElementById('cart-items-list');
+  const footer=document.getElementById('cart-footer');
   if(!cart.length){
-    list.innerHTML='<div class="cart-empty"><div style="font-size:40px;margin-bottom:12px">🛒</div><div>Tu carrito está vacío.</div></div>';
+    shippingCost=0;
+    list.innerHTML='<div class="cart-empty"><div style="font-size:40px;margin-bottom:12px">🛒</div>Tu carrito está vacío.</div>';
     footer.innerHTML='';
     return;
   }
-  const hasLubri = cart.some(i=>products.find(p=>p.id===i.id)?.store==='lubricentro');
-  list.innerHTML = cart.map(item=>{
-    const p = products.find(x=>x.id===item.id);
+  const hasLubri=cart.some(i=>products.find(p=>p.id===i.id)?.store==='lubricentro');
+  list.innerHTML=cart.map(item=>{
+    const p=products.find(x=>x.id===item.id);
     if(!p) return '';
-    const emoji = getEmoji(p.categoria);
-    const imgHTML = p.imagen
-      ? `<img src="${sanitize(p.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${emoji}'">`
-      : emoji;
+    const emoji=getEmoji(p.categoria);
+    const imgH=p.imagen?`<img src="${sanitize(p.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:24px">${emoji}</span>`;
     return `<div class="cart-item">
-      <div class="cart-item-img">${imgHTML}</div>
+      <div class="cart-item-img">${imgH}</div>
       <div class="cart-item-info">
         <div class="cart-item-name">${sanitize(p.nombre)}</div>
         <div class="cart-item-cat">${sanitize(p.categoria)}</div>
@@ -702,8 +832,20 @@ function updateCartUI(){
     </div>`;
   }).join('');
 
+  const sub  =cartSubtotal();
+  const total=sub+shippingCost;
+
   footer.innerHTML=`
-    <div class="cart-form">
+    ${buildCrossSell()}
+    <div class="shipping-box">
+      <div class="shipping-title">🚚 Calcular costo de envío</div>
+      <div class="shipping-row">
+        <input class="shipping-input" id="shipping-cp" type="text" maxlength="6" placeholder="Código postal (ej: 5000)"/>
+        <button class="shipping-calc-btn" onclick="calcShipping()">Calcular</button>
+      </div>
+      <div id="shipping-result" class="shipping-result" ${shippingCost>0?`style="display:block"`:''}>${shippingCost>0?`Envío calculado: $${shippingCost.toLocaleString('es-AR')}`:''}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
       <input class="form-input" id="cf-nombre" placeholder="Tu nombre *" maxlength="80"/>
       <input class="form-input" id="cf-dir" placeholder="Dirección en Córdoba *" maxlength="120"/>
       ${hasLubri?`<input class="form-input" id="cf-patente" placeholder="Patente del vehículo (opcional)" maxlength="10"/>`:''}
@@ -711,270 +853,240 @@ function updateCartUI(){
         <option>Efectivo</option><option>Transferencia</option><option>Mercado Pago</option>
       </select>
     </div>
-    <div class="cart-total-row">
-      <span class="cart-total-label">Total del pedido</span>
-      <span class="cart-total-val">$${cartTotal().toLocaleString('es-AR')}</span>
+    <div style="margin-bottom:12px">
+      ${shippingCost>0?`
+        <div class="cart-total-row"><span class="cart-total-label">Subtotal</span><span style="font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--muted)">$${sub.toLocaleString('es-AR')}</span></div>
+        <div class="cart-total-row"><span class="cart-total-label">Envío</span><span style="font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--green)">$${shippingCost.toLocaleString('es-AR')}</span></div>
+      `:''}
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-val">$${total.toLocaleString('es-AR')}</span>
+      </div>
     </div>
     <div class="cart-actions">
       <button class="wa-btn" onclick="sendWhatsApp()">💬 WhatsApp</button>
       <button class="mp-btn" onclick="fakeMercadoPago()">💳 Pagar online</button>
     </div>
+    <button class="share-btn" onclick="copyCartLink()">🔗 Copiar link de este carrito</button>
     <button class="clear-btn" onclick="clearCart()">Vaciar carrito</button>`;
 }
 
-function toggleCart(){
-  const d = document.getElementById('cart-drawer');
-  const o = document.getElementById('overlay');
-  const isOpen = d.classList.contains('open');
+window.toggleCart = function(){
+  const d=document.getElementById('cart-drawer');
+  const o=document.getElementById('overlay');
+  const isOpen=d.classList.contains('open');
   d.classList.toggle('open',!isOpen);
   o.classList.toggle('open',!isOpen);
-}
+};
 
-function sendWhatsApp(){
-  const nombre = sanitize(document.getElementById('cf-nombre')?.value||'');
-  const dir    = sanitize(document.getElementById('cf-dir')?.value||'');
-  if(!nombre||!dir){ showToast('Completá nombre y dirección primero','error'); return; }
-  const patente= sanitize(document.getElementById('cf-patente')?.value||'');
-  const pago   = sanitize(document.getElementById('cf-pago')?.value||'Efectivo');
-  const lineas = cart.map(i=>{
-    const p=products.find(x=>x.id===i.id);
-    return `• ${p.nombre} x${i.qty} → $${(p.precio*i.qty).toLocaleString('es-AR')}`;
-  });
-  const msg = [
+window.sendWhatsApp = function(){
+  const nombre=sanitize(document.getElementById('cf-nombre')?.value||'');
+  const dir   =sanitize(document.getElementById('cf-dir')?.value||'');
+  if(!nombre||!dir){ showToast('Completá nombre y dirección','error'); return; }
+  const patente=sanitize(document.getElementById('cf-patente')?.value||'');
+  const pago   =sanitize(document.getElementById('cf-pago')?.value||'Efectivo');
+  const sub    =cartSubtotal();
+  const total  =sub+shippingCost;
+  const lineas =cart.map(i=>{ const p=products.find(x=>x.id===i.id); return `• ${p.nombre} x${i.qty} → $${(p.precio*i.qty).toLocaleString('es-AR')}`; });
+  const msg=[
     '*🛒 Nuevo Pedido — Esquiú Shop*','',
     ...lineas,'',
-    `*Total: $${cartTotal().toLocaleString('es-AR')}*`,'',
+    shippingCost>0?`*Envío:* $${shippingCost.toLocaleString('es-AR')}`:null,
+    `*Total: $${total.toLocaleString('es-AR')}*`,'',
     '━━━━━━━━━━━━━━━',
-    `*Nombre:* ${nombre}`,
-    `*Dirección:* ${dir}`,
-    patente?`*Patente:* ${patente}`:null,
-    `*Pago:* ${pago}`,
+    `*Nombre:* ${nombre}`,`*Dirección:* ${dir}`,
+    patente?`*Patente:* ${patente}`:null,`*Método de pago:* ${pago}`,
   ].filter(x=>x!==null).join('\n');
-  window.open(`https://wa.me/5493511234567?text=${encodeURIComponent(msg)}`,'_blank','noopener,noreferrer');
-}
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank','noopener,noreferrer');
+};
 
-function fakeMercadoPago(){
-  showToast('Redirigiendo a Mercado Pago… (configurar Cloud Function)','success');
-}
+window.fakeMercadoPago = function(){
+  showToast('Redirigiendo a Mercado Pago… (configurar Cloud Function con Access Token)','success');
+};
 
-// ═══════════════════════════════════════════════════════════════
-// ADMIN LOGIN
-// ═══════════════════════════════════════════════════════════════
-function doLogin(){
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-pass').value;
-  const btn   = document.getElementById('login-btn');
-  const errEl = document.getElementById('login-error');
-  btn.disabled=true; btn.textContent='Verificando…';
-  errEl.style.display='none';
-  setTimeout(()=>{
-    if(email===ADMIN_USER && pass===ADMIN_PASS){
-      isAdmin=true;
-      document.getElementById('login-email').value='';
-      document.getElementById('login-pass').value='';
-      btn.disabled=false; btn.textContent='Ingresar al panel';
-      showPage('admin');
-      showToast('Bienvenido al panel admin ✓','success');
-    } else {
-      errEl.textContent='Credenciales incorrectas. Verificá e intentá de nuevo.';
-      errEl.style.display='block';
-      btn.disabled=false; btn.textContent='Ingresar al panel';
-    }
-  },600);
-}
-
-function doLogout(){
-  isAdmin=false;
-  showPage('admin-login');
-  showToast('Sesión cerrada','success');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// ADMIN DASHBOARD
-// ═══════════════════════════════════════════════════════════════
+// ── ADMIN DASHBOARD ──────────────────────────────────────────
 function renderAdmin(){
   renderAdminStats();
   renderAdminTable();
 }
 
 function renderAdminStats(){
-  const el = document.getElementById('admin-stats');
-  const total = products.length;
-  const lubri = products.filter(p=>p.store==='lubricentro').length;
-  const ferr  = products.filter(p=>p.store==='ferreteria').length;
-  const sinStock = products.filter(p=>p.stock===0).length;
+  const el=document.getElementById('admin-stats');
+  if(!el) return;
+  const total =products.length;
+  const lubri =products.filter(p=>p.store==='lubricentro').length;
+  const ferr  =products.filter(p=>p.store==='ferreteria').length;
+  const sin   =products.filter(p=>p.stock===0).length;
   el.innerHTML=[
-    {l:'Total productos',v:total,c:'var(--amber)'},
-    {l:'Lubricentro',v:lubri,c:'#7eb4f5'},
-    {l:'Ferretería',v:ferr,c:'#f5c060'},
-    {l:'Sin stock',v:sinStock,c:'var(--red)'},
-  ].map(s=>`<div class="stat-card">
-    <div class="stat-label">${s.l}</div>
-    <div class="stat-val" style="color:${s.c}">${s.v}</div>
-  </div>`).join('');
+    {l:'Total productos',v:total,c:'var(--amber)'},{l:'Lubricentro',v:lubri,c:'#7eb4f5'},
+    {l:'Ferretería',v:ferr,c:'#f5c060'},{l:'Sin stock',v:sin,c:'var(--red)'},
+  ].map(s=>`<div class="stat-card"><div class="stat-label">${s.l}</div><div class="stat-val" style="color:${s.c}">${s.v}</div></div>`).join('');
 }
 
 function renderAdminTable(){
-  const q       = (document.getElementById('admin-search')?.value||'').toLowerCase();
-  const store   = document.getElementById('admin-filter-store')?.value||'';
-  const filtered = products.filter(p=>{
+  const q    =(document.getElementById('admin-search')?.value||'').toLowerCase();
+  const store=document.getElementById('admin-filter-store')?.value||'';
+  const filtered=products.filter(p=>{
     if(store && p.store!==store) return false;
-    if(q && !p.nombre.toLowerCase().includes(q)) return false;
+    if(q && !p.nombre?.toLowerCase().includes(q)) return false;
     return true;
   });
-  const tbody = document.getElementById('admin-tbody');
-  tbody.innerHTML = filtered.map(p=>{
-    const emoji = getEmoji(p.categoria);
-    const imgHTML = p.imagen
-      ? `<img src="${sanitize(p.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${emoji}'">`
-      : emoji;
-    const storeLabel = p.store==='lubricentro'?'Lubricentro':'Ferretería';
-    const storeBg = p.store==='lubricentro'?'background:var(--blue-dim);color:#7eb4f5':'background:var(--amber-dim);color:#f5c060';
-    const stockClass = p.stock===0?'stock-low':p.stock<=3?'stock-warn':'stock-ok';
+  const tbody=document.getElementById('admin-tbody');
+  if(!tbody) return;
+  tbody.innerHTML=filtered.map(p=>{
+    const emoji=getEmoji(p.categoria);
+    const imgH=p.imagen?`<img src="${sanitize(p.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:emoji;
+    const slabel=p.store==='lubricentro'?'Lubricentro':'Ferretería';
+    const sbg  =p.store==='lubricentro'?'background:var(--blue-dim);color:#7eb4f5':'background:var(--amber-dim);color:#f5c060';
+    const scls =p.stock===0?'stock-low':p.stock<=3?'stock-warn':'stock-ok';
     return `<tr>
-      <td><div class="td-img">${imgHTML}</div></td>
-      <td style="font-weight:500;max-width:200px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sanitize(p.nombre)}</div></td>
-      <td><span class="store-tag" style="${storeBg}">${storeLabel}</span></td>
-      <td style="color:var(--muted);font-size:12px">${sanitize(p.categoria)}</td>
-      <td style="font-weight:600;color:var(--amber)">$${Number(p.precio).toLocaleString('es-AR')}</td>
-      <td class="${stockClass}" style="font-weight:600">${p.stock}</td>
-      <td>
-        <div style="display:flex;gap:6px;justify-content:flex-end">
-          <button class="edit-btn" onclick="openModal('${p.id}')">Editar</button>
-          <button class="del-row-btn" onclick="promptDelete('${p.id}')">Borrar</button>
-        </div>
-      </td>
+      <td><div class="td-img">${imgH}</div></td>
+      <td style="font-weight:500;max-width:180px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sanitize(p.nombre||'')}</div></td>
+      <td style="color:var(--muted);font-size:12px">${sanitize(p.marca||'—')}</td>
+      <td><span class="store-tag" style="${sbg}">${slabel}</span></td>
+      <td style="color:var(--muted);font-size:12px">${sanitize(p.categoria||'')}</td>
+      <td style="font-weight:600;color:var(--amber)">$${Number(p.precio||0).toLocaleString('es-AR')}</td>
+      <td class="${scls}" style="font-weight:600">${p.stock}</td>
+      <td><div style="display:flex;gap:6px;justify-content:flex-end">
+        <button class="edit-btn" onclick="openModal('${p.id}')">Editar</button>
+        <button class="del-row-btn" onclick="promptDelete('${p.id}')">Borrar</button>
+      </div></td>
     </tr>`;
   }).join('');
-  document.getElementById('admin-footer').textContent=`${filtered.length} productos mostrados · ${products.length} en total`;
+  const af=document.getElementById('admin-footer');
+  if(af) af.textContent=`${filtered.length} productos mostrados · ${products.length} en total`;
 }
+window.renderAdminTable=renderAdminTable;
 
-// ═══════════════════════════════════════════════════════════════
-// MODAL PRODUCTO
-// ═══════════════════════════════════════════════════════════════
-function openModal(id=null){
-  editingId = id;
-  const overlay = document.getElementById('modal-overlay');
-  const title   = document.getElementById('modal-title');
-  const errEl   = document.getElementById('modal-error');
+// ── MODAL PRODUCTO ───────────────────────────────────────────
+window.openModal = function(id=null){
+  editingId=id;
+  const overlay=document.getElementById('modal-overlay');
+  const errEl  =document.getElementById('modal-error');
   errEl.style.display='none';
   document.querySelectorAll('.badge-toggle').forEach(b=>b.classList.remove('on'));
 
   if(id){
-    const p = products.find(x=>x.id===id);
+    const p=products.find(x=>x.id===id);
     if(!p) return;
-    title.textContent = '✏️ Editar producto';
-    document.getElementById('m-store').value    = p.store;
-    document.getElementById('m-nombre').value   = p.nombre;
-    document.getElementById('m-categoria').value= p.categoria;
-    document.getElementById('m-desc').value     = p.descripcion;
-    document.getElementById('m-precio').value   = p.precio;
-    document.getElementById('m-stock').value    = p.stock;
-    document.getElementById('m-imagen').value   = p.imagen||'';
-    updateImgPreview(p.imagen||'',p.categoria);
-    p.badges.forEach(b=>{
-      document.querySelectorAll('.badge-toggle').forEach(el=>{
-        if(el.dataset.badge===b) el.classList.add('on');
-      });
+    document.getElementById('modal-title').textContent='✏️ Editar producto';
+    document.getElementById('m-store').value    =p.store||'ferreteria';
+    document.getElementById('m-nombre').value   =p.nombre||'';
+    document.getElementById('m-marca').value    =p.marca||'';
+    document.getElementById('m-categoria').value=p.categoria||'';
+    document.getElementById('m-desc').value     =p.descripcion||'';
+    document.getElementById('m-precio').value   =p.precio||'';
+    document.getElementById('m-stock').value    =p.stock||'';
+    document.getElementById('m-imagen').value   =p.imagen||'';
+    document.getElementById('m-sugerencia').value=p.sugerenciaId||'';
+    updateImgPreview(p.imagen||'',p.categoria||'');
+    (p.badges||[]).forEach(b=>{
+      document.querySelectorAll('.badge-toggle').forEach(el=>{ if(el.dataset.badge===b) el.classList.add('on'); });
     });
   } else {
-    title.textContent = '➕ Nuevo producto';
-    ['m-store','m-nombre','m-categoria','m-desc','m-precio','m-stock','m-imagen']
-      .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=id==='m-store'?'ferreteria':''; });
-    document.getElementById('m-img-preview').innerHTML = '📦';
+    document.getElementById('modal-title').textContent='➕ Nuevo producto';
+    ['m-nombre','m-marca','m-categoria','m-desc','m-precio','m-stock','m-imagen','m-sugerencia']
+      .forEach(fid=>{ const el=document.getElementById(fid); if(el) el.value=''; });
+    document.getElementById('m-store').value='ferreteria';
+    document.getElementById('m-img-preview').innerHTML='📦';
   }
   overlay.classList.add('open');
-}
+};
 
-function closeModal(){
+window.closeModal = function(){
   document.getElementById('modal-overlay').classList.remove('open');
   editingId=null;
-}
+};
 
 document.getElementById('m-imagen')?.addEventListener('input',function(){
-  clearTimeout(imgPreviewTimer);
-  imgPreviewTimer = setTimeout(()=>updateImgPreview(this.value, document.getElementById('m-categoria').value),500);
+  clearTimeout(imgTimer);
+  imgTimer=setTimeout(()=>updateImgPreview(this.value,document.getElementById('m-categoria').value),500);
 });
 
-function updateImgPreview(url, cat){
-  const el = document.getElementById('m-img-preview');
+function updateImgPreview(url,cat){
+  const el=document.getElementById('m-img-preview');
+  if(!el) return;
   if(!url){ el.innerHTML=getEmoji(cat)||'📦'; return; }
   el.innerHTML=`<img src="${sanitize(url)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='📦'">`;
 }
 
-function toggleBadgeOpt(el){ el.classList.toggle('on'); }
-
-function saveProduct(){
-  const errEl = document.getElementById('modal-error');
+window.saveProduct = async function(){
+  const errEl =document.getElementById('modal-error');
+  const saveBtn=document.getElementById('save-btn');
   errEl.style.display='none';
-  const nombre    = sanitize(document.getElementById('m-nombre').value);
-  const categoria = sanitize(document.getElementById('m-categoria').value);
-  const desc      = sanitize(document.getElementById('m-desc').value);
-  const precio    = Number(document.getElementById('m-precio').value);
-  const stock     = Number(document.getElementById('m-stock').value);
-  const imagen    = sanitize(document.getElementById('m-imagen').value);
-  const store     = document.getElementById('m-store').value;
-  const badges    = [...document.querySelectorAll('.badge-toggle.on')].map(el=>el.dataset.badge);
+  const nombre    =sanitize(document.getElementById('m-nombre').value);
+  const marca     =sanitize(document.getElementById('m-marca').value);
+  const categoria =sanitize(document.getElementById('m-categoria').value);
+  const desc      =sanitize(document.getElementById('m-desc').value);
+  const precio    =Number(document.getElementById('m-precio').value);
+  const stock     =Number(document.getElementById('m-stock').value);
+  const imagen    =sanitize(document.getElementById('m-imagen').value);
+  const store     =document.getElementById('m-store').value;
+  const sugerenciaId=sanitize(document.getElementById('m-sugerencia').value);
+  const badges    =[...document.querySelectorAll('.badge-toggle.on')].map(el=>el.dataset.badge);
 
   if(!nombre){ errEl.textContent='El nombre es obligatorio.'; errEl.style.display='block'; return; }
   if(!categoria){ errEl.textContent='La categoría es obligatoria.'; errEl.style.display='block'; return; }
   if(isNaN(precio)||precio<=0){ errEl.textContent='El precio debe ser mayor a 0.'; errEl.style.display='block'; return; }
   if(isNaN(stock)||stock<0){ errEl.textContent='El stock no puede ser negativo.'; errEl.style.display='block'; return; }
 
-  const payload = {store,nombre,categoria,descripcion:desc,precio,stock,imagen,badges};
-
-  if(editingId){
-    const idx = products.findIndex(p=>p.id===editingId);
-    if(idx>-1) products[idx]={...products[idx],...payload};
-    showToast('Producto actualizado ✓','success');
-  } else {
-    products.push({id:genId(store),...payload});
-    showToast('Producto creado ✓','success');
+  const payload={store,marca,nombre,categoria,descripcion:desc,precio,stock,imagen,badges,sugerenciaId};
+  saveBtn.disabled=true; saveBtn.textContent='Guardando…';
+  try {
+    await fbSave(payload, editingId||null);
+    closeModal();
+    renderAdmin();
+    showToast(editingId?'Producto actualizado ✓':'Producto creado ✓','success');
+  } catch(e){
+    errEl.textContent='Error al guardar: '+e.message; errEl.style.display='block';
+  } finally {
+    saveBtn.disabled=false; saveBtn.textContent='Guardar producto';
   }
-  closeModal();
-  renderAdmin();
-}
+};
 
-// ═══════════════════════════════════════════════════════════════
-// ELIMINAR
-// ═══════════════════════════════════════════════════════════════
-function promptDelete(id){
+// ── ELIMINAR ─────────────────────────────────────────────────
+window.promptDelete = function(id){
   deleteId=id;
   const p=products.find(x=>x.id===id);
   if(!p) return;
   document.getElementById('confirm-name').textContent=p.nombre;
   document.getElementById('confirm-overlay').classList.add('open');
-}
-function closeConfirm(){ document.getElementById('confirm-overlay').classList.remove('open'); deleteId=null; }
-function confirmDelete(){
+};
+window.closeConfirm = function(){
+  document.getElementById('confirm-overlay').classList.remove('open');
+  deleteId=null;
+};
+window.confirmDelete = async function(){
   if(!deleteId) return;
-  products=products.filter(p=>p.id!==deleteId);
-  cart=cart.filter(i=>i.id!==deleteId);
-  updateCartUI();
-  closeConfirm();
-  renderAdmin();
-  showToast('Producto eliminado','success');
-}
+  try {
+    await fbDelete(deleteId);
+    cart=cart.filter(i=>i.id!==deleteId);
+    updateCartUI();
+    closeConfirm();
+    renderAdmin();
+    showToast('Producto eliminado','success');
+  } catch(e){
+    showToast('Error al eliminar: '+e.message,'error');
+  }
+};
 
-// ═══════════════════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════════════════
-function showToast(msg, type='success'){
-  const t = document.getElementById('toast');
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
   clearTimeout(toastTimer);
   t.className='toast '+type;
   t.textContent=(type==='success'?'✓ ':'⚠ ')+msg;
   void t.offsetWidth;
   t.classList.add('show');
-  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
 }
+window.showToast=showToast;
 
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
-renderCatalog('lubricentro');
-renderCatalog('ferreteria');
+// ── INIT ─────────────────────────────────────────────────────
+await loadProducts();
+loadCartFromURL();
 updateCartUI();
+
 </script>
 </body>
 </html>
