@@ -3,471 +3,1166 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Esquiú Shop — Ferretería & Lubricentro</title>
+<title>Esquiú Shop — Ferretería & Lubricentro | Córdoba</title>
+
+<!-- SEO & OpenGraph -->
+<meta name="description" content="Ferretería y Lubricentro Esquiú en Villa Esquiú, Córdoba. Aceites, filtros, herramientas, maquinaria y más. Envío en Córdoba Capital."/>
+<meta name="keywords" content="ferretería córdoba, lubricentro córdoba, aceite motor, herramientas, villa esquiú"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Esquiú Shop — Ferretería & Lubricentro Córdoba"/>
+<meta property="og:description" content="Tu ferretería industrial y lubricentro de confianza en Villa Esquiú, Córdoba. Envío a Córdoba Capital."/>
+<meta property="og:image" content="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80"/>
+<meta property="og:url" content="https://esquiushop.com.ar"/>
+<meta property="og:site_name" content="Esquiú Shop"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Esquiú Shop — Ferretería & Lubricentro Córdoba"/>
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80"/>
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;600;700;800&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;600;700;800&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
 <style>
+/* ════════════════════════════════════════════════
+   DESIGN TOKENS
+════════════════════════════════════════════════ */
 :root{
-  --bg:#f5f4f0;--surface:#ffffff;--surface2:#f0efe9;--border:#e5e3dc;
-  --text:#1a1a18;--muted:#7a7870;--amber:#d4820a;--amber-light:#fef3e0;
-  --blue:#1a56d4;--blue-light:#eff4ff;--green:#16a34a;--red:#dc2626;
-  --font-head:'Fustat',sans-serif;--font-body:'Schibsted Grotesk',sans-serif;
-  --font-ui:'Inter',sans-serif;--r:10px;--r-lg:16px;
+  --gold:#FFD700;
+  --gold-dark:#e6c200;
+  --gold-light:#fff9cc;
+  --black:#0a0a0a;
+  --near-black:#111827;
+  --surface:#ffffff;
+  --surface2:#f8f7f4;
+  --surface3:#f0efe9;
+  --border:#e5e3dc;
+  --border2:#d1cfc6;
+  --text:#111827;
+  --text2:#4b5563;
+  --text3:#9ca3af;
+  --red:#dc2626;
+  --green:#16a34a;
+  --blue:#2563eb;
+  --font-head:'Fustat',sans-serif;
+  --font-body:'Schibsted Grotesk',sans-serif;
+  --font-detail:'Noto Sans',sans-serif;
+  --r:10px;
+  --r-lg:16px;
+  --r-xl:24px;
+  --header-h:64px;
+  --catbar-h:44px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.1);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.14);
+  --shadow-xl:0 16px 48px rgba(0,0,0,.18);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;min-height:100vh;overflow-x:hidden}
-
-/* ── NAVBAR ── */
-.navbar{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06)}
-.nav-logo{font-family:var(--font-head);font-size:24px;font-weight:800;letter-spacing:-1.44px;color:var(--text);cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
-.nav-logo-dot{width:8px;height:8px;border-radius:50%;background:#d4820a}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-link{font-family:var(--font-ui);font-size:14px;font-weight:500;color:#444;cursor:pointer;padding:7px 14px;border-radius:8px;transition:background .15s,color .15s;border:none;background:none}
-.nav-link:hover{background:rgba(0,0,0,0.06);color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.cart-btn{position:relative;background:rgba(0,0,0,0.06);border:none;border-radius:8px;padding:7px 16px;cursor:pointer;font-family:var(--font-ui);font-size:14px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:6px;transition:background .15s}
-.cart-btn:hover{background:rgba(0,0,0,0.1)}
-.cart-count{background:#d4820a;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;position:absolute;top:-6px;right:-6px}
-.admin-btn{background:#000;color:#fff;border:none;border-radius:8px;padding:7px 18px;cursor:pointer;font-family:var(--font-ui);font-size:14px;font-weight:500;transition:opacity .15s}
-.admin-btn:hover{opacity:.82}
-
-/* ── HERO ── */
-.hero{position:relative;height:100vh;min-height:640px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.hero-video-wrap{position:absolute;inset:0;z-index:0;background:#0a0a0a}
-.hero-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:115%;height:115%;object-fit:cover;object-position:top;will-change:opacity}
-.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(0,0,0,0.42) 0%,rgba(0,0,0,0.18) 50%,rgba(0,0,0,0.54) 100%)}
-.hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px;max-width:860px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.22);border-radius:100px;padding:6px 16px;font-family:var(--font-ui);font-size:13px;font-weight:500;color:rgba(255,255,255,0.9);margin-bottom:24px;letter-spacing:0.02em}
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#f0b840;flex-shrink:0}
-.hero-headline{font-family:var(--font-head);font-size:clamp(48px,7vw,80px);font-weight:800;letter-spacing:-4.8px;line-height:0.95;color:#fff;margin-bottom:36px}
-.hero-headline span{color:#f0b840}
-
-/* ── AI SEARCH BOX ── */
-.search-box{width:min(728px,92vw);background:rgba(0,0,0,0.24);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.18);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.search-top-row{display:flex;align-items:center;gap:8px}
-.search-top-label{font-family:var(--font-ui);font-size:12px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap}
-.search-quick-btns{display:flex;gap:6px;flex-wrap:wrap}
-.search-quick-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:100px;padding:4px 12px;font-family:var(--font-ui);font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);cursor:pointer;transition:background .15s;white-space:nowrap}
-.search-quick-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
-.search-input-row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:10px 10px 10px 16px}
-.search-input{flex:1;border:none;outline:none;font-family:var(--font-ui);font-size:15px;color:#1a1a18;background:transparent;caret-color:#d4820a}
-.search-input::placeholder{color:#aaa}
-.search-send-btn{width:36px;height:36px;border-radius:50%;background:#000;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
-.search-send-btn:hover{background:#333}
-.search-send-btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.search-bottom-row{display:flex;align-items:center;gap:8px}
-.search-action-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:100px;padding:5px 12px;font-family:var(--font-ui);font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);cursor:pointer;transition:background .15s}
-.search-action-btn:hover{background:rgba(255,255,255,0.18);color:#fff}
-.search-action-btn svg{width:13px;height:13px;opacity:.8}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;opacity:.7}
-.hero-scroll-dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:scrollBounce 1.6s ease-in-out infinite}
-@keyframes scrollBounce{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(8px);opacity:1}}
-
-/* ── STORE SECTION ── */
-.store-section{max-width:1160px;margin:0 auto;padding:64px 24px 32px}
-.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
-.section-title{font-family:var(--font-head);font-size:32px;font-weight:800;letter-spacing:-1.5px;color:var(--text)}
-.section-subtitle{font-size:14px;color:var(--muted);margin-top:4px;font-family:var(--font-ui)}
-.store-tabs{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:28px;width:fit-content}
-.store-tab{font-family:var(--font-ui);font-size:13px;font-weight:500;padding:7px 18px;border-radius:7px;border:none;background:none;cursor:pointer;color:var(--muted);transition:all .15s;white-space:nowrap}
-.store-tab.active{background:#000;color:#fff}
-.catalog-controls{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
-.catalog-search{flex:1;min-width:200px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 16px;font-family:var(--font-ui);font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
-.catalog-search:focus{border-color:#000}
-.catalog-search::placeholder{color:#b0ae a6}
-.cat-select{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 14px;font-family:var(--font-ui);font-size:13px;color:var(--text);outline:none;cursor:pointer}
-.cat-select:focus{border-color:#000}
-.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
-.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s;cursor:default}
-.prod-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.1);transform:translateY(-3px)}
-.prod-img{width:100%;height:160px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden;position:relative}
-.prod-img img{width:100%;height:100%;object-fit:cover}
-.prod-store-tag{position:absolute;top:10px;left:10px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;font-family:var(--font-ui)}
-.tag-lubri{background:var(--blue-light);color:var(--blue)}
-.tag-ferr{background:var(--amber-light);color:#92580a}
-.prod-body{padding:14px;flex:1;display:flex;flex-direction:column}
-.prod-cat{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-family:var(--font-ui)}
-.prod-name{font-family:var(--font-head);font-size:16px;font-weight:700;letter-spacing:-.3px;line-height:1.2;margin-bottom:4px;color:var(--text)}
-.prod-desc{font-size:12px;color:var(--muted);line-height:1.5;flex:1;font-family:'Noto Sans',sans-serif}
-.prod-badges{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
-.badge{font-size:10px;padding:2px 8px;border-radius:100px;font-weight:600;font-family:var(--font-ui)}
-.badge-green{background:#f0fdf4;color:#15803d}
-.badge-amber{background:var(--amber-light);color:#92580a}
-.prod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px}
-.prod-price{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
-.add-btn{background:#000;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;font-family:var(--font-ui);white-space:nowrap}
-.add-btn:hover{opacity:.8}
-.add-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed;opacity:1}
-.no-stock{font-size:11px;color:var(--red);margin-top:4px;font-family:var(--font-ui)}
-.loading-state{grid-column:1/-1;padding:64px 20px;text-align:center;color:var(--muted);font-family:var(--font-ui)}
-.spinner{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── CART DRAWER ── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
-.overlay.open{opacity:1;pointer-events:all}
-.cart-drawer{position:fixed;right:0;top:0;height:100%;width:min(440px,100vw);background:var(--surface);z-index:301;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 48px rgba(0,0,0,.12)}
-.cart-drawer.open{transform:translateX(0)}
-.drawer-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.drawer-title{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-.8px}
-.close-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
-.close-btn:hover{background:var(--border)}
-.cart-items{flex:1;overflow-y:auto;padding:16px 22px}
-.cart-empty{text-align:center;padding:48px 20px;color:var(--muted);font-family:var(--font-ui)}
-.cart-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
-.ci-img{width:54px;height:54px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden;border:1px solid var(--border)}
-.ci-img img{width:100%;height:100%;object-fit:cover}
-.ci-info{flex:1;min-width:0}
-.ci-name{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:2px;font-family:var(--font-ui)}
-.ci-cat{font-size:11px;color:var(--muted);font-family:var(--font-ui)}
-.ci-qty{display:flex;align-items:center;gap:8px;margin-top:8px}
-.qty-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;color:var(--text)}
-.qty-btn:hover{background:var(--border)}
-.ci-price{font-family:var(--font-head);font-size:17px;font-weight:800;letter-spacing:-.3px;color:var(--text);white-space:nowrap}
-.ci-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px;transition:color .15s;margin-top:2px}
-.ci-del:hover{color:var(--red)}
-.cart-footer{padding:16px 22px;border-top:1px solid var(--border)}
-.cart-form{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.cf-input{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 12px;color:var(--text);font-family:var(--font-ui);font-size:13px;outline:none;transition:border-color .15s;width:100%}
-.cf-input:focus{border-color:#000}
-.cf-input::placeholder{color:#aaa}
-.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
-.cart-total-label{font-size:14px;color:var(--muted);font-family:var(--font-ui)}
-.cart-total-val{font-family:var(--font-head);font-size:30px;font-weight:800;letter-spacing:-1.2px;color:var(--text)}
-.wa-btn{width:100%;background:#1a7a37;color:#fff;border:none;border-radius:var(--r);padding:14px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-ui);transition:background .15s}
-.wa-btn:hover{background:#15652e}
-.wa-btn:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
-.share-btn{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text);margin-top:8px;font-family:var(--font-ui);display:flex;align-items:center;justify-content:center;gap:6px;transition:border-color .15s}
-.share-btn:hover{border-color:#000}
-.clear-btn{width:100%;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-top:6px;padding:4px;font-family:var(--font-ui);transition:color .15s}
-.clear-btn:hover{color:var(--red)}
-.shipping-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px}
-.shipping-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-family:var(--font-ui);font-weight:600}
-.shipping-row{display:flex;gap:8px}
-.shipping-input{flex:1;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-family:var(--font-ui);font-size:13px;outline:none;transition:border-color .15s}
-.shipping-input:focus{border-color:#000}
-.shipping-input::placeholder{color:#bbb}
-.shipping-calc{background:#000;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-ui);white-space:nowrap;transition:opacity .15s}
-.shipping-calc:hover{opacity:.8}
-.shipping-result{margin-top:8px;font-size:12px;padding:7px 10px;border-radius:7px;display:none;font-family:var(--font-ui)}
-.s-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
-.s-consult{background:var(--amber-light);border:1px solid #fde68a;color:#92580a}
-.cross-banner{background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--r);padding:12px;margin-bottom:12px}
-.cross-title{font-size:11px;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-family:var(--font-ui);font-weight:600}
-.cross-item{display:flex;align-items:center;gap:10px}
-.cross-img{width:40px;height:40px;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(--border);overflow:hidden}
-.cross-img img{width:100%;height:100%;object-fit:cover}
-.cross-info{flex:1;min-width:0}
-.cross-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--font-ui)}
-.cross-price{font-size:12px;color:var(--blue);font-weight:600;font-family:var(--font-head)}
-.cross-add{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);white-space:nowrap;transition:opacity .15s}
-.cross-add:hover{opacity:.8}
-
-/* ── ADMIN LOGIN ── */
-.admin-login-wrap{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:24px;background:var(--surface2)}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px 32px;width:100%;max-width:380px;box-shadow:0 4px 32px rgba(0,0,0,.07)}
-.login-title{font-family:var(--font-head);font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px}
-.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;font-family:var(--font-ui)}
-.form-group{margin-bottom:16px}
-.form-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px;font-family:var(--font-ui);font-weight:600}
-.l-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:11px 14px;color:var(--text);font-family:var(--font-ui);font-size:14px;outline:none;transition:border-color .15s}
-.l-input:focus{border-color:#000}
-.l-input::placeholder{color:#bbb}
-.l-btn{width:100%;background:#000;color:#fff;border:none;border-radius:var(--r);padding:13px;font-family:var(--font-ui);font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:opacity .15s}
-.l-btn:hover{opacity:.82}
-.l-btn:disabled{opacity:.5;cursor:not-allowed}
-.l-error{background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);padding:10px 14px;color:var(--red);font-size:13px;margin-bottom:16px;font-family:var(--font-ui)}
-.sec-note{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;font-size:11px;color:var(--muted);margin-top:16px;line-height:1.5;font-family:var(--font-ui)}
-
-/* ── ADMIN DASHBOARD ── */
-.admin-wrap{max-width:1160px;margin:0 auto;padding:88px 24px 40px}
-.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
-.admin-heading{font-family:var(--font-head);font-size:30px;font-weight:800;letter-spacing:-1px}
-.admin-heading span{color:var(--amber)}
-.logout-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:8px 16px;color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font-ui);transition:all .15s}
-.logout-btn:hover{border-color:var(--red);color:var(--red)}
-.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px}
-.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;font-family:var(--font-ui);font-weight:600}
-.stat-val{font-family:var(--font-head);font-size:30px;font-weight:800;letter-spacing:-1px}
-.admin-controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.a-search{flex:1;min-width:180px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font-ui)}
-.a-search:focus{border-color:#000}
-.a-search::placeholder{color:#bbb}
-.a-sel{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 14px;color:var(--text);font-size:13px;outline:none;cursor:pointer;font-family:var(--font-ui)}
-.new-btn{background:#000;color:#fff;border:none;border-radius:var(--r);padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-ui);white-space:nowrap;transition:opacity .15s}
-.new-btn:hover{opacity:.8}
-.admin-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
-.a-table{width:100%;border-collapse:collapse;font-size:13px;font-family:var(--font-ui)}
-.a-table thead{background:var(--surface2)}
-.a-table th{text-align:left;padding:11px 16px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;border-bottom:1px solid var(--border)}
-.a-table td{padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
-.a-table tr:last-child td{border-bottom:none}
-.a-table tr:hover td{background:#fafafa}
-.td-img{width:44px;height:44px;border-radius:7px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid var(--border);overflow:hidden;flex-shrink:0}
-.td-img img{width:100%;height:100%;object-fit:cover}
-.s-tag{display:inline-block;font-size:10px;padding:2px 9px;border-radius:100px;font-weight:700}
-.stock-low{color:var(--red);font-weight:700}
-.stock-ok{color:var(--green);font-weight:700}
-.stock-warn{color:var(--amber);font-weight:700}
-.e-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 11px;color:var(--text);font-size:11px;cursor:pointer;font-family:var(--font-ui);transition:border-color .15s}
-.e-btn:hover{border-color:#000}
-.d-btn{background:none;border:1px solid transparent;border-radius:6px;padding:5px 9px;color:var(--muted);font-size:11px;cursor:pointer;font-family:var(--font-ui);transition:all .15s}
-.d-btn:hover{border-color:var(--red);color:var(--red)}
-.a-footer{margin-top:10px;font-size:12px;color:var(--muted);font-family:var(--font-ui)}
-.db-badge{font-size:10px;padding:3px 9px;border-radius:100px;font-family:var(--font-ui);font-weight:600;vertical-align:middle;margin-left:8px}
-.db-ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
-.db-err{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
-.db-load{background:var(--amber-light);color:#92580a;border:1px solid #fde68a}
-
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.15)}
-.modal-head{padding:22px 26px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;border-radius:var(--r-lg) var(--r-lg) 0 0}
-.modal-title{font-family:var(--font-head);font-size:20px;font-weight:800;letter-spacing:-.5px}
-.modal-body{padding:22px 26px}
-.m-field{margin-bottom:15px}
-.m-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px;font-family:var(--font-ui);font-weight:600}
-.m-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 13px;color:var(--text);font-family:var(--font-ui);font-size:13px;outline:none;transition:border-color .15s}
-.m-input:focus{border-color:#000}
-.m-input::placeholder{color:#bbb}
-textarea.m-input{resize:vertical;min-height:72px}
-.m-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.m-select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 13px;color:var(--text);font-size:13px;outline:none;font-family:var(--font-ui)}
-.badge-group{display:flex;flex-wrap:wrap;gap:7px}
-.badge-toggle{background:var(--surface2);border:1.5px solid var(--border);border-radius:100px;padding:4px 13px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none;font-family:var(--font-ui);font-weight:500}
-.badge-toggle.on{background:#000;border-color:#000;color:#fff}
-.img-prev{width:100%;height:96px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;margin-top:8px}
-.img-prev img{width:100%;height:100%;object-fit:cover}
-.modal-footer{padding:16px 26px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
-.m-cancel{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 20px;color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font-ui);transition:color .15s}
-.m-cancel:hover{color:var(--text)}
-.m-save{background:#000;color:#fff;border:none;border-radius:var(--r);padding:9px 24px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:opacity .15s}
-.m-save:hover{opacity:.8}
-.m-save:disabled{opacity:.4;cursor:not-allowed}
-.m-error{background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);padding:8px 12px;color:var(--red);font-size:12px;margin-bottom:12px;font-family:var(--font-ui)}
-.confirm-modal{max-width:360px}
-
-/* ── FOOTER ── */
-.site-footer{background:#111;color:#fff;padding:56px 40px 32px;margin-top:80px}
-.footer-inner{max-width:1160px;margin:0 auto}
-.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:40px;flex-wrap:wrap}
-@media(max-width:700px){.footer-top{grid-template-columns:1fr}}
-.footer-logo{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-1px;margin-bottom:10px}
-.footer-logo span{color:#f0b840}
-.footer-desc{font-size:13px;color:#888;line-height:1.6;font-family:'Noto Sans',sans-serif;max-width:280px}
-.footer-address{font-size:13px;color:#aaa;line-height:1.8;font-family:var(--font-ui);margin-top:14px}
-.footer-col-title{font-family:var(--font-ui);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#666;margin-bottom:14px}
-.footer-link{display:block;font-size:13px;color:#888;margin-bottom:8px;cursor:pointer;font-family:var(--font-ui);transition:color .15s;text-decoration:none}
-.footer-link:hover{color:#fff}
-.footer-bottom{border-top:1px solid #222;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.footer-copy{font-size:12px;color:#555;font-family:var(--font-ui)}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;z-index:500;background:#fff;border:1px solid var(--border);border-radius:12px;padding:13px 18px;font-size:13px;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.12);font-family:var(--font-ui)}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.success{border-left:4px solid var(--green)}
-.toast.error{border-left:4px solid var(--red)}
-.page{display:none;animation:fadeIn .2s ease}
-.page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--surface2);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit}
+img{max-width:100%;display:block}
+input,select{font-family:inherit}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+select option{background:#fff}
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
 input[type=number]{-moz-appearance:textfield}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-select option{background:#fff}
+
+/* ════════════════════════════════════════════════
+   HEADER (STICKY)
+════════════════════════════════════════════════ */
+.header{
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  height:var(--header-h);
+}
+.header-inner{
+  max-width:1280px;margin:0 auto;padding:0 24px;
+  height:100%;display:flex;align-items:center;gap:16px;
+}
+/* Logo */
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.logo-mark{
+  width:36px;height:36px;background:var(--black);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg{width:20px;height:20px;fill:var(--gold)}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.logo-name{font-family:var(--font-head);font-size:16px;font-weight:800;letter-spacing:-.5px;color:var(--black)}
+.logo-sub{font-size:10px;color:var(--text3);font-family:var(--font-detail);letter-spacing:.04em;text-transform:uppercase}
+
+/* Search bar */
+.search-wrap{flex:1;max-width:560px;margin:0 auto;position:relative}
+.search-bar{
+  width:100%;height:40px;
+  background:var(--surface3);
+  border:1.5px solid var(--border);
+  border-radius:100px;
+  padding:0 44px 0 16px;
+  font-size:14px;color:var(--text);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.search-bar:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,215,0,.18)}
+.search-bar::placeholder{color:var(--text3)}
+.search-icon{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  color:var(--text3);pointer-events:none;
+}
+.search-icon svg{width:17px;height:17px}
+.search-clear{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--text3);padding:2px;
+  display:none;align-items:center;justify-content:center;
+}
+.search-clear.visible{display:flex}
+.search-clear:hover{color:var(--text)}
+
+/* Header right */
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.db-badge{
+  font-size:10px;padding:3px 9px;border-radius:100px;
+  font-family:var(--font-detail);font-weight:600;
+}
+.db-ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.db-err{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
+.db-load{background:var(--gold-light);color:#92580a;border:1px solid #fde68a}
+.cart-trigger{
+  position:relative;
+  background:var(--black);color:#fff;
+  border:none;border-radius:100px;
+  padding:8px 18px 8px 14px;
+  display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:600;
+  transition:background .15s;
+}
+.cart-trigger:hover{background:#333}
+.cart-trigger svg{width:16px;height:16px}
+.cart-count{
+  background:var(--gold);color:var(--black);
+  border-radius:50%;width:19px;height:19px;
+  font-size:10px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  position:absolute;top:-7px;right:-7px;
+}
+.admin-trigger{
+  background:none;border:1.5px solid var(--border);
+  border-radius:8px;padding:7px 14px;
+  font-size:13px;font-weight:500;color:var(--text2);
+  transition:all .15s;
+}
+.admin-trigger:hover{border-color:var(--black);color:var(--black)}
+
+/* Hamburger */
+.hamburger{
+  display:none;background:none;border:1.5px solid var(--border);
+  border-radius:8px;width:38px;height:38px;
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:5px;
+}
+.hamburger span{
+  width:18px;height:2px;background:var(--text);
+  border-radius:2px;transition:all .3s;display:block;
+}
+
+/* ════════════════════════════════════════════════
+   CATEGORY BAR
+════════════════════════════════════════════════ */
+.cat-bar{
+  background:rgba(255,255,255,0.98);
+  border-bottom:1px solid var(--border);
+  height:var(--catbar-h);
+  overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:none;
+  position:sticky;top:var(--header-h);z-index:190;
+}
+.cat-bar::-webkit-scrollbar{display:none}
+.cat-bar-inner{
+  max-width:1280px;margin:0 auto;padding:0 24px;
+  height:100%;display:flex;align-items:center;gap:4px;
+  white-space:nowrap;
+}
+.cat-pill{
+  font-size:12px;font-weight:500;
+  padding:5px 14px;border-radius:100px;
+  border:1.5px solid transparent;
+  background:none;color:var(--text2);
+  transition:all .15s;flex-shrink:0;
+}
+.cat-pill:hover{background:var(--surface3);color:var(--text)}
+.cat-pill.active{
+  background:var(--black);color:#fff;
+  border-color:var(--black);
+}
+.cat-divider{width:1px;height:16px;background:var(--border);flex-shrink:0;margin:0 6px}
+
+/* ════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════ */
+.hero{
+  position:relative;
+  min-height:88vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:#111;
+}
+.hero-video{
+  position:absolute;inset:0;width:115%;height:115%;
+  left:50%;top:50%;transform:translate(-50%,-50%);
+  object-fit:cover;object-position:top;
+  will-change:opacity;
+}
+.hero-img-fallback{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1600&q=80');
+  background-size:cover;background-position:center;
+  opacity:.5;
+}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:rgba(0,0,0,0.52);
+}
+.hero-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;padding:80px 24px 40px;
+  width:100%;max-width:900px;
+}
+.hero-label{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,215,0,0.15);
+  border:1px solid rgba(255,215,0,0.35);
+  border-radius:100px;padding:5px 14px;
+  font-size:11px;font-weight:600;color:var(--gold);
+  letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:20px;font-family:var(--font-detail);
+}
+.hero-label-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.hero-headline{
+  font-family:var(--font-head);
+  font-size:clamp(40px,7vw,80px);
+  font-weight:800;letter-spacing:-3.5px;
+  line-height:.96;color:#fff;
+  margin-bottom:14px;
+}
+.hero-headline em{color:var(--gold);font-style:normal}
+.hero-sub{
+  font-size:16px;color:rgba(255,255,255,.65);
+  max-width:480px;line-height:1.6;margin-bottom:40px;
+  font-family:var(--font-detail);
+}
+
+/* Glassmorphism cards */
+.hero-cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+.hero-card{
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.22);
+  border-radius:var(--r-xl);padding:28px 36px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  cursor:pointer;transition:all .2s;min-width:200px;
+}
+.hero-card:hover{
+  background:rgba(255,255,255,0.18);
+  border-color:rgba(255,215,0,0.5);
+  transform:translateY(-4px);
+}
+.hero-card-icon{font-size:36px}
+.hero-card-name{
+  font-family:var(--font-head);font-size:18px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;color:#fff;
+}
+.hero-card-sub{font-size:12px;color:rgba(255,255,255,.6);font-family:var(--font-detail)}
+.hero-card-btn{
+  background:var(--gold);color:var(--black);
+  border:none;border-radius:100px;
+  padding:7px 20px;font-size:12px;font-weight:700;
+  font-family:var(--font-detail);letter-spacing:.02em;
+  transition:background .15s;margin-top:4px;
+}
+.hero-card:hover .hero-card-btn{background:#fff}
+
+/* Hero strip */
+.hero-strip{
+  position:relative;z-index:2;
+  width:100%;background:rgba(0,0,0,.4);
+  backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.1);
+  padding:14px 24px;
+  display:flex;gap:32px;justify-content:center;flex-wrap:wrap;
+}
+.hero-strip-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:rgba(255,255,255,.75);
+  font-family:var(--font-detail);
+}
+.hero-strip-item svg{width:15px;height:15px;opacity:.7}
+
+/* ════════════════════════════════════════════════
+   MAIN CONTENT
+════════════════════════════════════════════════ */
+.main{max-width:1280px;margin:0 auto;padding:40px 24px 80px}
+
+/* Filter bar */
+.filter-bar{
+  display:flex;gap:10px;align-items:center;
+  margin-bottom:28px;flex-wrap:wrap;
+}
+.filter-label{
+  font-size:11px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.08em;
+  font-family:var(--font-detail);white-space:nowrap;
+}
+.filter-sel{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:8px;padding:7px 12px;
+  font-size:13px;color:var(--text);outline:none;
+  cursor:pointer;transition:border-color .15s;
+  font-family:var(--font-body);
+}
+.filter-sel:focus{border-color:var(--gold)}
+.results-info{
+  font-size:13px;color:var(--text3);
+  font-family:var(--font-detail);margin-left:auto;
+}
+
+/* Section title */
+.section-anchor{scroll-margin-top:calc(var(--header-h) + var(--catbar-h) + 20px)}
+.section-head{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:24px;
+}
+.section-badge{
+  display:flex;align-items:center;gap:8px;
+  background:var(--black);color:#fff;
+  border-radius:100px;padding:6px 16px;
+  font-family:var(--font-head);font-size:14px;font-weight:700;
+  letter-spacing:.02em;
+}
+.section-divider{flex:1;height:1px;background:var(--border)}
+
+/* Product grid */
+.prod-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:18px;
+}
+
+/* Skeleton */
+.skeleton{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.skel-img{height:160px;background:linear-gradient(90deg,var(--surface3) 25%,var(--border) 50%,var(--surface3) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.skel-body{padding:14px}
+.skel-line{height:12px;border-radius:4px;background:linear-gradient(90deg,var(--surface3) 25%,var(--border) 50%,var(--surface3) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;margin-bottom:8px}
+.skel-line.short{width:60%}
+.skel-line.price{width:40%;height:18px;margin-top:12px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Product card */
+.prod-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:box-shadow .22s,transform .22s;
+  position:relative;
+}
+.prod-card:hover{
+  box-shadow:var(--shadow-lg);
+  transform:translateY(-4px);
+}
+.prod-img-wrap{
+  position:relative;height:160px;
+  background:var(--surface3);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+}
+.prod-img-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .3s;
+}
+.prod-card:hover .prod-img-wrap img{transform:scale(1.05)}
+.prod-img-placeholder{font-size:48px;opacity:.5}
+.prod-store-pill{
+  position:absolute;top:9px;left:9px;
+  font-size:9px;font-weight:700;padding:3px 8px;border-radius:100px;
+  font-family:var(--font-detail);letter-spacing:.04em;text-transform:uppercase;
+}
+.pill-lubri{background:rgba(37,99,235,.12);color:#1d4ed8;border:1px solid rgba(37,99,235,.2)}
+.pill-ferr{background:rgba(255,215,0,.2);color:#854d0e;border:1px solid rgba(255,215,0,.35)}
+.badge-oferta{
+  position:absolute;top:9px;right:9px;
+  background:var(--red);color:#fff;
+  font-size:9px;font-weight:700;padding:3px 8px;
+  border-radius:100px;font-family:var(--font-detail);letter-spacing:.04em;
+}
+.prod-body{padding:13px;flex:1;display:flex;flex-direction:column}
+.prod-cat{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;font-family:var(--font-detail)}
+.prod-name{
+  font-family:var(--font-head);font-size:15px;font-weight:700;
+  letter-spacing:-.2px;line-height:1.3;margin-bottom:4px;color:var(--text);
+}
+.prod-desc{font-size:12px;color:var(--text2);line-height:1.5;flex:1;font-family:var(--font-detail)}
+.prod-badges{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 0}
+.pbadge{font-size:10px;padding:2px 7px;border-radius:100px;font-family:var(--font-detail);font-weight:600}
+.pbadge-g{background:#f0fdf4;color:#15803d}
+.pbadge-y{background:var(--gold-light);color:#854d0e}
+.prod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px}
+.prod-price{font-family:var(--font-head);font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--black)}
+.prod-price-orig{font-size:12px;color:var(--text3);text-decoration:line-through;margin-left:4px;font-family:var(--font-detail)}
+.add-btn{
+  background:var(--black);color:#fff;
+  border:none;border-radius:8px;
+  padding:8px 14px;font-size:12px;font-weight:700;
+  transition:background .15s;white-space:nowrap;
+  font-family:var(--font-detail);
+}
+.add-btn:hover{background:var(--near-black)}
+.add-btn.out{background:var(--surface3);color:var(--text3);cursor:not-allowed}
+.no-stock-tag{font-size:11px;color:var(--red);margin-top:4px;font-family:var(--font-detail)}
+
+/* Empty state */
+.empty-state{
+  grid-column:1/-1;padding:72px 24px;
+  text-align:center;color:var(--text3);
+}
+.empty-state-icon{font-size:48px;margin-bottom:12px}
+.empty-state-title{font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.empty-state-sub{font-size:14px;font-family:var(--font-detail)}
+
+/* ════════════════════════════════════════════════
+   CART DRAWER
+════════════════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{
+  position:fixed;right:0;top:0;height:100%;width:min(460px,100vw);
+  background:var(--surface);z-index:301;
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 48px rgba(0,0,0,.14);
+}
+.cart-drawer.open{transform:translateX(0)}
+.drawer-head{
+  padding:20px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.drawer-title{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-.6px}
+.close-btn{
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:8px;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--text3);transition:background .15s;
+}
+.close-btn:hover{background:var(--border);color:var(--text)}
+.cart-body{flex:1;overflow-y:auto;padding:0 22px}
+.cart-empty-state{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;height:100%;padding:48px 20px;
+  color:var(--text3);text-align:center;
+}
+.cart-empty-state-icon{font-size:52px;margin-bottom:14px}
+.cart-empty-state-title{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:6px;color:var(--text2)}
+.cart-empty-state-sub{font-size:13px;font-family:var(--font-detail)}
+.cart-item{
+  display:flex;gap:13px;padding:16px 0;
+  border-bottom:1px solid var(--border);
+  align-items:flex-start;
+}
+.ci-img{
+  width:58px;height:58px;border-radius:9px;
+  background:var(--surface3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;overflow:hidden;border:1px solid var(--border);
+}
+.ci-img img{width:100%;height:100%;object-fit:cover}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:2px;font-family:var(--font-body)}
+.ci-cat{font-size:11px;color:var(--text3);font-family:var(--font-detail)}
+.ci-qty{display:flex;align-items:center;gap:9px;margin-top:8px}
+.qty-btn{
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:6px;width:27px;height:27px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--text);transition:background .15s;
+}
+.qty-btn:hover:not(:disabled){background:var(--border)}
+.qty-btn:disabled{opacity:.4;cursor:not-allowed}
+.qty-num{font-size:14px;font-weight:700;min-width:22px;text-align:center;font-family:var(--font-body)}
+.stock-warn{font-size:10px;color:var(--red);margin-top:3px;font-family:var(--font-detail)}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.ci-price{font-family:var(--font-head);font-size:17px;font-weight:800;letter-spacing:-.4px}
+.ci-del{background:none;border:none;color:var(--text3);font-size:14px;padding:2px;transition:color .15s}
+.ci-del:hover{color:var(--red)}
+
+/* Cart footer */
+.cart-foot{
+  padding:16px 22px 24px;
+  border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:10px;
+  flex-shrink:0;
+}
+.cf-form{display:flex;flex-direction:column;gap:8px}
+.cf-input{
+  background:var(--surface3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:9px 12px;
+  font-size:13px;color:var(--text);outline:none;
+  transition:border-color .15s;width:100%;
+  font-family:var(--font-body);
+}
+.cf-input:focus{border-color:var(--gold)}
+.cf-input::placeholder{color:var(--text3)}
+.cf-row{display:flex;gap:8px}
+
+/* Shipping box */
+.shipping-box{
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:var(--r);padding:12px;
+}
+.shipping-title{
+  font-size:11px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.07em;
+  margin-bottom:8px;font-family:var(--font-detail);
+}
+.shipping-row{display:flex;gap:8px}
+.shipping-input{
+  flex:1;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:8px;padding:8px 11px;
+  font-size:13px;color:var(--text);outline:none;
+  font-family:var(--font-body);transition:border-color .15s;
+}
+.shipping-input:focus{border-color:var(--gold)}
+.shipping-input::placeholder{color:var(--text3)}
+.shipping-btn{
+  background:var(--black);color:#fff;border:none;
+  border-radius:8px;padding:8px 14px;
+  font-size:12px;font-weight:700;font-family:var(--font-detail);
+  white-space:nowrap;transition:opacity .15s;
+}
+.shipping-btn:hover{opacity:.8}
+.shipping-result{
+  margin-top:8px;font-size:12px;padding:7px 10px;
+  border-radius:7px;display:none;font-family:var(--font-detail);
+}
+.s-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
+.s-consult{background:var(--gold-light);border:1px solid #fde68a;color:#92580a}
+.s-err{background:#fef2f2;border:1px solid #fecaca;color:var(--red)}
+
+/* Cross-sell */
+.cross-sell{
+  background:linear-gradient(135deg,#eff6ff,#f0fdf4);
+  border:1px solid #bfdbfe;border-radius:var(--r);padding:12px;
+}
+.cross-title{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;font-family:var(--font-detail)}
+.cross-item{display:flex;align-items:center;gap:10px}
+.cross-img{
+  width:42px;height:42px;border-radius:7px;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;overflow:hidden;
+}
+.cross-img img{width:100%;height:100%;object-fit:cover}
+.cross-info{flex:1;min-width:0}
+.cross-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cross-price{font-size:12px;color:var(--blue);font-weight:700;font-family:var(--font-head)}
+.cross-add{
+  background:var(--blue);color:#fff;border:none;
+  border-radius:7px;padding:6px 11px;font-size:11px;font-weight:700;
+  font-family:var(--font-detail);white-space:nowrap;transition:opacity .15s;
+}
+.cross-add:hover{opacity:.82}
+
+/* Totals */
+.totals-section{display:flex;flex-direction:column;gap:6px}
+.total-row{display:flex;justify-content:space-between;align-items:baseline}
+.total-label{font-size:13px;color:var(--text2);font-family:var(--font-detail)}
+.total-val{font-size:14px;font-weight:600;font-family:var(--font-body)}
+.total-row.final .total-label{font-size:15px;font-weight:700;color:var(--text)}
+.total-row.final .total-val{font-family:var(--font-head);font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--black)}
+.total-row.shipping .total-val{color:var(--green)}
+
+/* CTA buttons */
+.wa-btn{
+  width:100%;background:#075E54;color:#fff;border:none;
+  border-radius:var(--r);padding:15px;
+  font-size:15px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  transition:background .15s;font-family:var(--font-detail);
+}
+.wa-btn:hover{background:#064d45}
+.wa-btn:disabled{background:var(--surface3);color:var(--text3);cursor:not-allowed}
+.share-btn{
+  width:100%;background:var(--surface3);
+  border:1.5px solid var(--border);border-radius:var(--r);
+  padding:10px;font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:border-color .15s;color:var(--text);
+  font-family:var(--font-detail);
+}
+.share-btn:hover{border-color:var(--black)}
+.clear-btn{
+  background:none;border:none;color:var(--text3);
+  font-size:12px;font-family:var(--font-detail);
+  padding:4px;transition:color .15s;width:100%;text-align:center;
+}
+.clear-btn:hover{color:var(--red)}
+
+/* Mobile cart fab */
+.cart-fab{
+  display:none;
+  position:fixed;bottom:20px;right:20px;z-index:180;
+  background:var(--black);color:#fff;
+  border:none;border-radius:100px;
+  padding:12px 20px;box-shadow:var(--shadow-xl);
+  font-size:14px;font-weight:700;font-family:var(--font-detail);
+  align-items:center;gap:8px;
+}
+.cart-fab .cart-count{position:static;width:22px;height:22px;font-size:11px}
+
+/* ════════════════════════════════════════════════
+   ADMIN
+════════════════════════════════════════════════ */
+.page{display:none;animation:pageFadeIn .2s ease}
+.page.active{display:block}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.admin-login-wrap{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:80px 24px 40px;background:var(--surface2);
+}
+.login-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:40px 36px;
+  width:100%;max-width:380px;
+  box-shadow:var(--shadow-xl);
+}
+.login-title{font-family:var(--font-head);font-size:28px;font-weight:800;letter-spacing:-.8px;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:28px;font-family:var(--font-detail)}
+.fgroup{margin-bottom:16px}
+.flabel{
+  font-size:11px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.07em;
+  display:block;margin-bottom:6px;font-family:var(--font-detail);
+}
+.finput{
+  width:100%;background:var(--surface3);
+  border:1.5px solid var(--border);border-radius:var(--r);
+  padding:11px 14px;color:var(--text);font-size:14px;
+  outline:none;transition:border-color .15s;font-family:var(--font-body);
+}
+.finput:focus{border-color:var(--black)}
+.finput::placeholder{color:#ccc}
+.l-btn{
+  width:100%;background:var(--black);color:#fff;border:none;
+  border-radius:var(--r);padding:13px;
+  font-family:var(--font-head);font-size:16px;font-weight:800;
+  letter-spacing:.02em;transition:opacity .15s;margin-top:8px;
+}
+.l-btn:hover{opacity:.82}
+.l-btn:disabled{opacity:.45;cursor:not-allowed}
+.l-error{
+  background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);
+  padding:10px 14px;color:var(--red);font-size:13px;
+  margin-bottom:16px;font-family:var(--font-detail);
+}
+.sec-note{
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 14px;
+  font-size:11px;color:var(--text3);margin-top:16px;
+  line-height:1.6;font-family:var(--font-detail);
+}
+
+.admin-wrap{max-width:1200px;margin:0 auto;padding:90px 24px 60px}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.admin-heading{font-family:var(--font-head);font-size:30px;font-weight:800;letter-spacing:-.8px}
+.admin-heading em{color:var(--gold);font-style:normal}
+.logout-btn{
+  background:var(--surface3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:8px 16px;
+  font-size:13px;color:var(--text2);transition:all .15s;
+  font-family:var(--font-detail);
+}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:18px;
+}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;font-family:var(--font-detail);font-weight:600}
+.stat-val{font-family:var(--font-head);font-size:30px;font-weight:800;letter-spacing:-1px}
+.a-controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.a-search{
+  flex:1;min-width:180px;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:var(--r);
+  padding:9px 14px;font-size:13px;color:var(--text);outline:none;
+  font-family:var(--font-body);
+}
+.a-search:focus{border-color:var(--gold)}
+.a-search::placeholder{color:var(--text3)}
+.a-sel{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:9px 14px;
+  font-size:13px;color:var(--text);outline:none;
+  cursor:pointer;font-family:var(--font-body);
+}
+.new-btn{
+  background:var(--black);color:#fff;border:none;
+  border-radius:var(--r);padding:9px 20px;
+  font-size:13px;font-weight:700;font-family:var(--font-detail);
+  white-space:nowrap;transition:opacity .15s;
+}
+.new-btn:hover{opacity:.8}
+.a-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;overflow-x:auto}
+.a-table{width:100%;border-collapse:collapse;font-size:13px;font-family:var(--font-body)}
+.a-table thead{background:var(--surface3)}
+.a-table th{text-align:left;padding:11px 16px;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-weight:700;border-bottom:1px solid var(--border);white-space:nowrap;font-family:var(--font-detail)}
+.a-table td{padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.a-table tr:last-child td{border-bottom:none}
+.a-table tr:hover td{background:#fafaf8}
+.td-thumb{width:44px;height:44px;border-radius:8px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid var(--border);overflow:hidden;flex-shrink:0}
+.td-thumb img{width:100%;height:100%;object-fit:cover}
+.s-pill{display:inline-block;font-size:10px;padding:2px 9px;border-radius:100px;font-weight:700;font-family:var(--font-detail)}
+.s-lubri{background:#eff6ff;color:#1d4ed8}
+.s-ferr{background:var(--gold-light);color:#92580a}
+.stock-low{color:var(--red);font-weight:700}
+.stock-ok{color:var(--green);font-weight:700}
+.stock-warn{color:#d97706;font-weight:700}
+.e-btn{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 11px;font-size:11px;color:var(--text);cursor:pointer;font-family:var(--font-detail);transition:border-color .15s}
+.e-btn:hover{border-color:var(--black)}
+.d-btn{background:none;border:1px solid transparent;border-radius:6px;padding:4px 9px;font-size:11px;color:var(--text3);cursor:pointer;font-family:var(--font-detail);transition:all .15s}
+.d-btn:hover{border-color:var(--red);color:var(--red)}
+.a-foot{margin-top:10px;font-size:12px;color:var(--text3);font-family:var(--font-detail)}
+
+/* ════════════════════════════════════════════════
+   MODAL
+════════════════════════════════════════════════ */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);width:100%;max-width:520px;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:var(--shadow-xl);
+}
+.modal-head{
+  padding:22px 26px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:var(--surface);z-index:1;border-radius:var(--r-xl) var(--r-xl) 0 0;
+}
+.modal-title{font-family:var(--font-head);font-size:20px;font-weight:800;letter-spacing:-.4px}
+.modal-body{padding:22px 26px}
+.mfield{margin-bottom:15px}
+.mlabel{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:6px;font-family:var(--font-detail)}
+.minput{
+  width:100%;background:var(--surface3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:9px 13px;
+  color:var(--text);font-size:13px;outline:none;
+  transition:border-color .15s;font-family:var(--font-body);
+}
+.minput:focus{border-color:var(--gold)}
+.minput::placeholder{color:#ccc}
+textarea.minput{resize:vertical;min-height:72px}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mselect{width:100%;background:var(--surface3);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 13px;color:var(--text);font-size:13px;outline:none;font-family:var(--font-body)}
+.badge-grp{display:flex;flex-wrap:wrap;gap:7px}
+.btoggle{
+  background:var(--surface3);border:1.5px solid var(--border);
+  border-radius:100px;padding:4px 13px;
+  font-size:12px;color:var(--text2);cursor:pointer;
+  transition:all .15s;user-select:none;font-family:var(--font-detail);font-weight:500;
+}
+.btoggle.on{background:var(--black);border-color:var(--black);color:#fff}
+.img-prev{
+  width:100%;height:96px;background:var(--surface3);
+  border:1.5px solid var(--border);border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;overflow:hidden;margin-top:8px;
+}
+.img-prev img{width:100%;height:100%;object-fit:cover}
+.m-error{
+  background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);
+  padding:8px 12px;color:var(--red);font-size:12px;margin-bottom:12px;
+  font-family:var(--font-detail);
+}
+.modal-foot{padding:16px 26px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+.m-cancel{
+  background:var(--surface3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:9px 20px;
+  font-size:13px;color:var(--text2);
+  transition:color .15s;font-family:var(--font-detail);
+}
+.m-cancel:hover{color:var(--text)}
+.m-save{
+  background:var(--black);color:#fff;border:none;
+  border-radius:var(--r);padding:9px 24px;
+  font-size:13px;font-weight:700;font-family:var(--font-detail);
+  transition:opacity .15s;
+}
+.m-save:hover{opacity:.8}
+.m-save:disabled{opacity:.4;cursor:not-allowed}
+.confirm-modal{max-width:360px}
+
+/* ════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════ */
+.footer{background:var(--black);color:#fff;padding:56px 24px 28px;margin-top:80px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.footer-brand{}
+.footer-logo-foot{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px}
+.footer-logo-foot em{color:var(--gold);font-style:normal}
+.footer-desc{font-size:13px;color:#6b7280;line-height:1.7;max-width:280px;font-family:var(--font-detail)}
+.footer-address{font-size:13px;color:#9ca3af;line-height:1.9;margin-top:14px;font-family:var(--font-detail)}
+.footer-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#4b5563;margin-bottom:14px;font-family:var(--font-detail)}
+.footer-link{display:block;font-size:13px;color:#9ca3af;margin-bottom:8px;transition:color .15s;font-family:var(--font-detail);cursor:pointer}
+.footer-link:hover{color:#fff}
+.footer-bottom{border-top:1px solid #1f2937;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-copy{font-size:12px;color:#4b5563;font-family:var(--font-detail)}
+
+/* ════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:600;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:13px 18px;
+  font-size:13px;display:flex;align-items:center;gap:10px;
+  transform:translateY(80px);opacity:0;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  max-width:320px;box-shadow:var(--shadow-xl);
+  font-family:var(--font-detail);
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:4px solid var(--green)}
+.toast.error{border-left:4px solid var(--red)}
+
+/* ════════════════════════════════════════════════
+   MOBILE MENU
+════════════════════════════════════════════════ */
+.mobile-menu{
+  position:fixed;inset:0;z-index:250;
+  background:var(--surface);
+  transform:translateX(-100%);transition:transform .3s;
+  display:flex;flex-direction:column;padding:80px 28px 32px;
+  gap:6px;overflow-y:auto;
+}
+.mobile-menu.open{transform:translateX(0)}
+.mob-close{
+  position:absolute;top:18px;right:18px;
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:8px;width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--text3);
+}
+.mob-link{
+  font-family:var(--font-head);font-size:22px;font-weight:700;
+  letter-spacing:-.4px;padding:10px 0;color:var(--text);
+  border-bottom:1px solid var(--border);background:none;border-left:none;border-right:none;border-top:none;text-align:left;
+}
+.mob-link:last-child{border-bottom:none}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════ */
+@media(max-width:900px){
+  .logo-sub{display:none}
+  .search-wrap{max-width:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-brand{grid-column:1/-1}
+}
+@media(max-width:680px){
+  :root{--header-h:56px;--catbar-h:40px}
+  .header-inner{padding:0 14px;gap:10px}
+  .logo-text{display:none}
+  .search-wrap{max-width:none}
+  .search-bar{font-size:13px}
+  .admin-trigger{display:none}
+  .db-badge{display:none}
+  .hamburger{display:flex}
+  .cart-trigger span{display:none}
+  .cart-trigger{padding:8px 12px}
+  .hero-headline{letter-spacing:-2px}
+  .hero-cards{flex-direction:column;align-items:center}
+  .hero-card{width:100%;max-width:280px}
+  .main{padding:28px 14px 60px}
+  .filter-bar{gap:8px}
+  .prod-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-brand{grid-column:1}
+  .cart-fab{display:flex}
+  .cart-trigger{display:none}
+  .cat-bar-inner{padding:0 14px}
+  .admin-wrap{padding:70px 14px 40px}
+  .mrow{grid-template-columns:1fr}
+}
+@media(max-width:380px){
+  .prod-grid{grid-template-columns:1fr}
+}
+@media(min-width:1100px){
+  .prod-grid{grid-template-columns:repeat(4,1fr)}
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ NAVBAR ═══════════ -->
-<nav class="navbar">
-  <div class="nav-logo" onclick="goHome()">
-    <div class="nav-logo-dot"></div>
-    Esquiú Shop
-  </div>
-  <div class="nav-links">
-    <button class="nav-link" onclick="switchStore('lubricentro');showPage('store')">Lubricentro</button>
-    <button class="nav-link" onclick="switchStore('ferreteria');showPage('store')">Ferretería</button>
-    <button class="nav-link" onclick="switchStore('ferreteria');setFilter('ferreteria','Herramientas Eléctricas',null);showPage('store')">Herramientas</button>
-    <button class="nav-link" onclick="showPage('store')">Ofertas</button>
-  </div>
-  <div class="nav-right">
-    <span id="db-badge" class="db-badge db-load">● conectando</span>
-    <div class="cart-btn" onclick="toggleCart()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      Carrito
-      <div class="cart-count" id="cart-count" style="display:none">0</div>
+<!-- ════════ HEADER ════════ -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <!-- Logo -->
+    <div class="logo" onclick="goHome()">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Esquiú Shop</span>
+        <span class="logo-sub">Ferretería & Lubricentro</span>
+      </div>
     </div>
-    <button class="admin-btn" onclick="showPage('admin-login')">Admin</button>
-  </div>
-</nav>
 
-<!-- ═══════════ HOME ═══════════ -->
-<div class="page active" id="page-home">
+    <!-- Search -->
+    <div class="search-wrap">
+      <input class="search-bar" id="main-search" type="text" placeholder="Buscar aceites, herramientas, filtros…" autocomplete="off"/>
+      <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <button class="search-clear" id="search-clear" onclick="clearSearch()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Right -->
+    <div class="header-right">
+      <span class="db-badge db-load" id="db-badge">● conectando</span>
+      <button class="cart-trigger" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>Carrito</span>
+        <div class="cart-count" id="cart-count" style="display:none">0</div>
+      </button>
+      <button class="admin-trigger" onclick="showPage('admin-login')">Admin ⚙</button>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ CATEGORY BAR ════════ -->
+<div class="cat-bar" id="cat-bar">
+  <div class="cat-bar-inner" id="cat-bar-inner">
+    <button class="cat-pill active" onclick="setCat('',this)">Todos</button>
+    <div class="cat-divider"></div>
+    <button class="cat-pill" onclick="setCat('lubricentro-all',this)">🔧 Lubricentro</button>
+    <button class="cat-pill" onclick="setCat('ferreteria-all',this)">🏭 Ferretería</button>
+    <div class="cat-divider"></div>
+    <button class="cat-pill" onclick="setCat('Aceites Motor',this)">Aceites Motor</button>
+    <button class="cat-pill" onclick="setCat('Filtros',this)">Filtros</button>
+    <button class="cat-pill" onclick="setCat('Aditivos',this)">Aditivos</button>
+    <button class="cat-pill" onclick="setCat('Herramientas Eléctricas',this)">Herr. Eléctricas</button>
+    <button class="cat-pill" onclick="setCat('Herramientas Manuales',this)">Herr. Manuales</button>
+    <button class="cat-pill" onclick="setCat('Bosques y Jardines',this)">Jardín</button>
+    <button class="cat-pill" onclick="setCat('Hogar y Camping',this)">Camping</button>
+  </div>
+</div>
+
+<!-- ════════ MOBILE MENU ════════ -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mob-close close-btn" onclick="toggleMenu()">×</button>
+  <button class="mob-link" onclick="scrollToSection('lubricentro');toggleMenu()">🔧 Lubricentro</button>
+  <button class="mob-link" onclick="scrollToSection('ferreteria');toggleMenu()">🏭 Ferretería</button>
+  <button class="mob-link" onclick="setCat('Herramientas Eléctricas',null);toggleMenu()">⚡ Herramientas</button>
+  <button class="mob-link" onclick="setCat('Bosques y Jardines',null);toggleMenu()">🌿 Jardín</button>
+  <button class="mob-link" onclick="setCat('Hogar y Camping',null);toggleMenu()">⛺ Camping</button>
+  <button class="mob-link" onclick="showPage('admin-login');toggleMenu()">⚙ Panel Admin</button>
+</div>
+
+<!-- ════════ MAIN STORE ════════ -->
+<div id="page-store">
+
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-video-wrap">
-      <video class="hero-video" id="hero-video" muted playsinline preload="auto">
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <video class="hero-video" id="hero-video" muted playsinline preload="auto" style="opacity:0">
         <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260329_050842_be71947f-f16e-4a14-810c-06e83d23ddb5.mp4" type="video/mp4"/>
       </video>
+      <div class="hero-img-fallback"></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <div class="hero-badge">
-        <div class="hero-badge-dot"></div>
-        Descubrí lo que es posible — Ferretería &amp; Lubricentro
-      </div>
-      <div class="hero-headline">Transformá<br/>tu <span>Trabajo</span></div>
-      <!-- AI SEARCH BOX -->
-      <div class="search-box">
-        <div class="search-top-row">
-          <span class="search-top-label">Consultas rápidas</span>
-          <div class="search-quick-btns">
-            <button class="search-quick-btn" onclick="quickSearch('aceite 10W40')">🛢 Aceite 10W40</button>
-            <button class="search-quick-btn" onclick="quickSearch('taladro Bosch')">⚡ Taladro Bosch</button>
-            <button class="search-quick-btn" onclick="quickSearch('filtro')">🔵 Filtros</button>
-            <button class="search-quick-btn" onclick="quickSearch('motosierra')">🌿 Motosierra</button>
-          </div>
+      <div class="hero-label"><div class="hero-label-dot"></div>Villa Esquiú, Córdoba — Desde 1990</div>
+      <h1 class="hero-headline">Tu trabajo<br/>merece las<br/>mejores <em>herramientas</em></h1>
+      <p class="hero-sub">Ferretería industrial y lubricentro especializado. Todo lo que necesitás, con entrega en Córdoba Capital.</p>
+      <div class="hero-cards">
+        <div class="hero-card" onclick="scrollToSection('lubricentro')">
+          <div class="hero-card-icon">🔧</div>
+          <div class="hero-card-name">Lubricentro</div>
+          <div class="hero-card-sub">Aceites · Filtros · Aditivos</div>
+          <button class="hero-card-btn">Ver productos</button>
         </div>
-        <div class="search-input-row">
-          <input class="search-input" id="hero-search" placeholder="¿Qué producto estás buscando?" onkeydown="if(event.key==='Enter')doHeroSearch()"/>
-          <button class="search-send-btn" onclick="doHeroSearch()">
-            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="search-bottom-row">
-          <button class="search-action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            Adjuntar
-          </button>
-          <button class="search-action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-            Voz
-          </button>
-          <button class="search-action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-            Prompts
-          </button>
+        <div class="hero-card" onclick="scrollToSection('ferreteria')">
+          <div class="hero-card-icon">🏭</div>
+          <div class="hero-card-name">Ferretería</div>
+          <div class="hero-card-sub">Herramientas · Jardín · Camping</div>
+          <button class="hero-card-btn">Ver productos</button>
         </div>
       </div>
     </div>
-    <div class="hero-scroll" onclick="document.getElementById('store-preview').scrollIntoView({behavior:'smooth'})">
-      <div style="font-size:10px;color:rgba(255,255,255,.5);font-family:var(--font-ui);letter-spacing:.1em;text-transform:uppercase">Explorar</div>
-      <div class="hero-scroll-dot"></div>
+    <div class="hero-strip">
+      <div class="hero-strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Envíos Córdoba Capital
+      </div>
+      <div class="hero-strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        3 y 6 Cuotas S/I
+      </div>
+      <div class="hero-strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Asesoramiento técnico
+      </div>
+      <div class="hero-strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Retiro en sucursal
+      </div>
     </div>
   </section>
-  <!-- HOME PRODUCT PREVIEW -->
-  <div id="store-preview">
-    <div class="store-section">
-      <div class="section-header">
-        <div>
-          <div class="section-title">Catálogo completo</div>
-          <div class="section-subtitle">Todos los productos disponibles en Córdoba</div>
-        </div>
-      </div>
-      <div class="store-tabs">
-        <button class="store-tab active" id="tab-all" onclick="switchHomeTab('all',this)">Todos</button>
-        <button class="store-tab" id="tab-lubri" onclick="switchHomeTab('lubricentro',this)">Lubricentro</button>
-        <button class="store-tab" id="tab-ferr" onclick="switchHomeTab('ferreteria',this)">Ferretería</button>
-      </div>
-      <div class="catalog-controls">
-        <input class="catalog-search" id="home-search" placeholder="Buscar producto…" oninput="renderHome()"/>
-        <select class="cat-select" id="home-cat" onchange="renderHome()">
-          <option value="">Todas las categorías</option>
-        </select>
-        <select class="cat-select" id="home-marca" onchange="renderHome()">
-          <option value="">Todas las marcas</option>
-        </select>
-      </div>
-      <div class="catalog-grid" id="grid-home">
-        <div class="loading-state"><div class="spinner"></div>Cargando productos…</div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ═══════════ STORE PAGE ═══════════ -->
-<div class="page" id="page-store">
-  <div class="store-section" style="padding-top:88px">
-    <div class="section-header">
-      <div>
-        <div class="section-title" id="store-page-title">Catálogo</div>
-        <div class="section-subtitle" id="store-page-sub"></div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="nav-link" onclick="goHome()">← Volver al inicio</button>
-      </div>
-    </div>
-    <div class="store-tabs">
-      <button class="store-tab active" onclick="switchStore('lubricentro')" id="stab-lubri">Lubricentro</button>
-      <button class="store-tab" onclick="switchStore('ferreteria')" id="stab-ferr">Ferretería</button>
-    </div>
-    <div class="catalog-controls">
-      <input class="catalog-search" id="store-search" placeholder="Buscar producto…" oninput="renderStore()"/>
-      <select class="cat-select" id="store-cat" onchange="renderStore()">
-        <option value="">Todas las categorías</option>
-      </select>
-      <select class="cat-select" id="store-marca" onchange="renderStore()">
+  <!-- CATALOG -->
+  <main class="main" id="catalog-main">
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filtrar:</span>
+      <select class="filter-sel" id="fil-marca" onchange="applyFilters()">
         <option value="">Todas las marcas</option>
       </select>
+      <select class="filter-sel" id="fil-order" onchange="applyFilters()">
+        <option value="">Relevancia</option>
+        <option value="precio-asc">Precio: menor a mayor</option>
+        <option value="precio-desc">Precio: mayor a menor</option>
+        <option value="nombre-asc">Nombre A-Z</option>
+        <option value="stock-desc">Mayor stock</option>
+      </select>
+      <span class="results-info" id="results-info"></span>
     </div>
-    <div class="catalog-grid" id="grid-store">
-      <div class="loading-state"><div class="spinner"></div>Cargando…</div>
-    </div>
-  </div>
-</div>
 
-<!-- ═══════════ ADMIN LOGIN ═══════════ -->
+    <!-- Lubricentro section -->
+    <div id="lubricentro" class="section-anchor">
+      <div class="section-head">
+        <div class="section-badge">🔧 Lubricentro</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="prod-grid" id="grid-lubricentro">
+        <!-- skeletons injected by JS -->
+      </div>
+    </div>
+
+    <!-- Ferretería section -->
+    <div id="ferreteria" class="section-anchor" style="margin-top:56px">
+      <div class="section-head">
+        <div class="section-badge">🏭 Ferretería Industrial</div>
+        <div class="section-divider"></div>
+      </div>
+      <div class="prod-grid" id="grid-ferreteria">
+        <!-- skeletons injected by JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo-foot">Esquiú <em>Shop</em></div>
+          <p class="footer-desc">Tu ferretería industrial y lubricentro de confianza en Villa Esquiú, Córdoba. Calidad garantizada en cada producto.</p>
+          <div class="footer-address">
+            📍 C. de la Pulpería 292, Villa Esquiú, Córdoba<br/>
+            📞 0351 347-7888<br/>
+            💬 WhatsApp: +54 9 351 347-7888
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Tienda</div>
+          <span class="footer-link" onclick="scrollToSection('lubricentro')">Lubricentro</span>
+          <span class="footer-link" onclick="scrollToSection('ferreteria')">Ferretería</span>
+          <span class="footer-link" onclick="setCat('Herramientas Eléctricas',null)">Herramientas</span>
+          <span class="footer-link" onclick="setCat('Hogar y Camping',null)">Camping</span>
+        </div>
+        <div>
+          <div class="footer-col-title">Contacto</div>
+          <a class="footer-link" href="tel:03513477888">📞 Llamar</a>
+          <a class="footer-link" href="https://wa.me/5493513477888" target="_blank" rel="noopener">💬 WhatsApp</a>
+          <a class="footer-link" href="https://maps.google.com/?q=C+de+la+Pulperia+292+Villa+Esquiu+Cordoba" target="_blank" rel="noopener">🗺 Cómo llegar</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2025 Esquiú Shop · C. de la Pulpería 292, Villa Esquiú, Córdoba · 0351 347-7888</span>
+        <span class="footer-copy">Hecho con ❤ en Córdoba, Argentina</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-store -->
+
+<!-- ════════ ADMIN LOGIN ════════ -->
 <div class="page" id="page-admin-login">
   <div class="admin-login-wrap">
     <div class="login-card">
       <div class="login-title">Panel Admin</div>
       <div class="login-sub">Acceso restringido — Esquiú Shop</div>
-      <div id="login-error" class="l-error" style="display:none"></div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input id="login-email" type="email" class="l-input" placeholder="admin@esquiu.com"
-          name="eq-nofill-u" autocomplete="off" readonly
+      <div class="l-error" id="login-error" style="display:none"></div>
+      <div class="fgroup">
+        <label class="flabel">Email</label>
+        <input id="login-email" type="email" class="finput" placeholder="admin@esquiu.com"
+          name="eq-u" autocomplete="off" readonly
           onfocus="this.removeAttribute('readonly')" onclick="this.removeAttribute('readonly')"/>
       </div>
-      <div class="form-group">
-        <label class="form-label">Contraseña</label>
-        <input id="login-pass" type="password" class="l-input" placeholder="••••••••"
-          name="eq-nofill-p" autocomplete="new-password" readonly
+      <div class="fgroup">
+        <label class="flabel">Contraseña</label>
+        <input id="login-pass" type="password" class="finput" placeholder="••••••••"
+          name="eq-p" autocomplete="new-password" readonly
           onfocus="this.removeAttribute('readonly')" onclick="this.removeAttribute('readonly')"
           onkeydown="if(event.key==='Enter')doLogin()"/>
       </div>
-      <button class="l-btn" id="login-btn" onclick="doLogin()">Ingresar al panel</button>
-      <div class="sec-note">🔒 Campos con readOnly inicial — el navegador no puede autocompletar credenciales.</div>
+      <button class="l-btn" id="login-btn" onclick="doLogin()">Ingresar</button>
+      <div class="sec-note">🔒 Campos con <code>readOnly</code> inicial — el navegador no autocompleta credenciales automáticamente.</div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════ ADMIN DASHBOARD ═══════════ -->
+<!-- ════════ ADMIN DASHBOARD ════════ -->
 <div class="page" id="page-admin">
   <div class="admin-wrap">
     <div class="admin-topbar">
-      <div class="admin-heading">Panel <span>Admin</span></div>
-      <button class="logout-btn" onclick="doLogout()">Cerrar sesión →</button>
+      <div class="admin-heading">Panel <em>Admin</em></div>
+      <div style="display:flex;gap:8px">
+        <button class="e-btn" onclick="goHome()">← Volver a la tienda</button>
+        <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+      </div>
     </div>
-    <div class="admin-stats" id="admin-stats"></div>
-    <div class="admin-controls">
-      <input class="a-search" placeholder="Buscar producto…" id="admin-search" oninput="renderAdminTable()"/>
-      <select class="a-sel" id="admin-filter-store" onchange="renderAdminTable()">
+    <div class="stats-row" id="admin-stats"></div>
+    <div class="a-controls">
+      <input class="a-search" id="admin-search" placeholder="Buscar producto…" oninput="renderAdminTable()"/>
+      <select class="a-sel" id="admin-store-fil" onchange="renderAdminTable()">
         <option value="">Todas las tiendas</option>
         <option value="lubricentro">Lubricentro</option>
         <option value="ferreteria">Ferretería</option>
       </select>
       <button class="new-btn" onclick="openModal()">+ Nuevo producto</button>
     </div>
-    <div class="admin-table-wrap">
+    <div class="a-table-wrap">
       <table class="a-table">
         <thead><tr>
           <th>Img</th><th>Producto</th><th>Marca</th><th>Tienda</th>
@@ -476,86 +1171,93 @@ select option{background:#fff}
         <tbody id="admin-tbody"></tbody>
       </table>
     </div>
-    <div class="a-footer" id="admin-footer"></div>
+    <div class="a-foot" id="admin-foot"></div>
   </div>
 </div>
 
-<!-- ═══════════ CART DRAWER ═══════════ -->
+<!-- ════════ CART DRAWER ════════ -->
 <div class="overlay" id="overlay" onclick="toggleCart()"></div>
 <div class="cart-drawer" id="cart-drawer">
   <div class="drawer-head">
-    <div class="drawer-title">Tu Pedido</div>
+    <div class="drawer-title">Tu pedido</div>
     <button class="close-btn" onclick="toggleCart()">×</button>
   </div>
-  <div class="cart-items" id="cart-items-list"></div>
-  <div class="cart-footer" id="cart-footer"></div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot"></div>
 </div>
 
-<!-- ═══════════ PRODUCT MODAL ═══════════ -->
-<div class="modal-overlay" id="modal-overlay">
+<!-- Mobile cart FAB -->
+<button class="cart-fab" id="cart-fab" onclick="toggleCart()" style="display:none">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  Pedido
+  <div class="cart-count" id="cart-count-fab">0</div>
+</button>
+
+<!-- ════════ PRODUCT MODAL ════════ -->
+<div class="modal-ov" id="modal-overlay">
   <div class="modal">
     <div class="modal-head">
       <div class="modal-title" id="modal-title">Nuevo producto</div>
       <button class="close-btn" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body">
-      <div id="modal-error" class="m-error" style="display:none"></div>
-      <div class="m-field">
-        <label class="m-label">Tienda *</label>
-        <select class="m-select" id="m-store">
+      <div class="m-error" id="modal-error" style="display:none"></div>
+      <div class="mfield">
+        <label class="mlabel">Tienda *</label>
+        <select class="mselect" id="m-store">
           <option value="ferreteria">Ferretería Industrial</option>
           <option value="lubricentro">Lubricentro Esquiú</option>
         </select>
       </div>
-      <div class="m-row">
-        <div class="m-field">
-          <label class="m-label">Nombre *</label>
-          <input type="text" class="m-input" id="m-nombre" maxlength="100" placeholder="Nombre del producto"/>
+      <div class="mrow">
+        <div class="mfield">
+          <label class="mlabel">Nombre *</label>
+          <input type="text" class="minput" id="m-nombre" maxlength="100" placeholder="Nombre del producto"/>
         </div>
-        <div class="m-field">
-          <label class="m-label">Marca</label>
-          <input type="text" class="m-input" id="m-marca" maxlength="40" placeholder="Ej: Bosch"/>
-        </div>
-      </div>
-      <div class="m-field">
-        <label class="m-label">Categoría *</label>
-        <input type="text" class="m-input" id="m-categoria" maxlength="60" placeholder="Ej: Herramientas Eléctricas"/>
-      </div>
-      <div class="m-field">
-        <label class="m-label">Descripción</label>
-        <textarea class="m-input" id="m-desc" maxlength="300" placeholder="Descripción técnica…"></textarea>
-      </div>
-      <div class="m-row">
-        <div class="m-field">
-          <label class="m-label">Precio (ARS) *</label>
-          <input type="number" class="m-input" id="m-precio" min="0" step="100" placeholder="98000"/>
-        </div>
-        <div class="m-field">
-          <label class="m-label">Stock *</label>
-          <input type="number" class="m-input" id="m-stock" min="0" step="1" placeholder="10"/>
+        <div class="mfield">
+          <label class="mlabel">Marca</label>
+          <input type="text" class="minput" id="m-marca" maxlength="40" placeholder="Ej: Bosch"/>
         </div>
       </div>
-      <div class="m-field">
-        <label class="m-label">ID sugerencia cross-sell</label>
-        <input type="text" class="m-input" id="m-sugerencia" maxlength="30" placeholder="ID de producto relacionado"/>
+      <div class="mfield">
+        <label class="mlabel">Categoría *</label>
+        <input type="text" class="minput" id="m-categoria" maxlength="60" placeholder="Ej: Herramientas Eléctricas"/>
       </div>
-      <div class="m-field">
-        <label class="m-label">URL de imagen</label>
-        <input type="text" class="m-input" id="m-imagen" placeholder="https://… (opcional)"/>
+      <div class="mfield">
+        <label class="mlabel">Descripción</label>
+        <textarea class="minput" id="m-desc" maxlength="300" placeholder="Descripción técnica del producto…"></textarea>
+      </div>
+      <div class="mrow">
+        <div class="mfield">
+          <label class="mlabel">Precio (ARS) *</label>
+          <input type="number" class="minput" id="m-precio" min="0" step="100" placeholder="98000"/>
+        </div>
+        <div class="mfield">
+          <label class="mlabel">Stock *</label>
+          <input type="number" class="minput" id="m-stock" min="0" step="1" placeholder="10"/>
+        </div>
+      </div>
+      <div class="mfield">
+        <label class="mlabel">ID sugerencia (cross-sell)</label>
+        <input type="text" class="minput" id="m-sugerencia" maxlength="30" placeholder="ID de producto relacionado"/>
+      </div>
+      <div class="mfield">
+        <label class="mlabel">URL de imagen</label>
+        <input type="text" class="minput" id="m-imagen" placeholder="https://… (opcional)"/>
         <div class="img-prev" id="m-img-prev">📦</div>
       </div>
-      <div class="m-field">
-        <label class="m-label">Etiquetas</label>
-        <div class="badge-group">
-          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="Envío en Córdoba Capital">Envío Córdoba</div>
-          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="3 Cuotas Sin Interés">3 Cuotas S/I</div>
-          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="6 Cuotas Sin Interés">6 Cuotas S/I</div>
-          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="Retiro en sucursal">Retiro sucursal</div>
-          <div class="badge-toggle" onclick="this.classList.toggle('on')" data-badge="Oferta">Oferta</div>
+      <div class="mfield">
+        <label class="mlabel">Etiquetas</label>
+        <div class="badge-grp">
+          <div class="btoggle" onclick="this.classList.toggle('on')" data-badge="Envío en Córdoba Capital">Envío Córdoba</div>
+          <div class="btoggle" onclick="this.classList.toggle('on')" data-badge="3 Cuotas Sin Interés">3 Cuotas S/I</div>
+          <div class="btoggle" onclick="this.classList.toggle('on')" data-badge="6 Cuotas Sin Interés">6 Cuotas S/I</div>
+          <div class="btoggle" onclick="this.classList.toggle('on')" data-badge="Retiro en sucursal">Retiro sucursal</div>
+          <div class="btoggle" onclick="this.classList.toggle('on')" data-badge="Oferta">🔥 Oferta</div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-foot">
       <button class="m-cancel" onclick="closeModal()">Cancelar</button>
       <button class="m-save" id="save-btn" onclick="saveProduct()">Guardar producto</button>
     </div>
@@ -563,60 +1265,29 @@ select option{background:#fff}
 </div>
 
 <!-- CONFIRM DELETE -->
-<div class="modal-overlay" id="confirm-overlay">
+<div class="modal-ov" id="confirm-ov">
   <div class="modal confirm-modal">
     <div class="modal-head">
       <div class="modal-title">Confirmar borrado</div>
       <button class="close-btn" onclick="closeConfirm()">×</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:14px;color:var(--muted);font-family:var(--font-ui);line-height:1.5">Vas a eliminar permanentemente:</p>
-      <p id="confirm-name" style="font-weight:700;margin:10px 0;font-size:15px;font-family:var(--font-ui)"></p>
-      <p style="font-size:13px;color:var(--muted);font-family:var(--font-ui)">Esta acción no se puede deshacer.</p>
+      <p style="font-size:14px;color:var(--text2);font-family:var(--font-detail);line-height:1.5">¿Eliminás permanentemente este producto?</p>
+      <p id="confirm-name" style="font-weight:700;margin:10px 0;font-size:15px"></p>
+      <p style="font-size:13px;color:var(--text3);font-family:var(--font-detail)">Esta acción no se puede deshacer.</p>
     </div>
-    <div class="modal-footer">
+    <div class="modal-foot">
       <button class="m-cancel" onclick="closeConfirm()">Cancelar</button>
-      <button style="background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-ui)" onclick="confirmDelete()">Sí, eliminar</button>
+      <button style="background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-detail)" onclick="confirmDelete()">Eliminar</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- FOOTER -->
-<footer class="site-footer" id="site-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div>
-        <div class="footer-logo">Esquiú <span>Shop</span></div>
-        <div class="footer-desc">Tu ferretería industrial y lubricentro de confianza en Villa Esquiú, Córdoba. Herramientas, aceites, filtros y más, con reparto propio en Córdoba Capital.</div>
-        <div class="footer-address">
-          📍 C. de la Pulpería 292, Villa Esquiú, Córdoba<br/>
-          📞 0351 347-7888<br/>
-          💬 WhatsApp: 5493513477888
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-title">Tienda</div>
-        <a class="footer-link" onclick="switchStore('lubricentro');showPage('store')">Lubricentro</a>
-        <a class="footer-link" onclick="switchStore('ferreteria');showPage('store')">Ferretería</a>
-        <a class="footer-link" onclick="switchStore('ferreteria');setFilter('ferreteria','Herramientas Eléctricas',null);showPage('store')">Herramientas Eléctricas</a>
-        <a class="footer-link" onclick="showPage('store')">Ofertas</a>
-      </div>
-      <div>
-        <div class="footer-col-title">Contacto</div>
-        <a class="footer-link" href="tel:03513477888">📞 Llamar</a>
-        <a class="footer-link" href="https://wa.me/5493513477888" target="_blank" rel="noopener">💬 WhatsApp</a>
-        <a class="footer-link" href="https://maps.google.com/?q=C.+de+la+Pulperia+292+Villa+Esquiu+Cordoba" target="_blank" rel="noopener">🗺 Ver en mapa</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Esquiú Shop. C. de la Pulpería 292, Villa Esquiú, Córdoba. Tel: 0351 347-7888</div>
-      <div class="footer-copy">Hecho con ❤ en Córdoba, Argentina</div>
-    </div>
-  </div>
-</footer>
-
+<!-- ════════════════════════════════════════════════
+     FIREBASE v9 + APP LOGIC
+════════════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -625,7 +1296,7 @@ import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, s
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-// ── Firebase ─────────────────────────────────────────────────
+/* ─── Firebase init ─────────────────────────────────────── */
 const firebaseConfig = {
   apiKey:            "AIzaSyD973HXMYJHlsnfLF7lNvuojAVPA5bYurI",
   authDomain:        "lubricentroesquiu-1759a-decf7.firebaseapp.com",
@@ -638,387 +1309,280 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
-// ── Constantes ────────────────────────────────────────────────
-const WA_NUMBER      = '5493513477888';
-const SHIPPING_RATES = {'5000':1500,'5008':2000,'5016':2500,'5152':4000};
-const EMOJIS = {
+/* ─── Constants ─────────────────────────────────────────── */
+const WA_NUMBER = '5493513477888';
+const SHIPPING  = {'5000':1500,'5008':2000,'5016':2500,'5152':4000};
+const EMOJIS    = {
   'Aceites Motor':'🛢️','Filtros':'🔵','Aditivos':'⚗️',
   'Bosques y Jardines':'🌿','Herramientas Eléctricas':'⚡',
-  'Herramientas Manuales':'🧰','Hogar y Camping':'⛺','default':'📦'
+  'Herramientas Manuales':'🧰','Hogar y Camping':'⛺',
 };
-const getEmoji = c => EMOJIS[c] || EMOJIS.default;
+const emoji = c => EMOJIS[c] || '📦';
 
-// ── Estado ────────────────────────────────────────────────────
-let products      = [];
-let cart          = [];
-let shippingCost  = 0;
-let currentStore  = 'lubricentro';
-let homeTab       = 'all';
-let storeFilter   = { cat:'', marca:'' };
-let isAdmin       = false;
-let editingId     = null;
-let deleteId      = null;
-let toastTimer    = null;
-let imgTimer      = null;
+/* ─── State ──────────────────────────────────────────────── */
+let products    = [];
+let cart        = JSON.parse(localStorage.getItem('esquiu-cart') || '[]');
+let shipping    = 0;
+let activeCat   = '';
+let activeStore = '';
+let isAdmin     = false;
+let editingId   = null;
+let deleteId    = null;
+let toastTmr    = null;
+let imgTmr      = null;
+let debounceId  = null;
 
-// ── Sanitización ─────────────────────────────────────────────
+/* ─── Sanitize ───────────────────────────────────────────── */
 const san = s => {
   if(typeof s !== 'string') return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
           .replace(/"/g,'&quot;').replace(/'/g,'&#x27;').trim().slice(0,600);
 };
-const genId = s => s[0]+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
-// ═══════════════════════════════════════════════════════════════
-// VIDEO HERO — JS FADE (sin CSS transitions)
-// ═══════════════════════════════════════════════════════════════
-(function(){
-  const vid = document.getElementById('hero-video');
-  if(!vid) return;
-
-  let fadingOutRef  = false;
-  let rafId         = null;
-
-  const FADE_IN_MS  = 250;
-  const FADE_OUT_MS = 250;
-  const FADE_OUT_AT = 0.55; // segundos antes del final
-
-  function animateFade(from, to, durationMs, onDone){
-    const start = performance.now();
-    function step(now){
-      const t = Math.min((now - start) / durationMs, 1);
-      vid.style.opacity = from + (to - from) * t;
-      if(t < 1){ rafId = requestAnimationFrame(step); }
-      else { vid.style.opacity = to; if(onDone) onDone(); }
-    }
-    if(rafId) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(step);
-  }
-
-  function fadeIn(){
-    fadingOutRef = false;
-    animateFade(0, 1, FADE_IN_MS);
-  }
-
-  function fadeOutAndRestart(){
-    if(fadingOutRef) return;
-    fadingOutRef = true;
-    animateFade(1, 0, FADE_OUT_MS, () => {
-      setTimeout(() => {
-        vid.currentTime = 0;
-        vid.play().catch(()=>{});
-        fadeIn();
-      }, 100);
-    });
-  }
-
-  vid.style.opacity = 0;
-
-  vid.addEventListener('canplay', () => {
-    vid.play().catch(()=>{});
-    fadeIn();
-  }, { once: true });
-
-  vid.addEventListener('timeupdate', () => {
-    if(!fadingOutRef && vid.duration && vid.currentTime >= vid.duration - FADE_OUT_AT){
-      fadeOutAndRestart();
-    }
-  });
-
-  vid.addEventListener('ended', () => {
-    if(!fadingOutRef) fadeOutAndRestart();
-  });
-})();
-
-// ═══════════════════════════════════════════════════════════════
-// FIREBASE CRUD
-// ═══════════════════════════════════════════════════════════════
+/* ─── Firebase load ──────────────────────────────────────── */
 async function loadProducts(){
   const badge = document.getElementById('db-badge');
+  badge.className='db-badge db-load'; badge.textContent='● conectando';
+  injectSkeletons('grid-lubricentro',4);
+  injectSkeletons('grid-ferreteria',6);
   try {
-    badge.className='db-badge db-load'; badge.textContent='● conectando';
     const snap = await getDocs(collection(db,'productos'));
-    products = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    products = snap.docs.map(d => ({id:d.id,...d.data()}));
     badge.className='db-badge db-ok'; badge.textContent='● Firebase';
-    buildHomeSelects();
-    renderHome();
-    renderStore();
+    buildMarcaSelect();
+    renderCatalogs();
     if(isAdmin) renderAdmin();
   } catch(e){
     badge.className='db-badge db-err'; badge.textContent='● sin conexión';
-    showToast('Error Firestore: '+e.message,'error');
-    ['grid-home','grid-store'].forEach(id=>{
+    showToast('No se pudo conectar con la base de datos: '+e.message,'error');
+    ['grid-lubricentro','grid-ferreteria'].forEach(id=>{
       const g=document.getElementById(id);
-      if(g) g.innerHTML='<div class="loading-state" style="color:var(--red)">⚠ No se pudieron cargar los productos.</div>';
+      if(g) g.innerHTML=`<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Sin conexión</div><div class="empty-state-sub">${san(e.message)}</div></div>`;
     });
   }
 }
 
 async function fbSave(payload, docId=null){
   if(docId){
-    await updateDoc(doc(db,'productos',docId), {...payload, updatedAt:serverTimestamp()});
+    await updateDoc(doc(db,'productos',docId),{...payload,updatedAt:serverTimestamp()});
   } else {
-    await addDoc(collection(db,'productos'), {...payload, createdAt:serverTimestamp()});
+    await addDoc(collection(db,'productos'),{...payload,createdAt:serverTimestamp()});
   }
   await loadProducts();
 }
-
-async function fbDelete(docId){
+async function fbDel(docId){
   await deleteDoc(doc(db,'productos',docId));
   await loadProducts();
 }
 
-// ── Auth ──────────────────────────────────────────────────────
-onAuthStateChanged(auth, user => { isAdmin = !!user; });
-
-window.doLogin = async function(){
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-pass').value;
-  const btn   = document.getElementById('login-btn');
-  const errEl = document.getElementById('login-error');
-  btn.disabled=true; btn.textContent='Verificando…'; errEl.style.display='none';
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    isAdmin=true;
-    document.getElementById('login-email').value='';
-    document.getElementById('login-pass').value='';
-    btn.disabled=false; btn.textContent='Ingresar al panel';
-    showPage('admin');
-    showToast('Bienvenido al panel ✓','success');
-  } catch(e){
-    errEl.textContent='Credenciales incorrectas. Verificá e intentá de nuevo.';
-    errEl.style.display='block';
-    btn.disabled=false; btn.textContent='Ingresar al panel';
-  }
-};
-
-window.doLogout = async function(){
-  await signOut(auth);
-  isAdmin=false;
-  showPage('admin-login');
-  showToast('Sesión cerrada','success');
-};
-
-// ═══════════════════════════════════════════════════════════════
-// NAVEGACIÓN
-// ═══════════════════════════════════════════════════════════════
-window.showPage = function(name){
-  if(name==='admin' && !isAdmin){ showPage('admin-login'); return; }
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const el = document.getElementById('page-'+name);
-  if(el){ el.classList.add('active'); window.scrollTo(0,0); }
-  // show/hide footer
-  const footer = document.getElementById('site-footer');
-  if(footer) footer.style.display = (name==='home'||name==='store')?'block':'block';
-  if(name==='admin') renderAdmin();
-};
-window.goHome = () => showPage('home');
-
-// ── Hero search ───────────────────────────────────────────────
-window.doHeroSearch = function(){
-  const q = document.getElementById('hero-search').value.trim();
-  if(!q) return;
-  document.getElementById('home-search').value = q;
-  showPage('store');
-  document.getElementById('store-search').value = q;
-  renderStore();
-};
-window.quickSearch = function(q){
-  document.getElementById('store-search').value = q;
-  showPage('store');
-  renderStore();
-};
-
-// ═══════════════════════════════════════════════════════════════
-// CATÁLOGO
-// ═══════════════════════════════════════════════════════════════
-function buildHomeSelects(){
-  // cat select
-  const cats = [...new Set(products.map(p=>p.categoria).filter(Boolean))].sort();
-  const marcas = [...new Set(products.map(p=>p.marca).filter(Boolean))].sort();
-  ['home-cat','store-cat'].forEach(id=>{
-    const sel=document.getElementById(id);
-    if(!sel) return;
-    const cur=sel.value;
-    sel.innerHTML='<option value="">Todas las categorías</option>'+
-      cats.map(c=>`<option value="${san(c)}" ${c===cur?'selected':''}>${san(c)}</option>`).join('');
-  });
-  ['home-marca','store-marca'].forEach(id=>{
-    const sel=document.getElementById(id);
-    if(!sel) return;
-    const cur=sel.value;
-    sel.innerHTML='<option value="">Todas las marcas</option>'+
-      marcas.map(m=>`<option value="${san(m)}" ${m===cur?'selected':''}>${san(m)}</option>`).join('');
-  });
+/* ─── Skeletons ─────────────────────────────────────────── */
+function injectSkeletons(gridId, count){
+  const g = document.getElementById(gridId);
+  if(!g) return;
+  g.innerHTML = Array.from({length:count}, ()=>`
+    <div class="skeleton">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skel-line"></div>
+        <div class="skel-line short"></div>
+        <div class="skel-line price"></div>
+      </div>
+    </div>`).join('');
 }
 
-function prodCard(p){
-  const emoji = getEmoji(p.categoria);
-  const imgH  = p.imagen
-    ? `<img src="${san(p.imagen)}" alt="${san(p.nombre)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
-    : `<span style="font-size:44px">${emoji}</span>`;
-  const tagCls = p.store==='lubricentro'?'tag-lubri':'tag-ferr';
-  const tagTxt = p.store==='lubricentro'?'Lubricentro':'Ferretería';
-  const badgesH = (p.badges||[]).map(b=>`<span class="badge ${p.store==='lubricentro'?'badge-green':'badge-amber'}">${san(b)}</span>`).join('');
-  const disabled = p.stock===0;
+/* ─── Marca select ───────────────────────────────────────── */
+function buildMarcaSelect(){
+  const sel=document.getElementById('fil-marca');
+  if(!sel) return;
+  const cur=sel.value;
+  const marcas=[...new Set(products.map(p=>p.marca).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las marcas</option>'+
+    marcas.map(m=>`<option value="${san(m)}" ${m===cur?'selected':''}>${san(m)}</option>`).join('');
+}
+
+/* ─── Filtering ─────────────────────────────────────────── */
+function filteredProducts(store=''){
+  const q     = document.getElementById('main-search')?.value.toLowerCase()||'';
+  const marca = document.getElementById('fil-marca')?.value||'';
+  const order = document.getElementById('fil-order')?.value||'';
+
+  let list = products.filter(p=>{
+    if(store && p.store!==store) return false;
+    if(activeStore && p.store!==activeStore) return false;
+    if(activeCat && activeCat!=='lubricentro-all' && activeCat!=='ferreteria-all' && p.categoria!==activeCat) return false;
+    if(marca && p.marca!==marca) return false;
+    if(q && !p.nombre?.toLowerCase().includes(q) && !p.descripcion?.toLowerCase().includes(q) && !p.categoria?.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  if(order==='precio-asc') list.sort((a,b)=>a.precio-b.precio);
+  else if(order==='precio-desc') list.sort((a,b)=>b.precio-a.precio);
+  else if(order==='nombre-asc') list.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+  else if(order==='stock-desc') list.sort((a,b)=>b.stock-a.stock);
+
+  return list;
+}
+
+window.applyFilters = function(){ renderCatalogs(); };
+
+window.setCat = function(cat, btn){
+  activeCat = cat;
+  activeStore = cat==='lubricentro-all'?'lubricentro':cat==='ferreteria-all'?'ferreteria':'';
+  if(activeCat==='lubricentro-all'||activeCat==='ferreteria-all') activeCat='';
+  document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderCatalogs();
+  document.getElementById('catalog-main').scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+/* ─── Render catalogs ────────────────────────────────────── */
+function prodCardHTML(p){
+  const e = emoji(p.categoria);
+  const imgH = p.imagen
+    ? `<img src="${san(p.imagen)}" alt="${san(p.nombre)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=prod-img-placeholder>${e}</div>'">`
+    : `<div class="prod-img-placeholder">${e}</div>`;
+  const storePill = p.store==='lubricentro'
+    ? `<span class="prod-store-pill pill-lubri">Lubricentro</span>`
+    : `<span class="prod-store-pill pill-ferr">Ferretería</span>`;
+  const oferta = (p.badges||[]).includes('Oferta') ? `<span class="badge-oferta">OFERTA</span>` : '';
+  const badgesH = (p.badges||[]).filter(b=>b!=='Oferta').map(b=>`<span class="pbadge ${p.store==='lubricentro'?'pbadge-g':'pbadge-y'}">${san(b)}</span>`).join('');
+  const inCart  = cart.find(c=>c.id===p.id);
+  const disabled = p.stock===0 || (inCart && inCart.qty>=p.stock);
+  const btnTxt   = p.stock===0 ? 'Sin stock' : disabled ? `Máx. ${p.stock}` : 'Agregar';
   return `<div class="prod-card">
-    <div class="prod-img">
-      ${imgH}
-      <span class="prod-store-tag ${tagCls}">${tagTxt}</span>
-    </div>
+    <div class="prod-img-wrap">${imgH}${storePill}${oferta}</div>
     <div class="prod-body">
-      <div class="prod-cat">${san(p.categoria||'')} ${p.marca?`· ${san(p.marca)}`:''}</div>
+      <div class="prod-cat">${san(p.categoria||'')}${p.marca?` · ${san(p.marca)}`:''}</div>
       <div class="prod-name">${san(p.nombre||'')}</div>
       <div class="prod-desc">${san(p.descripcion||'')}</div>
-      <div class="prod-badges">${badgesH}</div>
+      ${badgesH?`<div class="prod-badges">${badgesH}</div>`:''}
       <div class="prod-footer">
-        <div class="prod-price">$${Number(p.precio||0).toLocaleString('es-AR')}</div>
-        <button class="add-btn" ${disabled?'disabled':''} onclick="addToCart('${p.id}')">
-          ${disabled?'Sin stock':'Agregar'}
+        <div>
+          <div class="prod-price">$${Number(p.precio||0).toLocaleString('es-AR')}</div>
+          ${p.stock===0?`<div class="no-stock-tag">Sin stock</div>`:''}
+        </div>
+        <button class="add-btn ${disabled?'out':''}" ${disabled?'disabled':''} onclick="addToCart('${p.id}')">
+          ${btnTxt}
         </button>
       </div>
-      ${disabled?'<div class="no-stock">Sin stock disponible</div>':''}
     </div>
   </div>`;
 }
 
-function filterProducts(store, q, cat, marca){
-  return products.filter(p=>{
-    if(store && store!=='all' && p.store!==store) return false;
-    if(cat && p.categoria!==cat) return false;
-    if(marca && p.marca!==marca) return false;
-    if(q){
-      const lq=q.toLowerCase();
-      if(!p.nombre?.toLowerCase().includes(lq) && !p.descripcion?.toLowerCase().includes(lq)) return false;
+function renderCatalogs(){
+  const lubriList = filteredProducts('lubricentro');
+  const ferrList  = filteredProducts('ferreteria');
+  const total     = lubriList.length + ferrList.length;
+
+  const ri = document.getElementById('results-info');
+  if(ri) ri.textContent = total > 0 ? `${total} producto${total!==1?'s':''}` : '';
+
+  const gl = document.getElementById('grid-lubricentro');
+  const gf = document.getElementById('grid-ferreteria');
+
+  // Show/hide sections based on active filter
+  const lubriSection = document.getElementById('lubricentro').parentElement || document.getElementById('lubricentro');
+  const ferrSection  = document.getElementById('ferreteria').parentElement || document.getElementById('ferreteria');
+
+  if(gl){
+    if(lubriList.length){
+      gl.innerHTML = lubriList.map(prodCardHTML).join('');
+    } else {
+      gl.innerHTML=`<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">Sin resultados</div><div class="empty-state-sub">Probá con otro término o categoría.</div></div>`;
     }
-    return true;
-  });
-}
-
-function renderHome(){
-  const grid  = document.getElementById('grid-home');
-  if(!grid) return;
-  const q     = document.getElementById('home-search')?.value||'';
-  const cat   = document.getElementById('home-cat')?.value||'';
-  const marca = document.getElementById('home-marca')?.value||'';
-  const store = homeTab==='all'?'':homeTab;
-  const items = filterProducts(store, q, cat, marca);
-  if(!items.length){
-    grid.innerHTML='<div class="loading-state">🔍 No encontramos productos.</div>'; return;
   }
-  grid.innerHTML = items.map(prodCard).join('');
-}
-
-window.switchHomeTab = function(tab, btn){
-  homeTab=tab;
-  document.querySelectorAll('#page-home .store-tab').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  renderHome();
-};
-
-window.switchStore = function(store){
-  currentStore=store;
-  // update tab UI
-  ['stab-lubri','stab-ferr'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.classList.remove('active');
-  });
-  const activeTab=document.getElementById(store==='lubricentro'?'stab-lubri':'stab-ferr');
-  if(activeTab) activeTab.classList.add('active');
-  // update titles
-  const title=document.getElementById('store-page-title');
-  const sub=document.getElementById('store-page-sub');
-  if(store==='lubricentro'){
-    if(title) title.textContent='🔧 Lubricentro Esquiú';
-    if(sub)   sub.textContent='Aceites, filtros y aditivos para tu vehículo';
-  } else {
-    if(title) title.textContent='🏭 Ferretería Industrial';
-    if(sub)   sub.textContent='Herramientas, maquinaria y materiales';
+  if(gf){
+    if(ferrList.length){
+      gf.innerHTML = ferrList.map(prodCardHTML).join('');
+    } else {
+      gf.innerHTML=`<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">Sin resultados</div><div class="empty-state-sub">Probá con otro término o categoría.</div></div>`;
+    }
   }
-  // build category selects for this store
-  const cats  = [...new Set(products.filter(p=>p.store===store).map(p=>p.categoria).filter(Boolean))].sort();
-  const marcas= [...new Set(products.filter(p=>p.store===store).map(p=>p.marca).filter(Boolean))].sort();
-  const catSel=document.getElementById('store-cat');
-  const mSel  =document.getElementById('store-marca');
-  if(catSel) catSel.innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option value="${san(c)}">${san(c)}</option>`).join('');
-  if(mSel)   mSel.innerHTML='<option value="">Todas las marcas</option>'+marcas.map(m=>`<option value="${san(m)}">${san(m)}</option>`).join('');
-  renderStore();
-};
-
-function renderStore(){
-  const grid  = document.getElementById('grid-store');
-  if(!grid) return;
-  const q     = document.getElementById('store-search')?.value||'';
-  const cat   = document.getElementById('store-cat')?.value||'';
-  const marca = document.getElementById('store-marca')?.value||'';
-  const items = filterProducts(currentStore, q, cat, marca);
-  if(!items.length){
-    grid.innerHTML='<div class="loading-state">🔍 No encontramos productos.</div>'; return;
-  }
-  grid.innerHTML = items.map(prodCard).join('');
 }
-window.renderStore=renderStore;
+window.renderCatalogs = renderCatalogs;
 
-window.setFilter = function(store, cat){
-  switchStore(store);
-  const sel=document.getElementById('store-cat');
-  if(sel){ sel.value=cat; }
-  renderStore();
+/* ─── Search with debounce ───────────────────────────────── */
+document.getElementById('main-search')?.addEventListener('input', function(){
+  const clearBtn = document.getElementById('search-clear');
+  if(clearBtn) clearBtn.classList.toggle('visible', this.value.length > 0);
+  clearTimeout(debounceId);
+  debounceId = setTimeout(() => renderCatalogs(), 300);
+});
+
+window.clearSearch = function(){
+  const inp = document.getElementById('main-search');
+  if(inp){ inp.value=''; inp.dispatchEvent(new Event('input')); }
 };
 
-// ═══════════════════════════════════════════════════════════════
-// CARRITO
-// ═══════════════════════════════════════════════════════════════
-window.addToCart = function(id){
-  const p=products.find(x=>x.id===id);
-  if(!p||p.stock===0) return;
-  const ex=cart.find(x=>x.id===id);
-  if(ex){ ex.qty=Math.min(ex.qty+1,p.stock); }
-  else { cart.push({id,qty:1}); }
-  updateCartUI();
-  showToast('Agregado al carrito ✓','success');
-};
-window.removeFromCart = function(id){ cart=cart.filter(x=>x.id!==id); updateCartUI(); };
-window.changeCartQty  = function(id,d){
-  const item=cart.find(x=>x.id===id);
-  const prod=products.find(x=>x.id===id);
-  if(!item) return;
-  item.qty=Math.max(1,Math.min(item.qty+d,prod?.stock||999));
-  updateCartUI();
-};
-window.clearCart = function(){ cart=[]; shippingCost=0; updateCartUI(); };
-
+/* ─── Cart ───────────────────────────────────────────────── */
+function saveCart(){ localStorage.setItem('esquiu-cart', JSON.stringify(cart)); }
 const cartSubtotal = () => cart.reduce((a,i)=>{ const p=products.find(x=>x.id===i.id); return a+(p?p.precio*i.qty:0); },0);
 const cartCount    = () => cart.reduce((a,i)=>a+i.qty,0);
 
-// Shipping
-window.calcShipping = function(){
-  const cp=(document.getElementById('shipping-cp')?.value||'').trim();
-  const res=document.getElementById('shipping-result');
-  if(!res) return;
-  res.style.display='block';
-  const cost=SHIPPING_RATES[cp];
-  if(cost!==undefined){
-    shippingCost=cost;
-    res.className='shipping-result s-ok';
-    res.textContent=`✓ Envío a CP ${cp}: $${cost.toLocaleString('es-AR')}`;
+window.addToCart = function(id){
+  const p = products.find(x=>x.id===id);
+  if(!p||p.stock===0) return;
+  const ex = cart.find(x=>x.id===id);
+  if(ex){
+    if(ex.qty >= p.stock){ showToast(`Stock máximo: ${p.stock} unidades`,'error'); return; }
+    ex.qty++;
   } else {
-    shippingCost=0;
-    res.className='shipping-result s-consult';
-    res.textContent='Consultar envío por WhatsApp (CP fuera de zona fija)';
+    cart.push({id,qty:1});
   }
-  updateCartUI();
+  saveCart(); updateCartUI(); renderCatalogs();
+  showToast(`${p.nombre.slice(0,30)}… agregado ✓`,'success');
 };
 
-// Cross-sell
+window.removeFromCart = function(id){
+  cart = cart.filter(x=>x.id!==id);
+  saveCart(); updateCartUI(); renderCatalogs();
+};
+
+window.changeQty = function(id, d){
+  const item = cart.find(x=>x.id===id);
+  const prod = products.find(x=>x.id===id);
+  if(!item) return;
+  const newQty = item.qty + d;
+  if(newQty < 1){ removeFromCart(id); return; }
+  if(prod && newQty > prod.stock){ showToast(`Stock máximo: ${prod.stock}`,'error'); return; }
+  item.qty = newQty;
+  saveCart(); updateCartUI();
+};
+
+window.clearCart = function(){ cart=[]; shipping=0; saveCart(); updateCartUI(); renderCatalogs(); };
+
+/* ─── Shipping calc ─────────────────────────────────────── */
+window.calcShipping = function(){
+  const cp  = (document.getElementById('shipping-cp')?.value||'').trim();
+  const res = document.getElementById('shipping-result');
+  if(!res) return;
+  res.style.display='block';
+  const cost = SHIPPING[cp];
+  if(cost!==undefined){
+    shipping = cost;
+    res.className='shipping-result s-ok';
+    res.innerHTML=`✓ CP ${cp} — Envío: <strong>$${cost.toLocaleString('es-AR')}</strong>`;
+  } else if(!cp){
+    res.className='shipping-result s-err';
+    res.textContent='Ingresá tu código postal.';
+    shipping=0;
+  } else {
+    shipping=0;
+    res.className='shipping-result s-consult';
+    res.textContent='CP no disponible — Consultá envío por WhatsApp.';
+  }
+  updateCartTotals();
+};
+
+/* ─── Cross-sell ─────────────────────────────────────────── */
 function buildCrossSell(){
   const ids=[...new Set(cart.map(i=>{ const p=products.find(x=>x.id===i.id); return p?.sugerenciaId||null; }).filter(Boolean))];
-  const suggestions=ids.map(sid=>products.find(p=>p.id===sid)).filter(p=>p&&!cart.find(c=>c.id===p.id));
-  if(!suggestions.length) return '';
-  const s=suggestions[0];
-  const emoji=getEmoji(s.categoria);
-  const imgH=s.imagen?`<img src="${san(s.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:20px">${emoji}</span>`;
-  return `<div class="cross-banner">
+  const sugg=ids.map(sid=>products.find(p=>p.id===sid)).filter(p=>p&&!cart.find(c=>c.id===p.id));
+  if(!sugg.length) return '';
+  const s=sugg[0];
+  const emc=emoji(s.categoria);
+  const imgH=s.imagen?`<img src="${san(s.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:20px">${emc}</span>`;
+  return `<div class="cross-sell">
     <div class="cross-title">💡 También podrías necesitar</div>
     <div class="cross-item">
       <div class="cross-img">${imgH}</div>
@@ -1031,7 +1595,125 @@ function buildCrossSell(){
   </div>`;
 }
 
-// Copiar link
+/* ─── Cart UI ────────────────────────────────────────────── */
+function updateCartUI(){
+  const cnt=cartCount();
+  ['cart-count','cart-count-fab'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){ el.textContent=cnt; el.style.display=cnt>0?'flex':'none'; }
+  });
+  const fab=document.getElementById('cart-fab');
+  if(fab) fab.style.display=cnt>0?'flex':'none';
+
+  const body=document.getElementById('cart-body');
+  const foot=document.getElementById('cart-foot');
+  if(!body||!foot) return;
+
+  if(!cart.length){
+    body.innerHTML=`<div class="cart-empty-state"><div class="cart-empty-state-icon">🛒</div><div class="cart-empty-state-title">Tu carrito está vacío</div><div class="cart-empty-state-sub">Agregá productos del catálogo para comenzar.</div></div>`;
+    foot.innerHTML=''; return;
+  }
+
+  const hasLubri = cart.some(i=>products.find(p=>p.id===i.id)?.store==='lubricentro');
+
+  body.innerHTML = cart.map(item=>{
+    const p=products.find(x=>x.id===item.id);
+    if(!p) return '';
+    const e=emoji(p.categoria);
+    const imgH=p.imagen?`<img src="${san(p.imagen)}" loading="lazy" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:26px">${e}</span>`;
+    const maxed=item.qty>=p.stock;
+    return `<div class="cart-item">
+      <div class="ci-img">${imgH}</div>
+      <div class="ci-info">
+        <div class="ci-name">${san(p.nombre)}</div>
+        <div class="ci-cat">${san(p.categoria)}${p.marca?` · ${san(p.marca)}`:''}</div>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${p.id}',1)" ${maxed?'disabled':''}>+</button>
+          ${maxed?`<span class="stock-warn">Máx. ${p.stock}</span>`:''}
+        </div>
+      </div>
+      <div class="ci-right">
+        <span class="ci-price">$${(p.precio*item.qty).toLocaleString('es-AR')}</span>
+        <button class="ci-del" onclick="removeFromCart('${p.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const sub   = cartSubtotal();
+  const total = sub + shipping;
+
+  foot.innerHTML=`
+    ${buildCrossSell()}
+    <div class="shipping-box">
+      <div class="shipping-title">🚚 Calcular envío</div>
+      <div class="shipping-row">
+        <input class="shipping-input" id="shipping-cp" type="text" maxlength="6" placeholder="Código postal (ej: 5000)"/>
+        <button class="shipping-btn" onclick="calcShipping()">Calcular</button>
+      </div>
+      <div id="shipping-result" class="shipping-result" ${shipping>0?'style="display:block"':''}>${shipping>0?`✓ Envío: <strong>$${shipping.toLocaleString('es-AR')}</strong>`:''}</div>
+    </div>
+    <div class="cf-form">
+      <input class="cf-input" id="cf-nombre" placeholder="Tu nombre completo *" maxlength="80"/>
+      <input class="cf-input" id="cf-dir" placeholder="Dirección en Córdoba *" maxlength="140"/>
+      ${hasLubri?`<input class="cf-input" id="cf-patente" placeholder="Patente del vehículo (opcional)" maxlength="10"/>`:''}
+    </div>
+    <div class="totals-section">
+      <div class="total-row"><span class="total-label">Subtotal</span><span class="total-val">$${sub.toLocaleString('es-AR')}</span></div>
+      ${shipping>0?`<div class="total-row shipping"><span class="total-label">Envío</span><span class="total-val">$${shipping.toLocaleString('es-AR')}</span></div>`:''}
+      <div class="total-row final">
+        <span class="total-label">Total</span>
+        <span class="total-val">$${total.toLocaleString('es-AR')}</span>
+      </div>
+    </div>
+    <button class="wa-btn" onclick="sendWhatsApp()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      Pedir por WhatsApp
+    </button>
+    <button class="share-btn" onclick="copyCartLink()">🔗 Compartir carrito</button>
+    <button class="clear-btn" onclick="clearCart()">Vaciar carrito</button>`;
+}
+
+function updateCartTotals(){
+  // Re-render footer totals without rebuilding whole body
+  updateCartUI();
+}
+
+window.toggleCart = function(){
+  const d=document.getElementById('cart-drawer');
+  const o=document.getElementById('overlay');
+  const open=d.classList.contains('open');
+  d.classList.toggle('open',!open);
+  o.classList.toggle('open',!open);
+  document.body.style.overflow=open?'':'hidden';
+};
+
+/* ─── WhatsApp ───────────────────────────────────────────── */
+window.sendWhatsApp = function(){
+  const nombre = san(document.getElementById('cf-nombre')?.value||'');
+  const dir    = san(document.getElementById('cf-dir')?.value||'');
+  if(!nombre||!dir){ showToast('Completá nombre y dirección para continuar','error'); return; }
+  const patente= san(document.getElementById('cf-patente')?.value||'');
+  const sub    = cartSubtotal();
+  const total  = sub + shipping;
+  const lines  = cart.map(i=>{ const p=products.find(x=>x.id===i.id); return `• ${p.nombre} x${i.qty} — $${(p.precio*i.qty).toLocaleString('es-AR')}`; });
+  const msg=[
+    '🛒 *Nuevo Pedido — Esquiú Shop*','',
+    ...lines,'',
+    `*Subtotal:* $${sub.toLocaleString('es-AR')}`,
+    shipping>0?`*Envío:* $${shipping.toLocaleString('es-AR')}`:null,
+    `*TOTAL: $${total.toLocaleString('es-AR')}*`,'',
+    '—',
+    `*Nombre:* ${nombre}`,
+    `*Dirección:* ${dir}`,
+    patente?`*Patente:* ${patente}`:null,
+    '','_Pedido desde esquiushop.github.io_',
+  ].filter(x=>x!==null).join('\n');
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank','noopener,noreferrer');
+};
+
+/* ─── Share cart link ────────────────────────────────────── */
 window.copyCartLink = function(){
   if(!cart.length){ showToast('El carrito está vacío','error'); return; }
   const param=cart.map(i=>`${i.id}:${i.qty}`).join(',');
@@ -1048,114 +1730,73 @@ function loadCartFromURL(){
   const cp=params.get('cart');
   if(!cp) return;
   try {
-    const items=decodeURIComponent(cp).split(',').map(s=>{ const [id,qty]=s.split(':'); return {id:id.trim(),qty:Math.max(1,parseInt(qty)||1)}; }).filter(i=>products.find(p=>p.id===i.id));
-    if(items.length){ cart=items; updateCartUI(); toggleCart(); showToast(`Carrito cargado (${items.length} productos)`,'success'); }
+    const items=decodeURIComponent(cp).split(',').map(s=>{
+      const [id,qty]=s.split(':');
+      return {id:id.trim(), qty:Math.max(1,parseInt(qty)||1)};
+    }).filter(i=>products.find(p=>p.id===i.id));
+    if(items.length){ cart=items; saveCart(); updateCartUI(); toggleCart(); showToast(`Carrito cargado (${items.length} productos)`,'success'); }
   } catch(e){}
 }
 
-function updateCartUI(){
-  const cnt=cartCount();
-  const countEl=document.getElementById('cart-count');
-  countEl.textContent=cnt;
-  countEl.style.display=cnt>0?'flex':'none';
-  const list  =document.getElementById('cart-items-list');
-  const footer=document.getElementById('cart-footer');
-  if(!cart.length){
-    shippingCost=0;
-    list.innerHTML='<div class="cart-empty"><div style="font-size:40px;margin-bottom:12px">🛒</div><div style="font-family:var(--font-ui)">Tu pedido está vacío.</div><div style="font-size:12px;color:#aaa;margin-top:6px;font-family:var(--font-ui)">Agregá productos del catálogo</div></div>';
-    footer.innerHTML=''; return;
+/* ─── Auth ───────────────────────────────────────────────── */
+onAuthStateChanged(auth, user => { isAdmin=!!user; });
+
+window.doLogin = async function(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass =document.getElementById('login-pass').value;
+  const btn  =document.getElementById('login-btn');
+  const errEl=document.getElementById('login-error');
+  btn.disabled=true; btn.textContent='Verificando…'; errEl.style.display='none';
+  try {
+    await signInWithEmailAndPassword(auth,email,pass);
+    isAdmin=true;
+    document.getElementById('login-email').value='';
+    document.getElementById('login-pass').value='';
+    btn.disabled=false; btn.textContent='Ingresar';
+    showPage('admin');
+    showToast('Sesión iniciada ✓','success');
+  } catch(e){
+    errEl.textContent='Credenciales incorrectas.';
+    errEl.style.display='block';
+    btn.disabled=false; btn.textContent='Ingresar';
   }
-  const hasLubri=cart.some(i=>products.find(p=>p.id===i.id)?.store==='lubricentro');
-  list.innerHTML=cart.map(item=>{
-    const p=products.find(x=>x.id===item.id);
-    if(!p) return '';
-    const emoji=getEmoji(p.categoria);
-    const imgH=p.imagen?`<img src="${san(p.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<span style="font-size:24px">${emoji}</span>`;
-    return `<div class="cart-item">
-      <div class="ci-img">${imgH}</div>
-      <div class="ci-info">
-        <div class="ci-name">${san(p.nombre)}</div>
-        <div class="ci-cat">${san(p.categoria)}</div>
-        <div class="ci-qty">
-          <button class="qty-btn" onclick="changeCartQty('${p.id}',-1)">−</button>
-          <span style="font-size:14px;min-width:22px;text-align:center;font-family:var(--font-ui);font-weight:600">${item.qty}</span>
-          <button class="qty-btn" onclick="changeCartQty('${p.id}',1)">+</button>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-        <div class="ci-price">$${(p.precio*item.qty).toLocaleString('es-AR')}</div>
-        <button class="ci-del" onclick="removeFromCart('${p.id}')">✕</button>
-      </div>
-    </div>`;
-  }).join('');
-  const sub  =cartSubtotal();
-  const total=sub+shippingCost;
-  footer.innerHTML=`
-    ${buildCrossSell()}
-    <div class="shipping-box">
-      <div class="shipping-title">🚚 Calcular costo de envío</div>
-      <div class="shipping-row">
-        <input class="shipping-input" id="shipping-cp" type="text" maxlength="6" placeholder="Código postal (ej: 5000)"/>
-        <button class="shipping-calc" onclick="calcShipping()">Calcular</button>
-      </div>
-      <div id="shipping-result" class="shipping-result" ${shippingCost>0?'style="display:block"':''}>${shippingCost>0?`✓ Envío: $${shippingCost.toLocaleString('es-AR')}`:''}</div>
-    </div>
-    <div class="cart-form">
-      <input class="cf-input" id="cf-nombre" placeholder="Tu nombre *" maxlength="80"/>
-      <input class="cf-input" id="cf-dir" placeholder="Dirección en Córdoba *" maxlength="120"/>
-      ${hasLubri?`<input class="cf-input" id="cf-patente" placeholder="Patente del vehículo (opcional)" maxlength="10"/>`:''}
-    </div>
-    <div style="margin-bottom:14px">
-      ${shippingCost>0?`
-        <div class="cart-total-row"><span class="cart-total-label">Subtotal</span><span style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--muted)">$${sub.toLocaleString('es-AR')}</span></div>
-        <div class="cart-total-row"><span class="cart-total-label">Envío</span><span style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--green)">$${shippingCost.toLocaleString('es-AR')}</span></div>`:''}
-      <div class="cart-total-row">
-        <span class="cart-total-label">Total</span>
-        <span class="cart-total-val">$${total.toLocaleString('es-AR')}</span>
-      </div>
-    </div>
-    <button class="wa-btn" onclick="sendWhatsApp()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-      Pedir por WhatsApp
-    </button>
-    <button class="share-btn" onclick="copyCartLink()">🔗 Copiar link de este pedido</button>
-    <button class="clear-btn" onclick="clearCart()">Vaciar carrito</button>`;
-}
-
-window.toggleCart = function(){
-  const d=document.getElementById('cart-drawer');
-  const o=document.getElementById('overlay');
-  const open=d.classList.contains('open');
-  d.classList.toggle('open',!open);
-  o.classList.toggle('open',!open);
 };
 
-window.sendWhatsApp = function(){
-  const nombre =san(document.getElementById('cf-nombre')?.value||'');
-  const dir    =san(document.getElementById('cf-dir')?.value||'');
-  if(!nombre||!dir){ showToast('Completá nombre y dirección','error'); return; }
-  const patente=san(document.getElementById('cf-patente')?.value||'');
-  const sub    =cartSubtotal();
-  const total  =sub+shippingCost;
-  const lineas =cart.map(i=>{ const p=products.find(x=>x.id===i.id); return `• ${p.nombre} x${i.qty} → $${(p.precio*i.qty).toLocaleString('es-AR')}`; });
-  const msg=[
-    '*🛒 Nuevo Pedido — Esquiú Shop*','',
-    ...lineas,'',
-    shippingCost>0?`*Envío:* $${shippingCost.toLocaleString('es-AR')}`:null,
-    `*Total: $${total.toLocaleString('es-AR')}*`,'',
-    '━━━━━━━━━━━━━━━',
-    `*Nombre:* ${nombre}`,
-    `*Dirección:* ${dir}`,
-    patente?`*Patente:* ${patente}`:null,
-    '',
-    '_Pedido enviado desde esquiu.shop_'
-  ].filter(x=>x!==null).join('\n');
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank','noopener,noreferrer');
+window.doLogout = async function(){
+  await signOut(auth); isAdmin=false; goHome(); showToast('Sesión cerrada','success');
 };
 
-// ═══════════════════════════════════════════════════════════════
-// ADMIN DASHBOARD
-// ═══════════════════════════════════════════════════════════════
+/* ─── Page routing ───────────────────────────────────────── */
+window.showPage = function(name){
+  if(name==='admin'&&!isAdmin){ showPage('admin-login'); return; }
+  // Hide store page
+  document.getElementById('page-store').style.display='none';
+  document.getElementById('cat-bar').style.display='none';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+name);
+  if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+  if(name==='admin') renderAdmin();
+};
+
+window.goHome = function(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-store').style.display='';
+  document.getElementById('cat-bar').style.display='';
+  window.scrollTo(0,0);
+};
+
+window.scrollToSection = function(id){
+  goHome();
+  setTimeout(()=>{
+    document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  },50);
+};
+
+window.toggleMenu = function(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+};
+
+/* ─── Admin ──────────────────────────────────────────────── */
 function renderAdmin(){
   renderAdminStats();
   renderAdminTable();
@@ -1164,38 +1805,36 @@ function renderAdmin(){
 function renderAdminStats(){
   const el=document.getElementById('admin-stats');
   if(!el) return;
-  const t=products.length;
-  const l=products.filter(p=>p.store==='lubricentro').length;
-  const f=products.filter(p=>p.store==='ferreteria').length;
-  const s=products.filter(p=>p.stock===0).length;
+  const t=products.length, l=products.filter(p=>p.store==='lubricentro').length,
+        f=products.filter(p=>p.store==='ferreteria').length, s=products.filter(p=>p.stock===0).length;
   el.innerHTML=[
     {l:'Total',v:t,c:'var(--text)'},{l:'Lubricentro',v:l,c:'var(--blue)'},
-    {l:'Ferretería',v:f,c:'var(--amber)'},{l:'Sin stock',v:s,c:'var(--red)'},
+    {l:'Ferretería',v:f,c:'#d97706'},{l:'Sin stock',v:s,c:'var(--red)'},
   ].map(x=>`<div class="stat-card"><div class="stat-label">${x.l}</div><div class="stat-val" style="color:${x.c}">${x.v}</div></div>`).join('');
 }
 
 function renderAdminTable(){
   const q    =(document.getElementById('admin-search')?.value||'').toLowerCase();
-  const store=document.getElementById('admin-filter-store')?.value||'';
+  const store=document.getElementById('admin-store-fil')?.value||'';
   const f=products.filter(p=>{
-    if(store && p.store!==store) return false;
-    if(q && !p.nombre?.toLowerCase().includes(q)) return false;
+    if(store&&p.store!==store) return false;
+    if(q&&!p.nombre?.toLowerCase().includes(q)) return false;
     return true;
   });
   const tbody=document.getElementById('admin-tbody');
   if(!tbody) return;
   tbody.innerHTML=f.map(p=>{
-    const emoji=getEmoji(p.categoria);
-    const imgH=p.imagen?`<img src="${san(p.imagen)}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:emoji;
+    const e=emoji(p.categoria);
+    const imgH=p.imagen?`<img src="${san(p.imagen)}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display='none'">`:e;
     const sl=p.store==='lubricentro'?'Lubricentro':'Ferretería';
-    const sb=p.store==='lubricentro'?'background:var(--blue-light);color:var(--blue)':'background:var(--amber-light);color:#92580a';
+    const sb=p.store==='lubricentro'?'s-pill s-lubri':'s-pill s-ferr';
     const sc=p.stock===0?'stock-low':p.stock<=3?'stock-warn':'stock-ok';
     return `<tr>
-      <td><div class="td-img">${imgH}</div></td>
+      <td><div class="td-thumb">${imgH}</div></td>
       <td style="font-weight:600;max-width:180px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${san(p.nombre||'')}</div></td>
-      <td style="color:var(--muted);font-size:12px">${san(p.marca||'—')}</td>
-      <td><span class="s-tag" style="${sb}">${sl}</span></td>
-      <td style="color:var(--muted);font-size:12px">${san(p.categoria||'')}</td>
+      <td style="color:var(--text3);font-size:12px">${san(p.marca||'—')}</td>
+      <td><span class="${sb}">${sl}</span></td>
+      <td style="color:var(--text3);font-size:12px">${san(p.categoria||'')}</td>
       <td style="font-weight:700;font-family:var(--font-head);font-size:15px">$${Number(p.precio||0).toLocaleString('es-AR')}</td>
       <td class="${sc}">${p.stock}</td>
       <td><div style="display:flex;gap:6px;justify-content:flex-end">
@@ -1204,32 +1843,31 @@ function renderAdminTable(){
       </div></td>
     </tr>`;
   }).join('');
-  const af=document.getElementById('admin-footer');
-  if(af) af.textContent=`${f.length} productos mostrados · ${products.length} en total`;
+  const af=document.getElementById('admin-foot');
+  if(af) af.textContent=`${f.length} de ${products.length} productos`;
 }
 window.renderAdminTable=renderAdminTable;
 
-// ── Modal producto ────────────────────────────────────────────
+/* ─── Modal ──────────────────────────────────────────────── */
 window.openModal = function(id=null){
   editingId=id;
   const errEl=document.getElementById('modal-error');
   errEl.style.display='none';
-  document.querySelectorAll('.badge-toggle').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.btoggle').forEach(b=>b.classList.remove('on'));
   if(id){
-    const p=products.find(x=>x.id===id);
-    if(!p) return;
+    const p=products.find(x=>x.id===id); if(!p) return;
     document.getElementById('modal-title').textContent='✏️ Editar producto';
-    document.getElementById('m-store').value    =p.store||'ferreteria';
-    document.getElementById('m-nombre').value   =p.nombre||'';
-    document.getElementById('m-marca').value    =p.marca||'';
-    document.getElementById('m-categoria').value=p.categoria||'';
-    document.getElementById('m-desc').value     =p.descripcion||'';
-    document.getElementById('m-precio').value   =p.precio||'';
-    document.getElementById('m-stock').value    =p.stock||'';
-    document.getElementById('m-imagen').value   =p.imagen||'';
-    document.getElementById('m-sugerencia').value=p.sugerenciaId||'';
+    document.getElementById('m-store').value      =p.store||'ferreteria';
+    document.getElementById('m-nombre').value     =p.nombre||'';
+    document.getElementById('m-marca').value      =p.marca||'';
+    document.getElementById('m-categoria').value  =p.categoria||'';
+    document.getElementById('m-desc').value       =p.descripcion||'';
+    document.getElementById('m-precio').value     =p.precio||'';
+    document.getElementById('m-stock').value      =p.stock||'';
+    document.getElementById('m-imagen').value     =p.imagen||'';
+    document.getElementById('m-sugerencia').value =p.sugerenciaId||'';
     updateImgPrev(p.imagen||'',p.categoria||'');
-    (p.badges||[]).forEach(b=>{ document.querySelectorAll('.badge-toggle').forEach(el=>{ if(el.dataset.badge===b) el.classList.add('on'); }); });
+    (p.badges||[]).forEach(b=>{ document.querySelectorAll('.btoggle').forEach(el=>{ if(el.dataset.badge===b) el.classList.add('on'); }); });
   } else {
     document.getElementById('modal-title').textContent='➕ Nuevo producto';
     ['m-nombre','m-marca','m-categoria','m-desc','m-precio','m-stock','m-imagen','m-sugerencia'].forEach(fid=>{ const el=document.getElementById(fid); if(el) el.value=''; });
@@ -1238,21 +1876,21 @@ window.openModal = function(id=null){
   }
   document.getElementById('modal-overlay').classList.add('open');
 };
-window.closeModal = function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
+window.closeModal=function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
 
 document.getElementById('m-imagen')?.addEventListener('input',function(){
-  clearTimeout(imgTimer);
-  imgTimer=setTimeout(()=>updateImgPrev(this.value,document.getElementById('m-categoria').value),500);
+  clearTimeout(imgTmr);
+  imgTmr=setTimeout(()=>updateImgPrev(this.value,document.getElementById('m-categoria').value),500);
 });
 
 function updateImgPrev(url,cat){
   const el=document.getElementById('m-img-prev');
   if(!el) return;
-  if(!url){ el.innerHTML=getEmoji(cat)||'📦'; return; }
+  if(!url){ el.innerHTML=emoji(cat)||'📦'; return; }
   el.innerHTML=`<img src="${san(url)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='📦'">`;
 }
 
-window.saveProduct = async function(){
+window.saveProduct=async function(){
   const errEl =document.getElementById('modal-error');
   const saveBtn=document.getElementById('save-btn');
   errEl.style.display='none';
@@ -1265,7 +1903,7 @@ window.saveProduct = async function(){
   const imagen    =san(document.getElementById('m-imagen').value);
   const store     =document.getElementById('m-store').value;
   const sugerenciaId=san(document.getElementById('m-sugerencia').value);
-  const badges    =[...document.querySelectorAll('.badge-toggle.on')].map(el=>el.dataset.badge);
+  const badges    =[...document.querySelectorAll('.btoggle.on')].map(el=>el.dataset.badge);
   if(!nombre){ errEl.textContent='El nombre es obligatorio.'; errEl.style.display='block'; return; }
   if(!categoria){ errEl.textContent='La categoría es obligatoria.'; errEl.style.display='block'; return; }
   if(isNaN(precio)||precio<=0){ errEl.textContent='El precio debe ser mayor a 0.'; errEl.style.display='block'; return; }
@@ -1273,51 +1911,69 @@ window.saveProduct = async function(){
   const payload={store,marca,nombre,categoria,descripcion:desc,precio,stock,imagen,badges,sugerenciaId};
   saveBtn.disabled=true; saveBtn.textContent='Guardando…';
   try {
-    await fbSave(payload, editingId||null);
-    closeModal();
-    renderAdmin();
+    await fbSave(payload,editingId||null);
+    closeModal(); renderAdmin();
     showToast(editingId?'Producto actualizado ✓':'Producto creado ✓','success');
-  } catch(e){
-    errEl.textContent='Error al guardar: '+e.message; errEl.style.display='block';
-  } finally {
-    saveBtn.disabled=false; saveBtn.textContent='Guardar producto';
-  }
+  } catch(e){ errEl.textContent='Error: '+e.message; errEl.style.display='block'; }
+  finally { saveBtn.disabled=false; saveBtn.textContent='Guardar producto'; }
 };
 
-// ── Delete ────────────────────────────────────────────────────
-window.promptDelete = function(id){
+window.promptDelete=function(id){
   deleteId=id;
-  const p=products.find(x=>x.id===id);
-  if(!p) return;
+  const p=products.find(x=>x.id===id); if(!p) return;
   document.getElementById('confirm-name').textContent=p.nombre;
-  document.getElementById('confirm-overlay').classList.add('open');
+  document.getElementById('confirm-ov').classList.add('open');
 };
-window.closeConfirm  = function(){ document.getElementById('confirm-overlay').classList.remove('open'); deleteId=null; };
-window.confirmDelete = async function(){
+window.closeConfirm=function(){ document.getElementById('confirm-ov').classList.remove('open'); deleteId=null; };
+window.confirmDelete=async function(){
   if(!deleteId) return;
   try {
-    await fbDelete(deleteId);
-    cart=cart.filter(i=>i.id!==deleteId);
-    updateCartUI();
-    closeConfirm();
-    renderAdmin();
+    await fbDel(deleteId);
+    cart=cart.filter(i=>i.id!==deleteId); saveCart(); updateCartUI();
+    closeConfirm(); renderAdmin();
     showToast('Producto eliminado','success');
   } catch(e){ showToast('Error: '+e.message,'error'); }
 };
 
-// ── Toast ─────────────────────────────────────────────────────
+/* ─── Toast ──────────────────────────────────────────────── */
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
-  clearTimeout(toastTimer);
+  clearTimeout(toastTmr);
   t.className='toast '+type;
   t.textContent=(type==='success'?'✓ ':'⚠ ')+msg;
   void t.offsetWidth;
   t.classList.add('show');
-  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+  toastTmr=setTimeout(()=>t.classList.remove('show'),3200);
 }
 window.showToast=showToast;
 
-// ── Init ──────────────────────────────────────────────────────
+/* ─── Video hero JS fade ─────────────────────────────────── */
+(function(){
+  const vid=document.getElementById('hero-video');
+  if(!vid) return;
+  let fadingOut=false, raf=null;
+  const fadeAnim=(from,to,ms,done)=>{
+    const start=performance.now();
+    const step=now=>{
+      const t=Math.min((now-start)/ms,1);
+      vid.style.opacity=from+(to-from)*t;
+      t<1?(raf=requestAnimationFrame(step)):(vid.style.opacity=to,done&&done());
+    };
+    if(raf) cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(step);
+  };
+  vid.style.opacity=0;
+  vid.addEventListener('canplay',()=>{ vid.play().catch(()=>{}); fadeAnim(0,1,250); },{once:true});
+  vid.addEventListener('timeupdate',()=>{
+    if(!fadingOut&&vid.duration&&vid.currentTime>=vid.duration-0.55){
+      fadingOut=true;
+      fadeAnim(1,0,250,()=>{ setTimeout(()=>{ vid.currentTime=0; vid.play().catch(()=>{}); fadingOut=false; fadeAnim(0,1,250); },100); });
+    }
+  });
+  vid.addEventListener('ended',()=>{ if(!fadingOut){ fadingOut=true; fadeAnim(1,0,250,()=>{ setTimeout(()=>{ vid.currentTime=0; vid.play().catch(()=>{}); fadingOut=false; fadeAnim(0,1,250); },100); }); } });
+})();
+
+/* ─── Init ───────────────────────────────────────────────── */
 await loadProducts();
 loadCartFromURL();
 updateCartUI();
