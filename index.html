@@ -1,930 +1,696 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ferretería + Lubricentro | Tienda Completa</title>
-  <style>
-    :root{
-      --bg:#0f172a;
-      --bg-soft:#111b32;
-      --surface:#17233f;
-      --surface-2:#1f2d4f;
-      --text:#e5ecff;
-      --muted:#9fb0d8;
-      --line:#2d3d66;
-      --accent:#38bdf8;
-      --accent-2:#22c55e;
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --radius:14px;
-      --shadow:0 12px 30px rgba(0,0,0,.25);
-      --max:1200px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg),#0b1224);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
-    .container{width:min(var(--max),92%);margin:auto}
-    .topbar{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:blur(10px);
-      background:rgba(11,18,36,.78);
-      border-bottom:1px solid var(--line)
-    }
-    .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:12px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{
-      width:36px;height:36px;border-radius:10px;
-      background:conic-gradient(from 210deg,#38bdf8,#22c55e,#38bdf8);
-      box-shadow:0 0 0 2px rgba(255,255,255,.06) inset;
-    }
-    .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
-    .brand small{color:var(--muted)}
-    .nav{display:flex;gap:8px;flex-wrap:wrap}
-    .nav button{
-      border:1px solid var(--line);
-      background:var(--surface);
-      color:var(--text);
-      border-radius:999px;
-      padding:8px 12px;
-      cursor:pointer;
-      transition:.18s;
-    }
-    .nav button:hover{transform:translateY(-1px);border-color:var(--accent)}
-    .actions{display:flex;align-items:center;gap:8px}
-    .search{
-      background:var(--surface);
-      border:1px solid var(--line);
-      color:var(--text);
-      padding:9px 12px;
-      border-radius:10px;
-      min-width:230px;
-      outline:none;
-    }
-    .btn{
-      border:none;cursor:pointer;border-radius:12px;padding:10px 14px;
-      font-weight:600;transition:.2s
-    }
-    .btn-primary{background:var(--accent);color:#052334}
-    .btn-primary:hover{transform:translateY(-1px);filter:brightness(1.06)}
-    .btn-soft{background:var(--surface);color:var(--text);border:1px solid var(--line)}
-    .badge{
-      background:var(--accent-2);
-      color:#04210f;
-      font-size:12px;font-weight:800;border-radius:999px;padding:2px 8px
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0e0e0f"/>
+<title>Lubricentro Esquiú — Turnos Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0e0e0f;--bg2:#161618;--bg3:#1e1e21;--border:#2a2a2e;
+  --orange:#f97316;--orange2:#ea580c;--text:#f0ede8;--muted:#7a7878;
+  --success:#22c55e;--warn:#eab308;--danger:#ef4444;--card:#18181b;
+  --wa:#25D366;--wa2:#128C7E;--blue:#3b82f6;
+}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;
+  min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
+input,select,textarea,button{font-family:'DM Sans',sans-serif;}
 
-    /* Hero / slider */
-    .hero{padding:26px 0 8px}
-    .slider{
-      position:relative;overflow:hidden;border-radius:18px;border:1px solid var(--line);
-      background:#0d1730;box-shadow:var(--shadow)
-    }
-    .slides{
-      display:flex;transition:transform .5s ease
-    }
-    .slide{
-      min-width:100%;position:relative;height:360px
-    }
-    .slide img{
-      width:100%;height:100%;object-fit:cover;filter:saturate(1.02) contrast(1.02)
-    }
-    .overlay{
-      position:absolute;inset:0;
-      background:linear-gradient(90deg,rgba(3,8,20,.78),rgba(3,8,20,.25),rgba(3,8,20,.55));
-      display:flex;align-items:end;padding:24px
-    }
-    .overlay-content{max-width:520px}
-    .kicker{display:inline-block;background:rgba(34,197,94,.16);border:1px solid rgba(34,197,94,.45);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;color:#b6f6ce}
-    .overlay h2{margin:10px 0 8px;font-size:32px;line-height:1.08}
-    .overlay p{margin:0 0 14px;color:#d6def7}
-    .slider-controls{
-      position:absolute;inset:auto 12px 12px auto;display:flex;gap:8px
-    }
-    .icon-btn{
-      width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
-      background:rgba(10,18,36,.76);color:white;font-size:19px;cursor:pointer
-    }
-    .dots{
-      position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:6px
-    }
-    .dot{
-      width:24px;height:6px;border-radius:999px;background:rgba(255,255,255,.3);cursor:pointer
-    }
-    .dot.active{background:var(--accent)}
+#toastBox{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;
+  gap:.45rem;pointer-events:none;max-width:310px;width:calc(100vw - 2rem);}
+.toast{pointer-events:all;background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:.68rem .95rem;font-size:.81rem;display:flex;align-items:center;justify-content:space-between;
+  gap:.6rem;transform:translateX(110%);transition:transform .26s ease;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.toast.show{transform:translateX(0);}
+.toast-success{border-left:3px solid var(--success);}
+.toast-error  {border-left:3px solid var(--danger);}
+.toast-msg{flex:1;line-height:1.4;}
+.toast-close{background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:1.05rem;padding:0 .15rem;line-height:1;flex-shrink:0;}
 
-    .hero-stats{
-      display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px
-    }
-    .stat{
-      background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px
-    }
-    .stat .n{font-size:28px;font-weight:800}
-    .stat .l{color:var(--muted);font-size:13px}
+.page{display:none;min-height:100vh;flex-direction:column;}
+.page.active{display:flex;}
 
-    /* layout */
-    main{padding:18px 0 56px}
-    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:14px}
-    .panel{
-      background:var(--surface);
-      border:1px solid var(--line);
-      border-radius:16px;
-      box-shadow:var(--shadow)
-    }
-    .panel h3{
-      margin:0;padding:14px 14px 10px;border-bottom:1px solid var(--line);
-      font-size:15px
-    }
+#pgLanding{align-items:center;justify-content:center;padding:2rem;
+  position:relative;overflow:hidden;text-align:center;}
+#pgLanding::before{content:'';position:absolute;top:-40%;left:-20%;width:60%;height:80%;
+  background:radial-gradient(ellipse,rgba(249,115,22,.09) 0%,transparent 70%);pointer-events:none;}
+  
+.logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,9vw,4.8rem);
+  letter-spacing:3px;line-height:1;}
+.logo span{color:var(--orange);}
+.land-sub{color:var(--muted);margin:.38rem 0 1.8rem;font-size:.78rem;
+  letter-spacing:2px;text-transform:uppercase;}
+.land-cards{display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.4rem;}
+.lcard{background:var(--bg3);border:1px solid var(--border);border-radius:16px;
+  padding:1.8rem 1.6rem;min-width:172px;cursor:pointer;transition:all .2s;text-align:center;}
+.lcard:hover,.lcard:active{border-color:var(--orange);transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(249,115,22,.18);}
+.lcard-ico{font-size:1.95rem;margin-bottom:.55rem;}
+.lcard h3{font-family:'Bebas Neue',sans-serif;font-size:1.42rem;letter-spacing:1px;margin-bottom:.2rem;}
+.lcard p{color:var(--muted);font-size:.77rem;}
+.maps-link{color:var(--muted);font-size:.75rem;text-decoration:none;
+  display:inline-flex;align-items:center;gap:.3rem;margin-bottom:.72rem;}
+.maps-link:hover{color:var(--orange);}
 
-    /* sidebar */
-    .filters{padding:12px}
-    .filters .group{margin-bottom:14px}
-    .filters label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
-    .filters select,.filters input[type="range"]{
-      width:100%;background:var(--surface-2);border:1px solid var(--line);color:var(--text);
-      border-radius:10px;padding:9px
-    }
-    .check{display:flex;align-items:center;gap:8px;font-size:14px;margin:8px 0;color:#d9e4ff}
-    .check input{accent-color:var(--accent)}
-    .pill-row{display:flex;flex-wrap:wrap;gap:7px}
-    .pill{
-      border:1px solid var(--line);background:var(--surface-2);padding:7px 10px;border-radius:999px;
-      font-size:12px;cursor:pointer
-    }
-    .pill.active{border-color:var(--accent);color:#c4edff;background:rgba(56,189,248,.14)}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.8rem 1.3rem;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;flex-shrink:0;}
+.tbrand{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;}
+.tbrand span{color:var(--orange);}
+.topbar-r{display:flex;align-items:center;gap:.68rem;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);
+  padding:.3rem .78rem;border-radius:8px;cursor:pointer;font-size:.76rem;
+  transition:all .15s;touch-action:manipulation;}
+.back-btn:hover{border-color:var(--orange);color:var(--text);}
 
-    /* products */
-    .products-wrap{padding:12px}
-    .toolbar{
-      display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px
-    }
-    .toolbar .left,.toolbar .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .seg{
-      display:inline-flex;border:1px solid var(--line);border-radius:11px;overflow:hidden
-    }
-    .seg button{
-      background:var(--surface-2);border:none;color:var(--text);padding:9px 11px;cursor:pointer
-    }
-    .seg button.active{background:rgba(56,189,248,.2);color:#bdeaff;font-weight:700}
-    .grid{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:12px
-    }
-    .card{
-      background:var(--surface-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;
-      transition:.2s;display:flex;flex-direction:column
-    }
-    .card:hover{transform:translateY(-2px);border-color:#3d5387}
-    .thumb{
-      height:150px;display:flex;align-items:center;justify-content:center;
-      background:radial-gradient(circle at 20% 20%,#2e4679,#1a2747)
-    }
-    .thumb span{
-      font-size:52px;opacity:.86;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))
-    }
-    .card-body{padding:11px}
-    .cat{font-size:11px;color:#9ec6db;text-transform:uppercase;letter-spacing:.8px}
-    .title{margin:5px 0 7px;font-size:16px;font-weight:700}
-    .desc{margin:0 0 10px;color:var(--muted);font-size:13px;line-height:1.4}
-    .meta{display:flex;justify-content:space-between;align-items:center}
-    .price{font-size:22px;font-weight:800}
-    .old{font-size:12px;color:#8ea1cb;text-decoration:line-through}
-    .buy-row{display:flex;gap:7px;margin-top:9px}
-    .buy-row button{flex:1}
-    .btn-like{
-      width:42px;flex:none;border:1px solid var(--line);background:#1b2a4c;color:#d9e7ff;border-radius:10px;cursor:pointer
-    }
-    .btn-like.active{background:rgba(239,68,68,.18);border-color:#ef4444;color:#ffc4c4}
+.content{padding:1.2rem;max-width:1050px;margin:0 auto;width:100%;flex:1;}
 
-    /* cart */
-    .cart{display:flex;flex-direction:column;min-height:640px}
-    .cart-body{padding:12px;display:flex;flex-direction:column;gap:10px;flex:1}
-    .cart-item{
-      border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:10px;display:grid;grid-template-columns:46px 1fr auto;gap:9px;align-items:center
-    }
-    .mini{
-      width:46px;height:46px;border-radius:10px;background:#22345f;display:flex;align-items:center;justify-content:center;font-size:21px
-    }
-    .ci-title{font-weight:700;font-size:14px}
-    .ci-price{color:#b9caef;font-size:12px}
-    .qty{display:flex;align-items:center;gap:7px}
-    .qty button{
-      width:24px;height:24px;border:1px solid var(--line);background:#21325c;color:white;border-radius:7px;cursor:pointer
-    }
-    .summary{
-      margin-top:auto;border-top:1px solid var(--line);padding-top:10px;font-size:14px;color:#d7e4ff
-    }
-    .sum-row{display:flex;justify-content:space-between;margin:6px 0}
-    .sum-row.total{font-size:20px;font-weight:800}
-    .empty{
-      border:1px dashed #3c5488;background:rgba(27,42,76,.45);border-radius:14px;padding:18px;text-align:center;color:#b2c5ef
-    }
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.05rem;}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1px;
+  margin-bottom:.8rem;color:var(--orange);}
 
-    /* admin modal */
-    .modal{
-      position:fixed;inset:0;background:rgba(2,8,20,.62);display:none;align-items:center;justify-content:center;padding:16px;z-index:100
-    }
-    .modal.active{display:flex}
-    .modal-card{
-      width:min(980px,95vw);max-height:90vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)
-    }
-    .modal-head{
-      display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:12px 14px
-    }
-    .modal-body{padding:14px}
-    .admin-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
-    .table{width:100%;border-collapse:collapse;font-size:13px}
-    .table th,.table td{border-bottom:1px solid var(--line);padding:8px;text-align:left}
-    .table th{color:#9cb4e6;font-size:12px;text-transform:uppercase;letter-spacing:.7px}
-    .input{
-      width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:10px
-    }
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .mt{margin-top:10px}
-    .danger{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.55);color:#ffd6d6}
+.badge{display:inline-block;padding:.13rem .46rem;border-radius:20px;font-size:.65rem;font-weight:600;}
+.b-green {background:rgba(34,197,94,.15);color:var(--success);}
+.b-yellow{background:rgba(234,179,8,.15);color:var(--warn);}
+.b-orange{background:rgba(249,115,22,.15);color:var(--orange);}
+.b-red   {background:rgba(239,68,68,.15);color:var(--danger);}
 
-    footer{
-      border-top:1px solid var(--line);padding:18px 0;color:#a9bbdf
-    }
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.26rem;
+  padding:.46rem .92rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;
+  border:none;transition:all .15s;-webkit-appearance:none;touch-action:manipulation;}
+.btn-p{background:var(--orange);color:#fff;}
+.btn-p:hover,.btn-p:active{background:var(--orange2);}
+.btn-g{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-g:hover,.btn-g:active{border-color:var(--orange);color:var(--orange);}
+.btn-wa{background:var(--wa);color:#fff;border:none;}
+.btn-wa:hover,.btn-wa:active{background:var(--wa2);}
+.btn-full{width:100%;margin-top:.26rem;}
 
-    @media (max-width:1100px){
-      .layout{grid-template-columns:240px 1fr}
-      .cart{grid-column:1/-1}
-    }
-    @media (max-width:860px){
-      .topbar-inner{flex-wrap:wrap}
-      .search{min-width:0;flex:1}
-      .hero-stats{grid-template-columns:repeat(2,1fr)}
-      .layout{grid-template-columns:1fr}
-      .grid{grid-template-columns:repeat(2,1fr)}
-      .slide{height:300px}
-    }
-    @media (max-width:560px){
-      .grid{grid-template-columns:1fr}
-      .overlay h2{font-size:24px}
-    }
-  </style>
+.fg{margin-bottom:.8rem;}
+.fl{display:block;font-size:.68rem;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:.26rem;}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:.52rem .76rem;border-radius:8px;font-size:.88rem;transition:border .15s;
+  outline:none;-webkit-appearance:none;}
+.fi:focus{border-color:var(--orange);}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+@media(max-width:480px){.fr{grid-template-columns:1fr;}}
+select.fi option{background:var(--bg2);}
+
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:.58rem;}
+.sc{border:2px solid var(--border);border-radius:10px;padding:.8rem;cursor:pointer;
+  transition:all .15s;text-align:center;touch-action:manipulation;}
+.sc:hover,.sc:active,.sc.sel{border-color:var(--orange);background:rgba(249,115,22,.07);}
+.sc-name{font-weight:600;font-size:.8rem;margin-bottom:.13rem;}
+.sc-price{color:var(--orange);font-size:.75rem;font-weight:700;}
+.sc-meta{color:var(--muted);font-size:.67rem;}
+
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:.36rem;}
+.tb{border:1px solid var(--border);background:var(--bg3);color:var(--text);padding:.38rem;
+  border-radius:8px;cursor:pointer;font-size:.77rem;transition:all .15s;text-align:center;
+  touch-action:manipulation;}
+.tb:hover,.tb:active,.tb.sel{border-color:var(--orange);color:var(--orange);
+  background:rgba(249,115,22,.07);}
+.tb.taken{opacity:.22;cursor:not-allowed;pointer-events:none;text-decoration:line-through;}
+
+.sh{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.9rem;flex-wrap:wrap;gap:.46rem;}
+.st{font-family:'Bebas Neue',sans-serif;font-size:1.38rem;letter-spacing:1px;}
+.alert{padding:.74rem .9rem;border-radius:8px;margin-bottom:.8rem;font-size:.8rem;line-height:1.5;}
+.ao{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:var(--orange);}
+.ag{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--success);}
+.ar{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--danger);}
+.ab{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);}
+.empty{text-align:center;padding:2rem 1rem;color:var(--muted);}
+.appt-card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:.88rem;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:.52rem;margin-bottom:.52rem;}
+.sum-box{background:rgba(249,115,22,.05);border:1px solid rgba(249,115,22,.3);
+  border-radius:12px;padding:.92rem;margin-bottom:.85rem;}
+.next-svc{background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.04));
+  border:1px solid rgba(249,115,22,.35);border-radius:14px;padding:1rem 1.1rem;
+  margin-bottom:1.3rem;}
+.next-svc-title{font-family:'Bebas Neue',sans-serif;font-size:1.02rem;letter-spacing:1px;
+  color:var(--orange);margin-bottom:.36rem;}
+.vtype-btns{display:flex;gap:.5rem;margin-top:.26rem;}
+.vtype-btn{flex:1;padding:.5rem;border:2px solid var(--border);border-radius:8px;
+  background:transparent;color:var(--text);font-size:.82rem;font-weight:600;cursor:pointer;
+  transition:all .15s;text-align:center;touch-action:manipulation;}
+.vtype-btn.sel{border-color:var(--orange);background:rgba(249,115,22,.08);color:var(--orange);}
+.closed-msg{text-align:center;padding:1.4rem;color:var(--danger);font-size:.88rem;
+  background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;}
+.success-banner{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.38);
+  border-radius:14px;padding:1.28rem;margin-bottom:.88rem;text-align:center;}
+.sb-icon{font-size:2.2rem;margin-bottom:.36rem;}
+.sb-title{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:1px;
+  color:var(--success);margin-bottom:.26rem;}
+.sb-sub{color:var(--muted);font-size:.8rem;margin-bottom:.88rem;line-height:1.55;}
+.btn-wa-big{background:var(--wa);color:#fff;border:none;border-radius:10px;padding:.8rem 1.5rem;
+  font-size:.98rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;
+  gap:.46rem;transition:all .15s;touch-action:manipulation;width:100%;justify-content:center;}
+.btn-wa-big:active{background:var(--wa2);}
+.btn-wa-big-hint{color:var(--muted);font-size:.7rem;margin-top:.42rem;}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(249,115,22,.25);
+  border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite;}
+.saving-lbl{font-size:.7rem;color:var(--muted);display:none;align-items:center;gap:.36rem;}
+.loader-full{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
+.big-spin{width:38px;height:38px;border:3px solid rgba(249,115,22,.2);
+  border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
+  
+.pit-badge{display:inline-block;padding:.11rem .4rem;border-radius:6px;font-size:.65rem;font-weight:700;margin-left:.3rem;}
+.pit-auto  {background:rgba(59,130,246,.15);color:var(--blue);}
+.pit-camion{background:rgba(168,85,247,.15);color:#c084fc;}
+
+.divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <h1>Gonzi Store</h1>
-          <small>Ferretería, Lubricentro & Cámaras</small>
-        </div>
-      </div>
 
-      <nav class="nav">
-        <button data-jump="destacados">Destacados</button>
-        <button data-jump="camaras">Cámaras</button>
-        <button data-jump="herramientas">Herramientas</button>
-        <button data-jump="lubricantes">Lubricantes</button>
-      </nav>
+<div id="toastBox"></div>
+<div class="loader-full" id="appLoader">
+  <div class="big-spin"></div>
+  <div style="color:var(--muted);font-size:.86rem">Conectando con Firebase...</div>
+</div>
 
-      <div class="actions">
-        <input id="search" class="search" placeholder="Buscar productos, marcas o categorías..." />
-        <button id="openAdmin" class="btn btn-soft">Admin</button>
-        <button id="openCart" class="btn btn-primary">Carrito <span id="cartCount" class="badge">0</span></button>
+<!-- ═══════════ LANDING ═══════════ -->
+<div class="page active" id="pgLanding">
+  <div style="text-align:center">
+    <div class="logo">LUBRICENTRO <span>ESQUIÚ</span></div>
+    <div class="land-sub">Turnos Online · Córdoba</div>
+    <div class="land-cards">
+      <div class="lcard" onclick="go('pgClient')">
+        <div class="lcard-ico">🚗</div><h3>SOY CLIENTE</h3><p>Sacá tu turno online</p>
       </div>
     </div>
-  </header>
+    <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank">
+      📍 Ver en Google Maps</a><br/>
+    <button class="btn btn-wa" style="padding:.62rem 1.3rem;font-size:.9rem;margin-top:.4rem"
+      onclick="window.open('https://wa.me/5493513880155','_blank')">💬 Consultas por WhatsApp</button>
+  </div>
+</div>
 
-  <section class="hero container" id="destacados">
-    <div class="slider panel">
-      <div class="slides" id="slides">
-        <article class="slide">
-          <img src="lubri.jpg" alt="Promoción lubricentro" />
-          <div class="overlay">
-            <div class="overlay-content">
-              <span class="kicker">Lubricentro</span>
-              <h2>Mantenimiento premium para tu motor</h2>
-              <p>Aceites sintéticos, filtros y aditivos con entrega en el día en zona urbana.</p>
-              <button class="btn btn-primary" onclick="scrollToSection('lubricantes')">Ver lubricantes</button>
-            </div>
-          </div>
-        </article>
-        <article class="slide">
-          <img src="ferre.jpg" alt="Promoción ferretería" />
-          <div class="overlay">
-            <div class="overlay-content">
-              <span class="kicker">Ferretería</span>
-              <h2>Herramientas para obra y hogar</h2>
-              <p>Marcas de confianza, kits completos y asesoramiento técnico por WhatsApp.</p>
-              <button class="btn btn-primary" onclick="scrollToSection('herramientas')">Ver herramientas</button>
-            </div>
-          </div>
-        </article>
-      </div>
-      <div class="slider-controls">
-        <button class="icon-btn" id="prevSlide">‹</button>
-        <button class="icon-btn" id="nextSlide">›</button>
-      </div>
-      <div class="dots">
-        <span class="dot active" data-dot="0"></span>
-        <span class="dot" data-dot="1"></span>
-      </div>
-    </div>
-
-    <div class="hero-stats">
-      <div class="stat"><div class="n">1.247</div><div class="l">Productos activos</div></div>
-      <div class="stat"><div class="n">87%</div><div class="l">Entrega en 24h</div></div>
-      <div class="stat"><div class="n">4,8/5</div><div class="l">Calificación clientes</div></div>
-      <div class="stat"><div class="n">+320</div><div class="l">Compras esta semana</div></div>
-    </div>
-  </section>
-
-  <main class="container">
-    <div class="layout">
-      <aside class="panel">
-        <h3>Filtros</h3>
-        <div class="filters">
-          <div class="group">
-            <label for="catFilter">Categoría</label>
-            <select id="catFilter">
-              <option value="all">Todas</option>
-              <option value="camaras">Cámaras</option>
-              <option value="herramientas">Herramientas</option>
-              <option value="lubricantes">Lubricantes</option>
-              <option value="electricidad">Electricidad</option>
-              <option value="seguridad">Seguridad</option>
-            </select>
-          </div>
-
-          <div class="group">
-            <label for="priceRange">Precio máximo: $<span id="priceMaxText">200000</span></label>
-            <input id="priceRange" type="range" min="2000" max="200000" step="1000" value="200000" />
-          </div>
-
-          <div class="group">
-            <label>Marcas</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Bosch" checked> Bosch</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Stanley" checked> Stanley</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Total" checked> Total</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Shell" checked> Shell</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Motul" checked> Motul</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Hikvision" checked> Hikvision</label>
-            <label class="check"><input type="checkbox" class="brandFilter" value="Ezviz" checked> Ezviz</label>
-          </div>
-
-          <div class="group">
-            <label>Etiquetas rápidas</label>
-            <div class="pill-row">
-              <span class="pill active" data-tag="all">Todo</span>
-              <span class="pill" data-tag="nuevo">Nuevo</span>
-              <span class="pill" data-tag="promo">Promo</span>
-              <span class="pill" data-tag="top">Top ventas</span>
-              <span class="pill" data-tag="pro">Profesional</span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <section class="panel">
-        <h3>Tienda</h3>
-        <div class="products-wrap">
-          <div class="toolbar">
-            <div class="left">
-              <strong id="resultCount">0 productos</strong>
-              <span style="color:var(--muted);font-size:13px">actualizado hace 3 min</span>
-            </div>
-            <div class="right">
-              <div class="seg">
-                <button class="active" data-sort="relevancia">Relevancia</button>
-                <button data-sort="menor">Menor precio</button>
-                <button data-sort="mayor">Mayor precio</button>
-              </div>
-              <button class="btn btn-soft" id="toggleView">Vista compacta</button>
-            </div>
-          </div>
-
-          <div class="grid" id="productGrid"></div>
-        </div>
-      </section>
-
-      <aside class="panel cart" id="cartPanel">
-        <h3>Carrito</h3>
-        <div class="cart-body">
-          <div id="cartItems"></div>
-          <div id="emptyCart" class="empty">
-            <p style="margin:0 0 8px;font-weight:700">Tu carrito está vacío</p>
-            <p style="margin:0 0 10px;font-size:13px">Agregá productos para cotizar envío y retirar en sucursal.</p>
-            <button class="btn btn-primary" onclick="scrollToSection('destacados')">Explorar destacados</button>
-          </div>
-
-          <div class="summary">
-            <div class="sum-row"><span>Subtotal</span><strong id="subTotal">$0</strong></div>
-            <div class="sum-row"><span>Envío estimado</span><strong id="shipping">$0</strong></div>
-            <div class="sum-row"><span>Descuento</span><strong id="discount">-$0</strong></div>
-            <div class="sum-row total"><span>Total</span><span id="total">$0</span></div>
-            <button id="checkoutBtn" class="btn btn-primary" style="width:100%;margin-top:10px">Finalizar compra</button>
-          </div>
-        </div>
-      </aside>
-    </div>
-  </main>
-
-  <footer>
-    <div class="container" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <small>© 2026 Gonzi Store. Precios sujetos a stock y disponibilidad.</small>
-      <small>Soporte técnico: Lun a Sáb 8:00 a 19:30</small>
-    </div>
-  </footer>
-
-  <!-- Admin Modal -->
-  <div id="adminModal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <strong>Panel Administrador</strong>
-        <button class="btn btn-soft" id="closeAdmin">Cerrar</button>
-      </div>
-      <div class="modal-body">
-        <div class="admin-grid">
-          <section class="panel" style="box-shadow:none">
-            <h3 style="border-bottom:1px solid var(--line)">Inventario actual</h3>
-            <div style="padding:10px;overflow:auto">
-              <table class="table" id="adminTable">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Producto</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="panel" style="box-shadow:none">
-            <h3 style="border-bottom:1px solid var(--line)">Alta / edición rápida</h3>
-            <div style="padding:10px">
-              <input id="fName" class="input" placeholder="Nombre del producto" />
-              <div class="form-row mt">
-                <input id="fCategory" class="input" placeholder="Categoría (camaras, herramientas...)" />
-                <input id="fBrand" class="input" placeholder="Marca" />
-              </div>
-              <div class="form-row mt">
-                <input id="fPrice" class="input" type="number" placeholder="Precio" />
-                <input id="fStock" class="input" type="number" placeholder="Stock" />
-              </div>
-              <div class="form-row mt">
-                <input id="fEmoji" class="input" placeholder="Emoji ícono (ej: 📷)" />
-                <input id="fTag" class="input" placeholder="Tag (nuevo, promo, top, pro)" />
-              </div>
-              <button id="addProduct" class="btn btn-primary mt" style="width:100%">Guardar producto</button>
-              <button id="clearForm" class="btn btn-soft mt" style="width:100%">Limpiar formulario</button>
-            </div>
-
-            <h3 style="border-bottom:1px solid var(--line);border-top:1px solid var(--line)">Métricas</h3>
-            <div style="padding:10px;font-size:14px;color:#c9d9ff">
-              <p style="margin:0 0 8px">Productos visibles: <strong id="mVisible">0</strong></p>
-              <p style="margin:0 0 8px">Stock total: <strong id="mStock">0</strong></p>
-              <p style="margin:0">Ticket promedio simulado: <strong id="mTicket">$0</strong></p>
-            </div>
-
-            <div style="padding:10px">
-              <button id="dangerReset" class="btn danger" style="width:100%">Resetear inventario demo</button>
-            </div>
-          </section>
-        </div>
-      </div>
+<!-- ═══════════ CLIENT APP ═══════════ -->
+<div class="page" id="pgClient">
+  <div class="topbar">
+    <div class="tbrand">LUBRICENTRO <span>ESQUIÚ</span></div>
+    <div class="topbar-r">
+      <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;display:none"></span>
+      <button class="back-btn" onclick="go('pgLanding')">← Inicio</button>
     </div>
   </div>
+  <div class="content" id="clientArea"></div>
+</div>
 
-  <script>
-    const initialProducts = [
-      {id:1, name:"Cámara Domo Full HD IR 30m", category:"camaras", brand:"Hikvision", price:64900, oldPrice:71900, stock:27, tag:"top", emoji:"📷", desc:"Visión nocturna, WDR digital y carcasa antivandálica."},
-      {id:2, name:"Cámara Bullet 2MP Exterior IP66", category:"camaras", brand:"Ezviz", price:58900, oldPrice:0, stock:18, tag:"promo", emoji:"🎥", desc:"Óptica fija 2.8mm, alerta por movimiento y app móvil."},
-      {id:3, name:"Kit CCTV 4 Canales + 2 Cámaras", category:"camaras", brand:"Hikvision", price:149900, oldPrice:169000, stock:9, tag:"pro", emoji:"📹", desc:"DVR H.265, acceso remoto y disco sugerido 1TB."},
-      {id:4, name:"Mini Cámara WiFi Interior 360°", category:"camaras", brand:"Ezviz", price:42900, oldPrice:49900, stock:33, tag:"nuevo", emoji:"🔍", desc:"Audio bidireccional y seguimiento inteligente."},
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT - SOLO CLIENTE
+═══════════════════════════════════════ -->
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyCKu6dYKVNv1GnefclT7avPSDu7S53xBf4",
+  authDomain:"lubricentroesquiu-1759a.firebaseapp.com",
+  projectId:"lubricentroesquiu-1759a",
+  storageBucket:"lubricentroesquiu-1759a.firebasestorage.app",
+  messagingSenderId:"278002254829",
+  appId:"1:278002254429:web:91ad2912c248978df183b4"
+});
+const db = firebase.firestore();
 
-      {id:5, name:"Taladro Percutor 710W", category:"herramientas", brand:"Bosch", price:112500, oldPrice:126900, stock:14, tag:"top", emoji:"🛠️", desc:"Velocidad variable y mandril de ajuste rápido."},
-      {id:6, name:"Amoladora 4½'' 850W", category:"herramientas", brand:"Total", price:79800, oldPrice:0, stock:21, tag:"promo", emoji:"⚙️", desc:"Ideal para corte y desbaste en uso profesional."},
-      {id:7, name:"Set 46 Piezas Cr-V", category:"herramientas", brand:"Stanley", price:35600, oldPrice:40200, stock:45, tag:"nuevo", emoji:"🧰", desc:"Tubos, puntas y crique en maletín compacto."},
-      {id:8, name:"Nivel Láser Cruz + Trípode", category:"herramientas", brand:"Total", price:96500, oldPrice:110000, stock:7, tag:"pro", emoji:"📏", desc:"Autonivelante, alcance hasta 15 m interior."},
+async function fsGet(key, fb=[]) {
+  try {
+    const s = await db.collection("lubricentro").doc(key).get();
+    return s.exists ? (s.data().data || fb) : fb;
+  } catch(e){ console.error("fsGet",key,e); return fb; }
+}
+async function fsPut(key, val) {
+  setSaving(true);
+  try { await db.collection("lubricentro").doc(key).set({data:val}); }
+  catch(e){ console.error("fsPut",key,e); toast("Error al guardar. Revisá tu conexión.","error"); }
+  setSaving(false);
+}
+function setSaving(v){
+  const el=document.getElementById("savingLbl");
+  if(el) el.style.display=v?"inline-flex":"none";
+}
 
-      {id:9, name:"Aceite Sintético 5W-30 4L", category:"lubricantes", brand:"Shell", price:53200, oldPrice:58900, stock:52, tag:"top", emoji:"🛢️", desc:"Protección térmica y limpieza superior del motor."},
-      {id:10, name:"Aceite 10W-40 Semisintético 4L", category:"lubricantes", brand:"Motul", price:48700, oldPrice:0, stock:40, tag:"promo", emoji:"🧪", desc:"Excelente desempeño urbano y ruta mixta."},
-      {id:11, name:"Aditivo Limpiainyectores 300ml", category:"lubricantes", brand:"Motul", price:12900, oldPrice:14900, stock:61, tag:"nuevo", emoji:"🧴", desc:"Mejora combustión y reduce carbonilla."},
-      {id:12, name:"Filtro de Aceite Universal", category:"lubricantes", brand:"Shell", price:8900, oldPrice:0, stock:78, tag:"all", emoji:"🔩", desc:"Compatibilidad amplia para líneas populares."},
+const PHONE_LUBRI = "5493513880155";
+const APP_URL     = "https://gonzitassi.github.io/lubricentroesquiu/";
+const BRANDS_LIST = ["Fiat","Renault","Volkswagen","Chevrolet","Toyota","Ford","Peugeot","Honda","Otro"];
+const SVC_INTERVAL = { auto:{months:6,km:10000}, camion:{months:3,km:25000} };
+const HRS_MORNING   = ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"];
+const HRS_AFTERNOON = ["15:30","16:00","16:30","17:00","17:30","18:00","18:30"];
+const CHECKLIST = [
+  {id:"aceite_motor",       label:"Aceite Motor"},
+  {id:"filtro_aceite",      label:"Filtro Aceite"},
+  {id:"filtro_aire",        label:"Filtro Aire"},
+  {id:"filtro_habitaculo",  label:"Filtro Habitáculo"},
+  {id:"filtro_combustible", label:"Filtro Combustible"},
+  {id:"filtro_trampa_agua", label:"Filtro Trampa Agua"},
+  {id:"filtro_secador",     label:"Filtro Secador"},
+  {id:"engrase",            label:"Engrase"},
+  {id:"aditivos",           label:"Aditivos"},
+  {id:"aceite_caja",        label:"Aceite Caja"},
+  {id:"aceite_diferencial", label:"Aceite Diferencial"},
+];
+const DEFAULT_SVC = [
+  {id:"s1",name:"Cambio de Aceite",       price:"$8.500", duration:30, type:"auto"},
+  {id:"s2",name:"Cambio de Filtro",        price:"$3.200", duration:30, type:"auto"},
+  {id:"s3",name:"Aceite + Filtro",         price:"$11.000",duration:30, type:"auto"},
+  {id:"s4",name:"Líquido de Frenos",       price:"$4.500", duration:30, type:"auto"},
+  {id:"s5",name:"Revisión General Auto",   price:"$6.000", duration:60, type:"auto"},
+  {id:"s6",name:"Rotación Neumáticos",     price:"$2.800", duration:30, type:"auto"},
+  {id:"s7",name:"Aceite Camión",           price:"$18.000",duration:60, type:"camion"},
+  {id:"s8",name:"Aceite + Filtros Camión", price:"$25.000",duration:120,type:"camion"},
+  {id:"s9",name:"Revisión Camión",         price:"$12.000",duration:120,type:"camion"},
+];
+const todayISO = new Date().toISOString().split("T")[0];
 
-      {id:13, name:"Cable Taller 2x1.5mm x 50m", category:"electricidad", brand:"Total", price:43800, oldPrice:0, stock:16, tag:"pro", emoji:"🔌", desc:"Aislación reforzada para instalaciones internas."},
-      {id:14, name:"Disyuntor Diferencial 40A", category:"electricidad", brand:"Stanley", price:27800, oldPrice:0, stock:24, tag:"all", emoji:"⚡", desc:"Protección ante fugas eléctricas residenciales."},
-      {id:15, name:"Guantes Anticorte Nivel 5", category:"seguridad", brand:"Bosch", price:14200, oldPrice:0, stock:63, tag:"top", emoji:"🧤", desc:"Agarre firme y alta resistencia al desgaste."},
-      {id:16, name:"Casco de Obra Ventilado", category:"seguridad", brand:"Stanley", price:21900, oldPrice:0, stock:28, tag:"nuevo", emoji:"⛑️", desc:"Regulación trasera y absorción de impacto."}
-    ];
+let CLIENTS=[], APPTS=[], SERVICES=[], ME=null, BK={};
 
-    let products = JSON.parse(localStorage.getItem('gonzi_products') || 'null') || initialProducts.slice();
-    let cart = JSON.parse(localStorage.getItem('gonzi_cart') || '[]');
-    let likes = JSON.parse(localStorage.getItem('gonzi_likes') || '{}');
+function toast(msg,type="success",ms=3400){
+  const box=document.getElementById("toastBox");
+  const el=document.createElement("div");
+  el.className=`toast toast-${type}`;
+  el.innerHTML=`<span class="toast-msg">${msg}</span>
+    <button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+  box.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("show")));
+  setTimeout(()=>{ el.classList.remove("show"); setTimeout(()=>el.remove(),300); },ms);
+}
 
-    let currentSlide = 0;
-    let activeTag = 'all';
-    let sortMode = 'relevancia';
-    let compactView = false;
+const fmtD   = s=>{ if(!s)return""; const[y,m,d]=s.split("-"); return`${d}/${m}/${y}`; };
+const uid    = ()=>Math.random().toString(36).substr(2,9);
+const esc    = s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/'/g,"&#39;");
+const fmtNum = n=>parseInt(n||0).toLocaleString("es-AR");
 
-    const el = {
-      slides: document.getElementById('slides'),
-      dots: [...document.querySelectorAll('.dot')],
-      prevSlide: document.getElementById('prevSlide'),
-      nextSlide: document.getElementById('nextSlide'),
-      search: document.getElementById('search'),
-      catFilter: document.getElementById('catFilter'),
-      priceRange: document.getElementById('priceRange'),
-      priceMaxText: document.getElementById('priceMaxText'),
-      brandFilter: [...document.querySelectorAll('.brandFilter')],
-      pills: [...document.querySelectorAll('.pill')],
-      sortBtns: [...document.querySelectorAll('[data-sort]')],
-      productGrid: document.getElementById('productGrid'),
-      resultCount: document.getElementById('resultCount'),
-      cartItems: document.getElementById('cartItems'),
-      emptyCart: document.getElementById('emptyCart'),
-      subTotal: document.getElementById('subTotal'),
-      shipping: document.getElementById('shipping'),
-      discount: document.getElementById('discount'),
-      total: document.getElementById('total'),
-      cartCount: document.getElementById('cartCount'),
-      toggleView: document.getElementById('toggleView'),
-      checkoutBtn: document.getElementById('checkoutBtn'),
-      openAdmin: document.getElementById('openAdmin'),
-      closeAdmin: document.getElementById('closeAdmin'),
-      adminModal: document.getElementById('adminModal'),
-      adminTableBody: document.querySelector('#adminTable tbody'),
-      addProduct: document.getElementById('addProduct'),
-      clearForm: document.getElementById('clearForm'),
-      fName: document.getElementById('fName'),
-      fCategory: document.getElementById('fCategory'),
-      fBrand: document.getElementById('fBrand'),
-      fPrice: document.getElementById('fPrice'),
-      fStock: document.getElementById('fStock'),
-      fEmoji: document.getElementById('fEmoji'),
-      fTag: document.getElementById('fTag'),
-      mVisible: document.getElementById('mVisible'),
-      mStock: document.getElementById('mStock'),
-      mTicket: document.getElementById('mTicket'),
-      dangerReset: document.getElementById('dangerReset'),
-      jumps: [...document.querySelectorAll('[data-jump]')],
-      openCart: document.getElementById('openCart')
-    };
+function cleanWA(num){
+  let c=(num||"").replace(/\D/g,"");
+  if(c.startsWith("549")) return c;
+  if(c.startsWith("54"))  return "5"+c;
+  return "549"+c;
+}
+function validateWA(num){ const c=(num||"").replace(/\D/g,""); return c.length>=8&&c.length<=15; }
+function bdg(s){
+  const m={pendiente:["b-yellow","⏳ Pendiente"],confirmado:["b-orange","✅ Confirmado"],
+           completado:["b-green","🔧 Completado"],cancelado:["b-red","❌ Cancelado"]};
+  const[c,l]=m[s]||["b-yellow",s];
+  return`<span class="badge ${c}">${l}</span>`;
+}
 
-    function money(n){
-      return "$" + Number(n).toLocaleString('es-AR');
+function go(pgId){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(pgId).classList.add("active");
+  if(pgId==="pgClient") renderIdentify();
+}
+
+function calcNextService(km,dateStr,vtype){
+  const iv=SVC_INTERVAL[vtype]||SVC_INTERVAL.auto;
+  const nextKm=(parseInt(km)||0)+iv.km;
+  const dt=new Date((dateStr||todayISO)+"T12:00:00");
+  dt.setMonth(dt.getMonth()+iv.months);
+  return{nextKm, nextDate:dt.toISOString().split("T")[0], iv};
+}
+
+function getHoursForDate(dateStr){
+  const dow=new Date(dateStr+"T12:00:00").getDay();
+  if(dow===0) return [];
+  if(dow===6) return [...HRS_MORNING];
+  return [...HRS_MORNING,...HRS_AFTERNOON];
+}
+function isDayClosed(dateStr){ return new Date(dateStr+"T12:00:00").getDay()===0; }
+
+function getPit(svcId){
+  return(SERVICES.find(s=>s.id===svcId)?.type||"auto")==="camion"?"camion":"auto";
+}
+function getTaken(date,pit,excludeId=null){
+  const s=new Set();
+  APPTS.filter(a=>a.date===date&&a.id!==excludeId&&(a.pit||"auto")===pit)
+       .forEach(a=>(a.blockedSlots||[a.time]).forEach(t=>s.add(t)));
+  return s;
+}
+function getSlots(startTime,durMins,dateStr){
+  const n=Math.max(1,Math.ceil((durMins||30)/30));
+  const dayH=getHoursForDate(dateStr);
+  const idx=dayH.indexOf(startTime);
+  if(idx===-1||idx+n>dayH.length) return null;
+  const slots=[];
+  for(let i=0;i<n;i++){
+    if(i>0){
+      const[ph,pm]=dayH[idx+i-1].split(":").map(Number);
+      const[ch,cm]=dayH[idx+i].split(":").map(Number);
+      if((ch*60+cm)-(ph*60+pm)!==30) return null;
     }
+    slots.push(dayH[idx+i]);
+  }
+  return slots;
+}
+function isAvail(time,durMins,takenSet,dateStr){
+  const slots=getSlots(time,durMins,dateStr);
+  return slots!==null&&!slots.some(s=>takenSet.has(s));
+}
 
-    function saveAll(){
-      localStorage.setItem('gonzi_products', JSON.stringify(products));
-      localStorage.setItem('gonzi_cart', JSON.stringify(cart));
-      localStorage.setItem('gonzi_likes', JSON.stringify(likes));
-    }
-
-    function setSlide(i){
-      currentSlide = (i + 2) % 2;
-      el.slides.style.transform = `translateX(-${currentSlide * 100}%)`;
-      el.dots.forEach((d,idx)=>d.classList.toggle('active', idx===currentSlide));
-    }
-    el.prevSlide.onclick = ()=>setSlide(currentSlide-1);
-    el.nextSlide.onclick = ()=>setSlide(currentSlide+1);
-    el.dots.forEach(d=>d.onclick = ()=>setSlide(Number(d.dataset.dot)));
-    setInterval(()=>setSlide(currentSlide+1), 6200);
-
-    function getFilteredProducts(){
-      const text = el.search.value.trim().toLowerCase();
-      const category = el.catFilter.value;
-      const maxPrice = Number(el.priceRange.value);
-      const selectedBrands = el.brandFilter.filter(c=>c.checked).map(c=>c.value);
-
-      let list = products.filter(p=>{
-        const matchText =
-          p.name.toLowerCase().includes(text) ||
-          p.brand.toLowerCase().includes(text) ||
-          p.category.toLowerCase().includes(text);
-        const matchCat = category==='all' ? true : p.category===category;
-        const matchPrice = p.price <= maxPrice;
-        const matchBrand = selectedBrands.includes(p.brand);
-        const matchTag = activeTag==='all' ? true : p.tag===activeTag;
-        return matchText && matchCat && matchPrice && matchBrand && matchTag;
-      });
-
-      if(sortMode==='menor') list.sort((a,b)=>a.price-b.price);
-      if(sortMode==='mayor') list.sort((a,b)=>b.price-a.price);
-      return list;
-    }
-
-    function iconForCategory(cat){
-      if(cat==='camaras') return '📷';
-      if(cat==='herramientas') return '🛠️';
-      if(cat==='lubricantes') return '🛢️';
-      if(cat==='electricidad') return '⚡';
-      if(cat==='seguridad') return '🦺';
-      return '📦';
-    }
-
-    function renderProducts(){
-      const list = getFilteredProducts();
-      el.resultCount.textContent = `${list.length} producto${list.length!==1?'s':''}`;
-
-      if(compactView){
-        el.productGrid.style.gridTemplateColumns = "1fr";
-      }else{
-        el.productGrid.style.gridTemplateColumns = "";
-      }
-
-      el.productGrid.innerHTML = list.map(p=>{
-        const liked = !!likes[p.id];
-        return `
-          <article class="card" id="${p.category}">
-            <div class="thumb">
-              <span>${p.emoji || iconForCategory(p.category)}</span>
-            </div>
-            <div class="card-body">
-              <div class="cat">${p.category} · ${p.brand}</div>
-              <h4 class="title">${p.name}</h4>
-              <p class="desc">${p.desc}</p>
-              <div class="meta">
-                <div>
-                  <div class="price">${money(p.price)}</div>
-                  ${p.oldPrice?`<div class="old">${money(p.oldPrice)}</div>`:''}
-                </div>
-                <span class="badge">${p.stock} stock</span>
-              </div>
-              <div class="buy-row">
-                <button class="btn btn-primary" onclick="addToCart(${p.id})">Agregar</button>
-                <button class="btn-like ${liked?'active':''}" onclick="toggleLike(${p.id})">♥</button>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join('');
-
-      renderAdminMetrics(list);
-    }
-
-    function addToCart(id){
-      const p = products.find(x=>x.id===id);
-      if(!p) return;
-      const item = cart.find(x=>x.id===id);
-      if(item){
-        if(item.qty < p.stock) item.qty++;
-      }else{
-        cart.push({id:p.id, qty:1});
-      }
-      saveAll();
-      renderCart();
-    }
-
-    function changeQty(id, delta){
-      const item = cart.find(x=>x.id===id);
-      if(!item) return;
-      const p = products.find(x=>x.id===id);
-      item.qty += delta;
-      if(item.qty < 1){
-        cart = cart.filter(x=>x.id!==id);
-      }else if(item.qty > p.stock){
-        item.qty = p.stock;
-      }
-      saveAll();
-      renderCart();
-    }
-
-    function removeItem(id){
-      cart = cart.filter(x=>x.id!==id);
-      saveAll();
-      renderCart();
-    }
-
-    function toggleLike(id){
-      likes[id] = !likes[id];
-      saveAll();
-      renderProducts();
-    }
-
-    function renderCart(){
-      if(!cart.length){
-        el.emptyCart.style.display='block';
-        el.cartItems.innerHTML='';
-      }else{
-        el.emptyCart.style.display='none';
-      }
-
-      let subtotal = 0;
-      el.cartItems.innerHTML = cart.map(ci=>{
-        const p = products.find(x=>x.id===ci.id);
-        if(!p) return '';
-        const line = p.price * ci.qty;
-        subtotal += line;
-        return `
-          <div class="cart-item">
-            <div class="mini">${p.emoji || '📦'}</div>
-            <div>
-              <div class="ci-title">${p.name}</div>
-              <div class="ci-price">${money(p.price)} c/u</div>
-            </div>
-            <div>
-              <div class="qty">
-                <button onclick="changeQty(${p.id},-1)">-</button>
-                <strong>${ci.qty}</strong>
-                <button onclick="changeQty(${p.id},1)">+</button>
-              </div>
-              <button class="btn btn-soft" style="margin-top:6px;padding:6px 8px;font-size:12px" onclick="removeItem(${p.id})">Quitar</button>
-            </div>
+/* ══ CLIENTE ════════════════════════════════════ */
+function renderIdentify(){
+  ME=null;
+  document.getElementById("clientNameLbl").style.display="none";
+  document.getElementById("clientArea").innerHTML=`
+    <div style="max-width:420px;padding-top:1.8rem">
+      <h2 style="font-family:'Bebas Neue';font-size:1.72rem;letter-spacing:1px;margin-bottom:.26rem">
+        BIENVENIDO</h2>
+      <p style="color:var(--muted);margin-bottom:1.1rem;font-size:.8rem">
+        Ingresá la patente de tu auto para continuar.</p>
+      <div id="cErr" class="alert ao" style="display:none"></div>
+      <div class="fg"><label class="fl">Patente del auto</label>
+        <input class="fi" id="cPat" placeholder="Ej: AB123CD"
+          oninput="this.value=this.value.toUpperCase().replace(/[\s-]/g,'')"
+          onkeydown="if(event.key==='Enter')tryIdentify()"/></div>
+      <div id="newFields" style="display:none">
+        <hr class="divider"/>
+        <p style="color:var(--orange);font-size:.8rem;margin-bottom:.8rem;font-weight:600">
+          ¡Primera vez! Completá tus datos:</p>
+        <div class="fg"><label class="fl">Nombre completo</label>
+          <input class="fi" id="cName" placeholder="Juan García"/></div>
+        <div class="fg"><label class="fl">WhatsApp (solo números)</label>
+          <input class="fi" id="cWa" type="tel" placeholder="3518516158"/></div>
+        <div class="fg"><label class="fl">Tipo de Vehículo</label>
+          <div class="vtype-btns">
+            <button class="vtype-btn sel" id="vtAuto" onclick="selVtype('auto')">🚗 Auto / Camioneta</button>
+            <button class="vtype-btn" id="vtCamion" onclick="selVtype('camion')">🚛 Camión</button>
           </div>
-        `;
-      }).join('');
+          <input type="hidden" id="cVtype" value="auto"/></div>
+        <div class="fg"><label class="fl">Marca</label>
+          <select class="fi" id="cBrand" onchange="toggleOtherBrand()">
+            <option value="">Seleccioná…</option>
+            ${BRANDS_LIST.map(b=>`<option value="${b}">${b}</option>`).join("")}
+          </select>
+          <input class="fi" id="cBrandOther" placeholder="Escribí la marca"
+            style="display:none;margin-top:.34rem"/></div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Modelo</label>
+            <input class="fi" id="cModel" placeholder="Gol"/></div>
+          <div class="fg"><label class="fl">Año</label>
+            <input class="fi" id="cYear" type="number" placeholder="2020"/></div>
+        </div>
+        <div class="fg"><label class="fl">Motor</label>
+          <input class="fi" id="cMotor" placeholder="Ej: 1.6, 2.0, MWM"/></div>
+      </div>
+      <button class="btn btn-p btn-full" id="cEnterBtn" onclick="tryIdentify()">Entrar →</button>
+    </div>`;
+}
 
-      const shipping = subtotal>0 ? (subtotal>150000 ? 0 : 6900) : 0;
-      const discount = subtotal>200000 ? Math.round(subtotal*0.08) : 0;
-      const total = subtotal + shipping - discount;
+function toggleOtherBrand(){
+  const sel=document.getElementById("cBrand");
+  const oth=document.getElementById("cBrandOther");
+  if(oth) oth.style.display=sel.value==="Otro"?"block":"none";
+}
 
-      el.subTotal.textContent = money(subtotal);
-      el.shipping.textContent = money(shipping);
-      el.discount.textContent = "-" + money(discount).replace('$','');
-      el.total.textContent = money(total);
-      el.cartCount.textContent = cart.reduce((a,b)=>a+b.qty,0);
-    }
+function selVtype(v){
+  document.getElementById("cVtype").value=v;
+  document.getElementById("vtAuto").classList.toggle("sel",v==="auto");
+  document.getElementById("vtCamion").classList.toggle("sel",v==="camion");
+}
 
-    function openAdmin(){
-      el.adminModal.classList.add('active');
-      el.adminModal.setAttribute('aria-hidden','false');
-      renderAdminTable();
-      renderAdminMetrics(getFilteredProducts());
-    }
-    function closeAdmin(){
-      el.adminModal.classList.remove('active');
-      el.adminModal.setAttribute('aria-hidden','true');
-    }
+function getBrandVal(){
+  const v=document.getElementById("cBrand")?.value||"";
+  return v==="Otro"?(document.getElementById("cBrandOther")?.value||"").trim()||"Otro":v;
+}
 
-    function renderAdminTable(){
-      el.adminTableBody.innerHTML = products.map(p=>`
-        <tr>
-          <td>${p.id}</td>
-          <td>${p.name}</td>
-          <td>${p.category}</td>
-          <td>${p.brand}</td>
-          <td>${money(p.price)}</td>
-          <td>${p.stock}</td>
-          <td>
-            <button class="btn btn-soft" style="padding:4px 8px;font-size:12px" onclick="quickDelete(${p.id})">Eliminar</button>
-          </td>
-        </tr>
-      `).join('');
-    }
+async function tryIdentify(){
+  const pat=(document.getElementById("cPat")?.value||"").trim().toUpperCase().replace(/[\s-]/g,"");
+  const err=document.getElementById("cErr");
+  const showErr=m=>{err.textContent="⚠️ "+m;err.style.display="block";};
+  if(!pat){showErr("Ingresá la patente de tu auto.");return;}
+  const found=CLIENTS.find(c=>c.patent===pat);
+  if(found){ME=found;renderClientHome();return;}
+  const nf=document.getElementById("newFields");
+  if(nf.style.display==="none"){
+    nf.style.display="block";
+    document.getElementById("cEnterBtn").textContent="Registrarme y entrar →";
+    showErr("No encontramos esa patente. Completá tus datos para registrarte.");return;
+  }
+  const name =document.getElementById("cName")?.value.trim()||"";
+  const wa   =document.getElementById("cWa")?.value.trim()||"";
+  const vtype=document.getElementById("cVtype")?.value||"auto";
+  const brand=getBrandVal();
+  const model=document.getElementById("cModel")?.value.trim()||"";
+  const year =document.getElementById("cYear")?.value.trim()||"";
+  const motor=document.getElementById("cMotor")?.value.trim()||"";
+  if(!name||!wa||!brand||!model||!year||!motor){showErr("Completá todos los campos.");return;}
+  if(!validateWA(wa)){showErr("WhatsApp inválido (solo números, sin espacios).");return;}
+  if(CLIENTS.find(c=>c.patent===pat)){showErr("Ya existe un cliente con esa patente.");return;}
+  const nc={id:uid(),name,whatsapp:wa,patent:pat,vehicleType:vtype,brand,model,year,motor};
+  CLIENTS.push(nc);
+  await fsPut("clients",CLIENTS);
+  ME=nc;renderClientHome();
+  toast("¡Registro exitoso! Bienvenido 🎉","success");
+}
 
-    function renderAdminMetrics(visibleList){
-      const stock = products.reduce((acc,p)=>acc+p.stock,0);
-      const sampleTicket = Math.round((visibleList.reduce((a,p)=>a+p.price,0) / Math.max(1,visibleList.length)) * 1.34);
-      el.mVisible.textContent = visibleList.length;
-      el.mStock.textContent = stock;
-      el.mTicket.textContent = money(sampleTicket);
-    }
+function renderClientHome(){
+  const lbl=document.getElementById("clientNameLbl");
+  lbl.textContent="👤 "+ME.name.split(" ")[0];lbl.style.display="inline";
+  const vtype=ME.vehicleType||"auto";
+  const iv=SVC_INTERVAL[vtype]||SVC_INTERVAL.auto;
+  const done=APPTS.filter(a=>a.clientId===ME.id&&a.status==="completado"&&a.km)
+    .sort((a,b)=>b.date.localeCompare(a.date));
+  let nextCard="";
+  if(done.length>0){
+    const last=done[0];
+    const ns=calcNextService(last.km,last.date,vtype);
+    nextCard=`<div class="next-svc">
+      <div class="next-svc-title">🔧 PRÓXIMO SERVICE ESTIMADO</div>
+      <div style="font-size:.86rem;margin-bottom:.14rem">
+        📏 Al llegar a <strong>${fmtNum(ns.nextKm)} km</strong></div>
+      <div style="font-size:.86rem;margin-bottom:.14rem">
+        📅 O en <strong>${fmtD(ns.nextDate)}</strong></div>
+      <div style="color:var(--muted);font-size:.72rem;margin-top:.28rem">
+        Basado en: ${fmtD(last.date)} · ${fmtNum(last.km)} km
+        ${last.oilBrand?` · ${esc(last.oilBrand)}`:""}
+        · <em>${iv.months} meses / ${fmtNum(iv.km)} km para ${vtype==="camion"?"camiones":"autos"}</em>
+      </div>
+    </div>`;
+  }
+  document.getElementById("clientArea").innerHTML=`
+    <div style="padding-top:1.65rem">
+      <h2 style="font-family:'Bebas Neue';font-size:1.72rem;margin-bottom:.26rem">
+        HOLA, ${ME.name.split(" ")[0].toUpperCase()} 👋</h2>
+      <p style="color:var(--muted);margin-bottom:1.3rem;font-size:.82rem">
+        ${vtype==="camion"?"🚛":"🚗"} ${esc(ME.brand)} ${esc(ME.model)} ${ME.year}
+        — <strong>${ME.patent}</strong> · Motor: ${esc(ME.motor||"—")}
+      </p>
+      ${nextCard}
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+        gap:.8rem;max-width:510px;margin-bottom:1.3rem">
+        <div class="lcard" onclick="renderBooking()">
+          <div class="lcard-ico">📅</div><h3>SACAR TURNO</h3><p>Nuevo turno online</p></div>
+        <div class="lcard" onclick="renderMyAppts()">
+          <div class="lcard-ico">📋</div><h3>MIS TURNOS</h3><p>Estado y próximos</p></div>
+      </div>
+      <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank">
+        📍 Ver en Google Maps</a>
+    </div>`;
+}
 
-    function quickDelete(id){
-      if(!confirm("¿Eliminar producto del inventario demo?")) return;
-      products = products.filter(p=>p.id!==id);
-      cart = cart.filter(ci=>ci.id!==id);
-      saveAll();
-      renderProducts();
-      renderCart();
-      renderAdminTable();
-      renderAdminMetrics(getFilteredProducts());
-    }
+function renderMyAppts(msg){
+  const myA=APPTS.filter(a=>a.clientId===ME.id).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById("clientArea").innerHTML=`
+    ${msg?`<div class="alert ag">✅ ${msg}</div>`:""}
+    <div class="sh"><div class="st">MIS TURNOS</div>
+      <button class="btn btn-p" onclick="renderBooking()">+ Nuevo</button></div>
+    ${myA.length===0?'<div class="empty">📋 No tenés turnos aún.</div>':
+      myA.map(a=>`<div class="appt-card">
+        <div>
+          <div style="font-weight:600;margin-bottom:.12rem">${esc(a.serviceName)}</div>
+          <div style="color:var(--muted);font-size:.77rem">
+            📅 ${fmtD(a.date)} a las ${a.time} · 🚗 ${esc(a.vehicleDesc)}</div>
+          ${a.km?`<div style="color:var(--muted);font-size:.7rem">KM: ${fmtNum(a.km)}</div>`:""}
+        </div>${bdg(a.status)}</div>`).join("")}
+    <button class="btn btn-g" style="margin-top:.9rem" onclick="renderClientHome()">← Volver</button>`;
+}
 
-    function addOrUpdateProduct(){
-      const name = el.fName.value.trim();
-      const category = el.fCategory.value.trim().toLowerCase();
-      const brand = el.fBrand.value.trim();
-      const price = Number(el.fPrice.value);
-      const stock = Number(el.fStock.value);
-      const emoji = el.fEmoji.value.trim() || '📦';
-      const tag = el.fTag.value.trim().toLowerCase() || 'all';
+function renderBooking(){
+  BK={step:1,service:null,date:todayISO,time:"",km:""};
+  while(isDayClosed(BK.date)){
+    const d=new Date(BK.date+"T12:00:00");d.setDate(d.getDate()+1);
+    BK.date=d.toISOString().split("T")[0];
+  }
+  drawBooking();
+}
 
-      if(!name || !category || !brand || !price || !stock){
-        alert("Completá nombre, categoría, marca, precio y stock.");
-        return;
-      }
+function drawBooking(){
+  const myServices=SERVICES.filter(s=>(s.type||"auto")===(ME.vehicleType||"auto"));
+  const selSvc=BK.service?SERVICES.find(s=>s.id===BK.service):null;
+  const dur=selSvc?.duration||30;
+  const pit=BK.service?getPit(BK.service):ME.vehicleType==="camion"?"camion":"auto";
+  const dayH=getHoursForDate(BK.date);
+  const taken=getTaken(BK.date,pit);
+  const isClosed=dayH.length===0;
+  document.getElementById("clientArea").innerHTML=`
+    <div style="max-width:540px">
+      <div style="display:flex;align-items:center;gap:.55rem;margin-bottom:1.1rem">
+        <button class="back-btn" onclick="renderClientHome()">← Volver</button>
+        <h2 style="font-family:'Bebas Neue';font-size:1.52rem;letter-spacing:1px">SACAR TURNO</h2>
+      </div>
 
-      const newId = products.length ? Math.max(...products.map(p=>p.id))+1 : 1;
-      products.unshift({
-        id:newId,
-        name, category, brand,
-        price, oldPrice:0,
-        stock, tag, emoji,
-        desc:"Producto agregado desde panel administrador."
-      });
-      clearForm();
-      saveAll();
-      renderProducts();
-      renderCart();
-      renderAdminTable();
-      renderAdminMetrics(getFilteredProducts());
-    }
+      <div class="card" style="margin-bottom:.8rem">
+        <div style="display:flex;align-items:center;margin-bottom:.8rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
+          border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue';
+          font-size:.88rem;margin-right:.38rem">1</span>
+          <span style="font-family:'Bebas Neue';font-size:1.38rem;letter-spacing:1px">Elegí el servicio</span></div>
+        ${myServices.length===0
+          ?'<div class="empty">Sin servicios disponibles. Contactá al lubricentro.</div>'
+          :`<div class="sg">${myServices.map(s=>`
+            <div class="sc${BK.service===s.id?" sel":""}" onclick="bkSvc('${s.id}')">
+              <div class="sc-name">${esc(s.name)}</div>
+              <div class="sc-price">${s.price}</div>
+              <div class="sc-meta">${s.duration} min</div>
+            </div>`).join("")}</div>`}
+      </div>
 
-    function clearForm(){
-      el.fName.value='';
-      el.fCategory.value='';
-      el.fBrand.value='';
-      el.fPrice.value='';
-      el.fStock.value='';
-      el.fEmoji.value='';
-      el.fTag.value='';
-    }
+      ${BK.step>=2?`<div class="card" style="margin-bottom:.8rem">
+        <div style="display:flex;align-items:center;margin-bottom:.8rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
+          border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue';
+          font-size:.88rem;margin-right:.38rem">2</span>
+          <span style="font-family:'Bebas Neue';font-size:1.38rem;letter-spacing:1px">Elegí el día y horario</span></div>
+        <div class="fg"><label class="fl">Fecha</label>
+          <input type="date" class="fi" value="${BK.date}" min="${todayISO}"
+            onchange="bkDate(this.value)"/></div>
+        ${isClosed?`<div class="closed-msg">🚫 El lubricentro está cerrado los domingos.</div>`:`
+        <div class="fg">
+          <label class="fl">Horario disponible</label>
+          <div style="color:var(--muted);font-size:.72rem;margin-bottom:.36rem">
+            ${pit==="camion"?"🚛 Fosa Camiones":"🚗 Fosa Autos"}
+            ${dur>30?` · Ocupa ${dur} min (${dur/30} franjas)`:" · 30 min"}</div>
+          <div class="tg">${dayH.map(h=>{
+            const ok=isAvail(h,dur,taken,BK.date);
+            return`<button class="tb${BK.time===h?" sel":""}${!ok?" taken":""}"
+              ${!ok?"disabled":""}
+              onclick="bkTime('${h}')">${h}</button>`;
+          }).join("")}</div>
+          ${dayH.every(h=>!isAvail(h,dur,taken,BK.date))
+            ?'<div class="alert ao" style="margin-top:.7rem">⚠️ Sin horarios disponibles. Probá otra fecha.</div>':""}
+        </div>`}
+      </div>`:""}
 
-    function resetDemo(){
-      if(!confirm("Esto restaura productos y limpia carrito. ¿Continuar?")) return;
-      products = initialProducts.slice();
-      cart = [];
-      likes = {};
-      saveAll();
-      renderProducts();
-      renderCart();
-      renderAdminTable();
-      renderAdminMetrics(getFilteredProducts());
-    }
+      ${BK.step>=3?`<div class="card" style="margin-bottom:.8rem">
+        <div style="display:flex;align-items:center;margin-bottom:.8rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
+          border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue';
+          font-size:.88rem;margin-right:.38rem">3</span>
+          <span style="font-family:'Bebas Neue';font-size:1.38rem;letter-spacing:1px">Confirmá tu vehículo</span></div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+          padding:.5rem .76rem;font-size:.82rem;margin-bottom:.76rem">
+          ${ME.vehicleType==="camion"?"🚛":"🚗"}
+          <strong>${esc(ME.brand)} ${esc(ME.model)} ${ME.year}</strong>
+          — ${ME.patent} · Motor: ${esc(ME.motor||"—")}
+        </div>
+        <div class="fg"><label class="fl">Kilómetros actuales (opcional)</label>
+          <input class="fi" id="bkKm" value="${BK.km}" type="number"
+            oninput="BK.km=this.value" placeholder="85000"/></div>
+      </div>`:""}
 
-    function bindEvents(){
-      el.search.addEventListener('input',renderProducts);
-      el.catFilter.addEventListener('change',renderProducts);
-      el.priceRange.addEventListener('input',()=>{
-        el.priceMaxText.textContent = el.priceRange.value;
-        renderProducts();
-      });
-      el.brandFilter.forEach(c=>c.addEventListener('change',renderProducts));
+      ${BK.step>=3&&BK.service&&BK.time&&!isClosed?`<div class="sum-box">
+        <div style="font-family:'Bebas Neue';font-size:.98rem;letter-spacing:1px;
+          margin-bottom:.62rem;color:var(--orange)">RESUMEN</div>
+        <div style="display:grid;gap:.28rem;font-size:.82rem">
+          <div>🔧 <strong>${esc(selSvc?.name)}</strong></div>
+          <div>📅 <strong>${fmtD(BK.date)}</strong> a las <strong>${BK.time}</strong></div>
+          <div>${ME.vehicleType==="camion"?"🚛":"🚗"}
+            <strong>${esc(ME.brand)} ${esc(ME.model)} ${ME.year}</strong> — ${ME.patent}</div>
+          <div>⚙️ Motor: ${esc(ME.motor||"—")}</div>
+          ${BK.km?`<div>📏 ${fmtNum(BK.km)} km</div>`:""}
+        </div>
+        <button class="btn btn-p btn-full" style="margin-top:.8rem" onclick="confirmBk()">
+          ✅ Confirmar y Guardar Turno</button>
+      </div>`:""}
+    </div>`;
+}
 
-      el.pills.forEach(p=>{
-        p.addEventListener('click',()=>{
-          el.pills.forEach(x=>x.classList.remove('active'));
-          p.classList.add('active');
-          activeTag = p.dataset.tag;
-          renderProducts();
-        });
-      });
+function bkSvc(id){BK.service=id;BK.time="";if(BK.step<2)BK.step=2;drawBooking();}
+function bkTime(h){BK.time=h;if(BK.step<3)BK.step=3;drawBooking();}
+function bkDate(d){
+  if(isDayClosed(d)){
+    toast("Domingos cerrado. Avanzando al lunes.","warn");
+    const nd=new Date(d+"T12:00:00");nd.setDate(nd.getDate()+1);
+    BK.date=nd.toISOString().split("T")[0];
+  } else {BK.date=d;}
+  BK.time="";drawBooking();
+}
 
-      el.sortBtns.forEach(b=>{
-        b.addEventListener('click',()=>{
-          el.sortBtns.forEach(x=>x.classList.remove('active'));
-          b.classList.add('active');
-          sortMode = b.dataset.sort;
-          renderProducts();
-        });
-      });
+async function confirmBk(){
+  const sv=SERVICES.find(s=>s.id===BK.service);if(!sv)return;
+  if(isDayClosed(BK.date)){toast("Cerrado ese día","error");return;}
+  const dur=sv.duration||30;
+  const pit=getPit(BK.service);
+  const freshAppts=await fsGet("appointments",[]);
+  APPTS=freshAppts;
+  const taken=getTaken(BK.date,pit);
+  if(!isAvail(BK.time,dur,taken,BK.date)){
+    toast("Ese horario ya fue tomado. Elegí otro.","error");
+    BK.time="";drawBooking();return;
+  }
+  const slots=getSlots(BK.time,dur,BK.date)||[BK.time];
+  const appt={
+    id:uid(),clientId:ME.id,patent:ME.patent,
+    vehicleDesc:`${ME.brand} ${ME.model} ${ME.year}`,
+    motor:ME.motor||"",date:BK.date,time:BK.time,
+    service:BK.service,serviceName:sv.name,
+    pit,blockedSlots:slots,status:"pendiente",km:BK.km,notes:""
+  };
+  APPTS.push(appt);
+  await fsPut("appointments",APPTS);
+  const waMsg=`¡Hola! Reservé un turno en Lubricentro Esquiú.\n\n`+
+    `🔧 *Servicio:* ${sv.name}\n`+
+    `📅 *Fecha:* ${fmtD(BK.date)} a las ${BK.time}\n`+
+    `${ME.vehicleType==="camion"?"🚛":"🚗"} *Vehículo:* ${ME.brand} ${ME.model} ${ME.year}\n`+
+    `🔑 *Patente:* ${ME.patent}\n`+
+    `⚙️ *Motor:* ${ME.motor||"—"}\n`+
+    `🔩 *Fosa:* ${pit==="camion"?"Camiones":"Autos"}`;
+  const waURL=`https://wa.me/${PHONE_LUBRI}?text=${encodeURIComponent(waMsg)}`;
+  document.getElementById("clientArea").innerHTML=`
+    <div style="max-width:480px;padding-top:1.5rem">
+      <div class="success-banner">
+        <div class="sb-icon">🎉</div>
+        <div class="sb-title">¡TURNO GUARDADO!</div>
+        <div class="sb-sub">
+          <strong>${esc(sv.name)}</strong><br/>
+          📅 ${fmtD(BK.date)} a las ${BK.time}<br/>
+          ${ME.vehicleType==="camion"?"🚛":"🚗"} ${esc(ME.brand)} ${esc(ME.model)} — ${ME.patent}
+        </div>
+        <button class="btn-wa-big" onclick="window.open('${waURL}','_blank')">
+          📲 CONFIRMAR POR WHATSAPP</button>
+        <div class="btn-wa-big-hint">Tocá para notificar al lubricentro. Funciona en iOS y Android.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.45rem;margin-top:.15rem">
+        <button class="btn btn-g btn-full" onclick="renderMyAppts()">📋 Ver mis turnos</button>
+        <button class="btn btn-g btn-full" onclick="renderClientHome()">← Inicio</button>
+      </div>
+    </div>`;
+}
 
-      el.toggleView.addEventListener('click',()=>{
-        compactView = !compactView;
-        el.toggleView.textContent = compactView ? "Vista normal" : "Vista compacta";
-        renderProducts();
-      });
-
-      el.checkoutBtn.addEventListener('click',()=>{
-        if(!cart.length){
-          alert("El carrito está vacío.");
-          return;
-        }
-        alert("Compra demo generada ✅\nTe contactaremos para coordinar envío.");
-      });
-
-      el.openAdmin.addEventListener('click',openAdmin);
-      el.closeAdmin.addEventListener('click',closeAdmin);
-      el.adminModal.addEventListener('click',(e)=>{
-        if(e.target===el.adminModal) closeAdmin();
-      });
-
-      el.addProduct.addEventListener('click',addOrUpdateProduct);
-      el.clearForm.addEventListener('click',clearForm);
-      el.dangerReset.addEventListener('click',resetDemo);
-
-      el.jumps.forEach(j=>{
-        j.addEventListener('click',()=>{
-          scrollToSection(j.dataset.jump);
-        });
-      });
-
-      el.openCart.addEventListener('click',()=>{
-        document.getElementById('cartPanel').scrollIntoView({behavior:'smooth',block:'start'});
-      });
-    }
-
-    function scrollToSection(id){
-      const target = document.getElementById(id);
-      if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
-    }
-
-    window.addToCart = addToCart;
-    window.changeQty = changeQty;
-    window.removeItem = removeItem;
-    window.toggleLike = toggleLike;
-    window.quickDelete = quickDelete;
-    window.scrollToSection = scrollToSection;
-
-    bindEvents();
-    renderProducts();
-    renderCart();
-    renderAdminTable();
-    renderAdminMetrics(getFilteredProducts());
-  </script>
+/* ══ INIT ════════════════════════════════════════════ */
+(async()=>{
+  try{
+    [CLIENTS,APPTS,SERVICES]=await Promise.all([
+      fsGet("clients",    []),
+      fsGet("appointments",[]),
+      fsGet("services",   DEFAULT_SVC),
+    ]);
+    if(!SERVICES.length){SERVICES=DEFAULT_SVC;await fsPut("services",SERVICES);}
+  }catch(e){
+    console.error("Init:",e);
+    SERVICES=DEFAULT_SVC;
+    toast("Error al conectar con Firebase","error",5000);
+  }
+  document.getElementById("appLoader").style.display="none";
+  go("pgLanding");
+})();
+</script>
 </body>
 </html>
