@@ -5,11 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#0e0e0f"/>
-<title>Lubricentro Esquiú — Turnos Online</title>
+<title>Lubricentro Esquiú — Administrador</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.5.3/qrcode.min.js"></script>
 <style>
+/* ══ RESET & VARIABLES ══════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#0e0e0f;--bg2:#161618;--bg3:#1e1e21;--border:#2a2a2e;
@@ -21,26 +23,46 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
   min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
 input,select,textarea,button{font-family:'DM Sans',sans-serif;}
 
+/* ══ TOAST ══════════════════════════════════════════ */
 #toastBox{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;
   gap:.45rem;pointer-events:none;max-width:310px;width:calc(100vw - 2rem);}
 .toast{pointer-events:all;background:var(--bg2);border:1px solid var(--border);border-radius:10px;
   padding:.68rem .95rem;font-size:.81rem;display:flex;align-items:center;justify-content:space-between;
-  gap:.6rem;transform:translateX(110%);transition:transform .26s ease;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+  gap:.6rem;transform:translateX(110%);transition:transform .26s ease;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);}
 .toast.show{transform:translateX(0);}
 .toast-success{border-left:3px solid var(--success);}
 .toast-error  {border-left:3px solid var(--danger);}
+.toast-warn   {border-left:3px solid var(--warn);}
 .toast-msg{flex:1;line-height:1.4;}
 .toast-close{background:none;border:none;color:var(--muted);cursor:pointer;
   font-size:1.05rem;padding:0 .15rem;line-height:1;flex-shrink:0;}
 
+/* ══ OPTIMISTIC UI ══════════════════════════════════ */
+.optimistic-pending{opacity:.6;pointer-events:none;}
+.optimistic-pending::after{
+  content:'';position:absolute;inset:0;background:rgba(234,179,8,.1);
+  border-radius:inherit;z-index:-1;
+}
+.saving-indicator{
+  position:fixed;bottom:1rem;left:1rem;background:var(--bg2);border:1px solid var(--orange);
+  border-radius:8px;padding:.5rem .8rem;display:none;align-items:center;gap:.4rem;
+  font-size:.75rem;color:var(--orange);z-index:1000;
+}
+.saving-indicator.active{display:flex;}
+.spinner{width:12px;height:12px;border:2px solid rgba(249,115,22,.3);
+  border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ══ PAGES ══════════════════════════════════════════ */
 .page{display:none;min-height:100vh;flex-direction:column;}
 .page.active{display:flex;}
 
+/* ══ LANDING ════════════════════════════════════════ */
 #pgLanding{align-items:center;justify-content:center;padding:2rem;
   position:relative;overflow:hidden;text-align:center;}
 #pgLanding::before{content:'';position:absolute;top:-40%;left:-20%;width:60%;height:80%;
   background:radial-gradient(ellipse,rgba(249,115,22,.09) 0%,transparent 70%);pointer-events:none;}
-  
 .logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,9vw,4.8rem);
   letter-spacing:3px;line-height:1;}
 .logo span{color:var(--orange);}
@@ -54,10 +76,8 @@ input,select,textarea,button{font-family:'DM Sans',sans-serif;}
 .lcard-ico{font-size:1.95rem;margin-bottom:.55rem;}
 .lcard h3{font-family:'Bebas Neue',sans-serif;font-size:1.42rem;letter-spacing:1px;margin-bottom:.2rem;}
 .lcard p{color:var(--muted);font-size:.77rem;}
-.maps-link{color:var(--muted);font-size:.75rem;text-decoration:none;
-  display:inline-flex;align-items:center;gap:.3rem;margin-bottom:.72rem;}
-.maps-link:hover{color:var(--orange);}
 
+/* ══ TOPBAR ══════════════════════════════════════════ */
 .topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.8rem 1.3rem;
   display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100;flex-shrink:0;}
@@ -69,29 +89,69 @@ input,select,textarea,button{font-family:'DM Sans',sans-serif;}
   transition:all .15s;touch-action:manipulation;}
 .back-btn:hover{border-color:var(--orange);color:var(--text);}
 
+/* ══ TABS ════════════════════════════════════════════ */
+.tabs{display:flex;gap:.1rem;padding:.8rem 1.3rem 0;background:var(--bg2);
+  border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;
+  -webkit-overflow-scrolling:touch;}
+.tab{background:none;border:none;padding:.52rem .9rem;color:var(--muted);font-size:.79rem;
+  cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;
+  touch-action:manipulation;}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab:hover:not(.active){color:var(--text);}
+
+/* ══ CONTENT ════════════════════════════════════════ */
 .content{padding:1.2rem;max-width:1050px;margin:0 auto;width:100%;flex:1;}
 
+/* ══ CARD ════════════════════════════════════════════ */
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.05rem;}
 .card-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:1px;
   margin-bottom:.8rem;color:var(--orange);}
 
+/* ══ STATS ═══════════════════════════════════════════ */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:.82rem;margin-bottom:1.1rem;}
+.stat{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.92rem;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--orange);line-height:1;}
+.stat-lbl{color:var(--muted);font-size:.67rem;text-transform:uppercase;
+  letter-spacing:1px;margin-top:.12rem;}
+
+/* ══ TABLE ═══════════════════════════════════════════ */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:.8rem;}
+th{text-align:left;padding:.46rem .66rem;color:var(--muted);font-size:.65rem;
+  text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border);font-weight:500;}
+td{padding:.62rem .66rem;border-bottom:1px solid #1e1e21;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg3);}
+tr.hidden-row{display:none;}
+
+/* ══ BADGE ═══════════════════════════════════════════ */
 .badge{display:inline-block;padding:.13rem .46rem;border-radius:20px;font-size:.65rem;font-weight:600;}
 .b-green {background:rgba(34,197,94,.15);color:var(--success);}
 .b-yellow{background:rgba(234,179,8,.15);color:var(--warn);}
 .b-orange{background:rgba(249,115,22,.15);color:var(--orange);}
 .b-red   {background:rgba(239,68,68,.15);color:var(--danger);}
+.b-blue  {background:rgba(59,130,246,.15);color:var(--blue);}
 
+/* ══ BUTTONS ════════════════════════════════════════ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.26rem;
   padding:.46rem .92rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;
   border:none;transition:all .15s;-webkit-appearance:none;touch-action:manipulation;}
 .btn-p{background:var(--orange);color:#fff;}
 .btn-p:hover,.btn-p:active{background:var(--orange2);}
+.btn-p:disabled{opacity:.5;cursor:not-allowed;}
 .btn-g{background:transparent;border:1px solid var(--border);color:var(--text);}
 .btn-g:hover,.btn-g:active{border-color:var(--orange);color:var(--orange);}
+.btn-d{background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3);}
+.btn-s{background:rgba(34,197,94,.15);color:var(--success);border:1px solid rgba(34,197,94,.3);}
+.btn-b{background:rgba(59,130,246,.15);color:var(--blue);border:1px solid rgba(59,130,246,.3);}
 .btn-wa{background:var(--wa);color:#fff;border:none;}
 .btn-wa:hover,.btn-wa:active{background:var(--wa2);}
+.btn-sm{padding:.22rem .52rem;font-size:.7rem;}
 .btn-full{width:100%;margin-top:.26rem;}
+.btn:disabled{opacity:.38;cursor:not-allowed;pointer-events:none;}
 
+/* ══ FORMS ═══════════════════════════════════════════ */
 .fg{margin-bottom:.8rem;}
 .fl{display:block;font-size:.68rem;color:var(--muted);text-transform:uppercase;
   letter-spacing:1px;margin-bottom:.26rem;}
@@ -99,121 +159,410 @@ input,select,textarea,button{font-family:'DM Sans',sans-serif;}
   padding:.52rem .76rem;border-radius:8px;font-size:.88rem;transition:border .15s;
   outline:none;-webkit-appearance:none;}
 .fi:focus{border-color:var(--orange);}
+.fi[readonly]{opacity:.6;cursor:not-allowed;}
+textarea.fi{resize:vertical;min-height:82px;line-height:1.5;}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
 @media(max-width:480px){.fr{grid-template-columns:1fr;}}
 select.fi option{background:var(--bg2);}
+.search-bar{position:relative;margin-bottom:.8rem;}
+.search-bar input{width:100%;background:var(--bg3);border:1px solid var(--border);
+  color:var(--text);padding:.5rem .8rem .5rem 2.1rem;border-radius:8px;font-size:.82rem;outline:none;}
+.search-bar input:focus{border-color:var(--orange);}
+.search-bar::before{content:'🔍';position:absolute;left:.6rem;top:50%;
+  transform:translateY(-50%);font-size:.82rem;pointer-events:none;}
 
-.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:.58rem;}
-.sc{border:2px solid var(--border);border-radius:10px;padding:.8rem;cursor:pointer;
-  transition:all .15s;text-align:center;touch-action:manipulation;}
-.sc:hover,.sc:active,.sc.sel{border-color:var(--orange);background:rgba(249,115,22,.07);}
-.sc-name{font-weight:600;font-size:.8rem;margin-bottom:.13rem;}
-.sc-price{color:var(--orange);font-size:.75rem;font-weight:700;}
-.sc-meta{color:var(--muted);font-size:.67rem;}
+/* ══ REMINDER CARD ══════════════════════════════════ */
+.reminder-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  padding:.92rem;margin-bottom:.65rem;}
+.reminder-card.notified{border-color:rgba(34,197,94,.3);opacity:.55;}
+.reminder-card.urgent{border-color:var(--danger);border-left:3px solid var(--danger);}
+.reminder-card.week{border-color:var(--warn);border-left:3px solid var(--warn);}
+.reminder-card.soon{border-color:var(--orange);border-left:3px solid var(--orange);}
+.reminder-head{display:flex;align-items:flex-start;justify-content:space-between;
+  flex-wrap:wrap;gap:.5rem;margin-bottom:.42rem;}
+.reminder-info h4{font-size:.9rem;font-weight:700;margin-bottom:.14rem;}
+.reminder-info p{font-size:.74rem;color:var(--muted);line-height:1.4;}
+.reminder-actions{display:flex;gap:.38rem;flex-wrap:wrap;flex-shrink:0;}
+.reminder-badge{display:inline-flex;align-items:center;gap:.28rem;font-size:.7rem;
+  padding:.12rem .4rem;border-radius:6px;font-weight:600;}
+.reminder-time{background:rgba(234,179,8,.15);color:var(--warn);}
+.reminder-km  {background:rgba(249,115,22,.15);color:var(--orange);}
 
-.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:.36rem;}
-.tb{border:1px solid var(--border);background:var(--bg3);color:var(--text);padding:.38rem;
-  border-radius:8px;cursor:pointer;font-size:.77rem;transition:all .15s;text-align:center;
-  touch-action:manipulation;}
-.tb:hover,.tb:active,.tb.sel{border-color:var(--orange);color:var(--orange);
-  background:rgba(249,115,22,.07);}
-.tb.taken{opacity:.22;cursor:not-allowed;pointer-events:none;text-decoration:line-through;}
+/* ══ MODAL ═══════════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:none;
+  align-items:center;justify-content:center;padding:1rem;-webkit-overflow-scrolling:touch;}
+.overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:1.5rem;width:100%;max-width:490px;max-height:93vh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;}
+.mtitle{font-family:'Bebas Neue',sans-serif;font-size:1.38rem;letter-spacing:1px;margin-bottom:1.1rem;}
+.mact{display:flex;gap:.55rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap;}
 
+/* ══ AUTOCOMPLETE ═══════════════════════════════════ */
+.autocomplete-wrap{position:relative;}
+.autocomplete-wrap .fi{padding-right:2rem;}
+.autocomplete-clear{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  line-height:1;padding:0;display:none;}
+.autocomplete-clear.visible{display:block;}
+.autocomplete-list{position:absolute;top:calc(100% + .3rem);left:0;right:0;
+  background:var(--bg2);border:1px solid var(--orange);border-radius:10px;
+  z-index:500;max-height:220px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);}
+.autocomplete-item{padding:.65rem .9rem;cursor:pointer;transition:background .12s;
+  border-bottom:1px solid var(--border);font-size:.85rem;}
+.autocomplete-item:last-child{border-bottom:none;}
+.autocomplete-item:hover,.autocomplete-item.ac-focused{background:rgba(249,115,22,.1);}
+.autocomplete-item-name{font-weight:700;color:var(--text);}
+.autocomplete-item-sub{color:var(--muted);font-size:.75rem;margin-top:.1rem;}
+.autocomplete-empty{padding:.65rem .9rem;color:var(--muted);font-size:.82rem;text-align:center;}
+
+/* ══ CLIENT PREVIEW ════════════════════════════════ */
+.client-preview{background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.3);
+  border-radius:10px;padding:.75rem 1rem;margin-bottom:.8rem;font-size:.86rem;line-height:1.6;
+  display:none;}
+.client-preview.visible{display:block;}
+.client-preview-title{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;
+  color:var(--orange);margin-bottom:.28rem;}
+
+/* ══ LIBRETITO ══════════════════════════════════════ */
+.libretito-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;
+  padding:1.2rem 1.2rem 1rem;margin-bottom:1rem;overflow:hidden;}
+.libretito-header{display:flex;align-items:flex-start;justify-content:space-between;
+  flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem;padding-bottom:.8rem;
+  border-bottom:1px solid var(--border);}
+.libretito-service{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;
+  color:var(--text);line-height:1.15;}
+.libretito-date{color:var(--muted);font-size:.82rem;margin-top:.18rem;}
+.libretito-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.85rem;}
+.libretito-pill{display:inline-flex;flex-direction:column;background:var(--bg2);
+  border:1px solid var(--border);border-radius:10px;padding:.5rem .8rem;min-width:110px;flex:1;}
+.libretito-pill-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.8px;margin-bottom:.18rem;}
+.libretito-pill-value{font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.2;}
+.libretito-pill.pill-km    .libretito-pill-value{color:var(--orange);}
+.libretito-pill.pill-oil   .libretito-pill-value{color:#60a5fa;}
+.libretito-pill.pill-next  .libretito-pill-value{color:var(--success);font-size:.95rem;}
+
+/* ══ QR MODAL ═══════════════════════════════════════ */
+.qr-container{text-align:center;padding:1rem;background:var(--bg3);
+  border-radius:10px;margin-bottom:1rem;}
+#qrCode{display:inline-block;}
+.qr-url{margin-top:.8rem;font-size:.75rem;color:var(--muted);word-break:break-all;}
+
+/* ══ MISC ════════════════════════════════════════════ */
 .sh{display:flex;align-items:center;justify-content:space-between;
   margin-bottom:.9rem;flex-wrap:wrap;gap:.46rem;}
 .st{font-family:'Bebas Neue',sans-serif;font-size:1.38rem;letter-spacing:1px;}
+.sn{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
+  border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue',sans-serif;
+  font-size:.88rem;margin-right:.38rem;flex-shrink:0;}
+.stitle{display:flex;align-items:center;font-weight:600;margin-bottom:.8rem;font-size:.88rem;}
+.divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
 .alert{padding:.74rem .9rem;border-radius:8px;margin-bottom:.8rem;font-size:.8rem;line-height:1.5;}
 .ao{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:var(--orange);}
 .ag{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--success);}
 .ar{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--danger);}
 .ab{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);}
 .empty{text-align:center;padding:2rem 1rem;color:var(--muted);}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:1.72rem;width:100%;max-width:318px;}
 .appt-card{background:var(--card);border:1px solid var(--border);border-radius:12px;
   padding:.88rem;display:flex;justify-content:space-between;align-items:center;
   flex-wrap:wrap;gap:.52rem;margin-bottom:.52rem;}
-.sum-box{background:rgba(249,115,22,.05);border:1px solid rgba(249,115,22,.3);
-  border-radius:12px;padding:.92rem;margin-bottom:.85rem;}
-.next-svc{background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.04));
-  border:1px solid rgba(249,115,22,.35);border-radius:14px;padding:1rem 1.1rem;
-  margin-bottom:1.3rem;}
-.next-svc-title{font-family:'Bebas Neue',sans-serif;font-size:1.02rem;letter-spacing:1px;
-  color:var(--orange);margin-bottom:.36rem;}
-.vtype-btns{display:flex;gap:.5rem;margin-top:.26rem;}
-.vtype-btn{flex:1;padding:.5rem;border:2px solid var(--border);border-radius:8px;
-  background:transparent;color:var(--text);font-size:.82rem;font-weight:600;cursor:pointer;
-  transition:all .15s;text-align:center;touch-action:manipulation;}
-.vtype-btn.sel{border-color:var(--orange);background:rgba(249,115,22,.08);color:var(--orange);}
-.closed-msg{text-align:center;padding:1.4rem;color:var(--danger);font-size:.88rem;
-  background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;}
-.success-banner{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.38);
-  border-radius:14px;padding:1.28rem;margin-bottom:.88rem;text-align:center;}
-.sb-icon{font-size:2.2rem;margin-bottom:.36rem;}
-.sb-title{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:1px;
-  color:var(--success);margin-bottom:.26rem;}
-.sb-sub{color:var(--muted);font-size:.8rem;margin-bottom:.88rem;line-height:1.55;}
-.btn-wa-big{background:var(--wa);color:#fff;border:none;border-radius:10px;padding:.8rem 1.5rem;
-  font-size:.98rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;
-  gap:.46rem;transition:all .15s;touch-action:manipulation;width:100%;justify-content:center;}
-.btn-wa-big:active{background:var(--wa2);}
-.btn-wa-big-hint{color:var(--muted);font-size:.7rem;margin-top:.42rem;}
-
-@keyframes spin{to{transform:rotate(360deg);}}
-.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(249,115,22,.25);
-  border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite;}
-.saving-lbl{font-size:.7rem;color:var(--muted);display:none;align-items:center;gap:.36rem;}
-.loader-full{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;
-  flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
-.big-spin{width:38px;height:38px;border:3px solid rgba(249,115,22,.2);
-  border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
-  
 .pit-badge{display:inline-block;padding:.11rem .4rem;border-radius:6px;font-size:.65rem;font-weight:700;margin-left:.3rem;}
 .pit-auto  {background:rgba(59,130,246,.15);color:var(--blue);}
 .pit-camion{background:rgba(168,85,247,.15);color:#c084fc;}
 
-.divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
+/* ══ CHECKLIST ITEMS ════════════════════════════════ */
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));
+  gap:.42rem;margin-top:.28rem;}
+.cl-btn{display:flex;align-items:center;gap:.38rem;border-radius:8px;padding:.48rem .72rem;
+  cursor:pointer;transition:all .15s;font-size:.82rem;font-weight:500;
+  text-align:left;touch-action:manipulation;width:100%;border:1.5px solid;}
+.cl-neutral{background:var(--bg3);border-color:var(--border);color:var(--muted);}
+.cl-done   {background:rgba(34,197,94,.11);border-color:var(--success);color:var(--success);}
+.cl-skip   {background:rgba(239,68,68,.09);border-color:var(--danger);color:var(--danger);}
+.cl-ico{font-size:.92rem;flex-shrink:0;width:14px;text-align:center;}
+
+/* ══ SECTION HEADER ════════════════════════════════ */
+.section-header{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;}
+.reminder-summary{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+.reminder-stat{display:flex;align-items:center;gap:.4rem;font-size:.85rem;padding:.5rem .8rem;
+  background:var(--bg3);border-radius:8px;}
+.reminder-stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;font-weight:700;}
+.reminder-stat-label{color:var(--muted);font-size:.7rem;}
 </style>
 </head>
 <body>
 
 <div id="toastBox"></div>
+<div class="saving-indicator" id="savingIndicator">
+  <div class="spinner"></div>
+  <span>Guardando cambios...</span>
+</div>
 <div class="loader-full" id="appLoader">
-  <div class="big-spin"></div>
+  <div style="width:38px;height:38px;border:3px solid rgba(249,115,22,.2);
+    border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;"></div>
   <div style="color:var(--muted);font-size:.86rem">Conectando con Firebase...</div>
 </div>
 
 <!-- ═══════════ LANDING ═══════════ -->
-<div class="page active" id="pgLanding">
-  <div style="text-align:center">
-    <div class="logo">LUBRICENTRO <span>ESQUIÚ</span></div>
-    <div class="land-sub">Turnos Online · Córdoba</div>
-    <div class="land-cards">
-      <div class="lcard" onclick="go('pgClient')">
-        <div class="lcard-ico">🚗</div><h3>SOY CLIENTE</h3><p>Sacá tu turno online</p>
-      </div>
+<div class="page" id="pgLanding">
+  <div class="logo">LUBRICENTRO <span>ESQUIÚ</span></div>
+  <div class="land-sub">Panel Administrador · Córdoba</div>
+  <div class="land-cards">
+    <div class="lcard" onclick="go('pgAdminLogin')">
+      <div class="lcard-ico">⚙️</div><h3>ADMINISTRAR</h3><p>Panel del lubricentro</p>
     </div>
-    <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank">
-      📍 Ver en Google Maps</a><br/>
-    <button class="btn btn-wa" style="padding:.62rem 1.3rem;font-size:.9rem;margin-top:.4rem"
-      onclick="window.open('https://wa.me/5493513880155','_blank')">💬 Consultas por WhatsApp</button>
   </div>
 </div>
 
-<!-- ═══════════ CLIENT APP ═══════════ -->
-<div class="page" id="pgClient">
+<!-- ═══════════ ADMIN LOGIN ═══════════ -->
+<div class="page" id="pgAdminLogin"
+  style="align-items:center;justify-content:center;padding:2rem;">
+  <div class="logo" style="font-size:1.85rem;margin-bottom:1.4rem;">
+    LUBRICENTRO <span style="color:var(--orange)">ESQUIÚ</span></div>
+  <div class="login-box">
+    <div style="font-family:'Bebas Neue';font-size:1.32rem;letter-spacing:1px;margin-bottom:1.05rem;">
+      ACCESO ADMINISTRADOR</div>
+    <div id="loginErr" class="alert ar" style="display:none"></div>
+    <input type="text" style="opacity:0;position:absolute;height:0;width:0;z-index:-1" tabindex="-1"/>
+    <input type="password" style="opacity:0;position:absolute;height:0;width:0;z-index:-1" tabindex="-1"/>
+    <div class="fg"><label class="fl">Usuario</label>
+      <input class="fi" id="loginU" name="lbadm_u" autocomplete="off"
+        placeholder="roger tassi" onkeydown="if(event.key==='Enter')tryLogin()"/></div>
+    <div class="fg"><label class="fl">Contraseña</label>
+      <input class="fi" type="password" id="loginP" name="lbadm_p" autocomplete="off"
+        placeholder="••••••••" onkeydown="if(event.key==='Enter')tryLogin()"/></div>
+    <button class="btn btn-p btn-full" onclick="tryLogin()">Ingresar →</button>
+    <button class="back-btn btn-full"
+      style="margin-top:.7rem;display:flex;justify-content:center;"
+      onclick="go('pgLanding')">← Volver</button>
+  </div>
+</div>
+
+<!-- ═══════════ ADMIN APP ═══════════ -->
+<div class="page" id="pgAdmin">
   <div class="topbar">
-    <div class="tbrand">LUBRICENTRO <span>ESQUIÚ</span></div>
+    <div class="tbrand">LUBRICENTRO <span>ESQUIÚ</span>
+      <span style="font-size:.67rem;color:var(--muted);font-family:'DM Sans';letter-spacing:0"> ADMIN</span>
+    </div>
     <div class="topbar-r">
-      <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;display:none"></span>
-      <button class="back-btn" onclick="go('pgLanding')">← Inicio</button>
+      <button class="back-btn" onclick="go('pgLanding')">← Salir</button>
     </div>
   </div>
-  <div class="content" id="clientArea"></div>
+  <div class="tabs" id="adminTabs">
+    <button class="tab active" onclick="aTab(this,'tDash')">📊 Panel</button>
+    <button class="tab" onclick="aTab(this,'tTurnos')">📅 Turnos</button>
+    <button class="tab" onclick="aTab(this,'tClientes')">👥 Clientes</button>
+    <button class="tab" onclick="aTab(this,'tRecord')">🔔 Recordatorios</button>
+    <button class="tab" onclick="aTab(this,'tConfig')">⚙️ Config</button>
+  </div>
+  <div class="content">
+    <div id="tDash"></div>
+    <div id="tTurnos" style="display:none"></div>
+    <div id="tClientes" style="display:none"></div>
+    <div id="tRecord" style="display:none"></div>
+    <div id="tConfig" style="display:none"></div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════
-     JAVASCRIPT - SOLO CLIENTE
+     MODALS
+═══════════════════════════════════════ -->
+
+<!-- New / Edit Appointment -->
+<div class="overlay" id="mAppt">
+  <div class="modal">
+    <div class="mtitle" id="mApptTitle">NUEVO TURNO</div>
+    <input type="hidden" id="mApptId"/>
+    <input type="hidden" id="mApptClientId"/>
+
+    <div class="fg">
+      <label class="fl">Buscar cliente</label>
+      <div class="autocomplete-wrap">
+        <input class="fi" id="mAClientSearch"
+          placeholder="Nombre o patente…"
+          autocomplete="off"
+          oninput="acSearch(this.value)"
+          onkeydown="acKeyNav(event)"/>
+        <button class="autocomplete-clear" id="mAClientClear" onclick="acClear()">×</button>
+        <div class="autocomplete-list" id="mAClientList" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="client-preview" id="mAClientPreview">
+      <div class="client-preview-title">CLIENTE SELECCIONADO</div>
+      <div id="mAClientPreviewBody"></div>
+    </div>
+
+    <div class="fg"><label class="fl">Servicio</label>
+      <select class="fi" id="mAService" onchange="buildAdminTimes()"></select></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Fecha</label>
+        <input type="date" class="fi" id="mADate" onchange="buildAdminTimes()"/></div>
+      <div class="fg"><label class="fl">Horario</label>
+        <select class="fi" id="mATime"></select></div>
+    </div>
+    <div class="fg"><label class="fl">KM (opcional)</label>
+      <input class="fi" type="number" id="mAKm" placeholder="85000"/></div>
+    <div class="mact">
+      <button class="btn btn-g" onclick="closeM('mAppt')">Cancelar</button>
+      <button class="btn btn-p" id="mApptSaveBtn" onclick="doSaveAppt()">Guardar Turno</button>
+    </div>
+  </div>
+</div>
+
+<!-- New / Edit Client -->
+<div class="overlay" id="mClient">
+  <div class="modal">
+    <div class="mtitle" id="mClientTitle">NUEVO CLIENTE</div>
+    <input type="hidden" id="mClientId"/>
+    <div class="fr">
+      <div class="fg"><label class="fl">Nombre</label>
+        <input class="fi" id="mCName" placeholder="Juan García"/></div>
+      <div class="fg"><label class="fl">WhatsApp (solo números)</label>
+        <input class="fi" id="mCWa" type="tel" placeholder="3518516158"/></div>
+    </div>
+    <div class="fg"><label class="fl">Patente</label>
+      <input class="fi" id="mCPatent" placeholder="AB123CD"
+        oninput="this.value=this.value.toUpperCase().replace(/[\s-]/g,'')"/></div>
+    <div class="fg"><label class="fl">Tipo de Vehículo</label>
+      <select class="fi" id="mCVtype">
+        <option value="auto">🚗 Auto / Camioneta</option>
+        <option value="camion">🚛 Camión</option>
+      </select></div>
+    <div class="fg"><label class="fl">Marca</label>
+      <select class="fi" id="mCBrand" onchange="toggleOther(this,'mCBrandOther')">
+        <option value="">Seleccioná…</option>
+        <option>Fiat</option><option>Renault</option><option>Volkswagen</option>
+        <option>Chevrolet</option><option>Toyota</option><option>Ford</option>
+        <option>Peugeot</option><option>Honda</option><option value="Otro">Otro</option>
+      </select>
+      <input class="fi" id="mCBrandOther" placeholder="Escribí la marca"
+        style="display:none;margin-top:.34rem"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Modelo</label>
+        <input class="fi" id="mCModel" placeholder="Gol"/></div>
+      <div class="fg"><label class="fl">Año</label>
+        <input class="fi" id="mCYear" type="number" placeholder="2020"/></div>
+    </div>
+    <div class="fg"><label class="fl">Motor</label>
+      <input class="fi" id="mCMotor" placeholder="Ej: 1.6, 2.0, MWM"/></div>
+    <div class="mact">
+      <button class="btn btn-g" onclick="closeM('mClient')">Cancelar</button>
+      <button class="btn btn-p" onclick="doSaveClient()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Client with QR -->
+<div class="overlay" id="mViewClient">
+  <div class="modal">
+    <div class="mtitle" id="mVCName"></div>
+    <div id="mVCBody"></div>
+    <div class="mact"><button class="btn btn-g" onclick="closeM('mViewClient')">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- Libretito Digital (Complete Turn) -->
+<div class="overlay" id="mComplete">
+  <div class="modal">
+    <div class="mtitle">📋 LIBRETITO DIGITAL</div>
+    <p style="color:var(--muted);font-size:.79rem;margin-bottom:1rem">
+      KM, Aceite y Checklist son el corazón del historial del cliente.</p>
+    <input type="hidden" id="mCompId"/>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">Kilometraje Actual *</label>
+        <input class="fi" type="number" id="mCompKm" placeholder="85000"
+          oninput="calcNextKm(this.value)"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Próximo Service (km)</label>
+        <input class="fi" type="number" id="mCompNextKm" readonly placeholder="Auto"/>
+      </div>
+    </div>
+    <div class="fg" id="mCompNextDateWrap" style="display:none">
+      <label class="fl">Próximo Service (fecha estimada)</label>
+      <input class="fi" id="mCompNextDate" readonly/>
+    </div>
+    <div class="fg"><label class="fl">Marca / Tipo de Aceite *</label>
+      <input class="fi" id="mCompOil" placeholder="Ej: Shell Helix 10W40 4L"/></div>
+    <div class="fg">
+      <label class="fl">Ítems realizados
+        <span style="color:var(--muted);font-size:.62rem;text-transform:none;letter-spacing:0;margin-left:.4rem">
+          ○ sin definir &nbsp;✔ realizado &nbsp;✖ no aplica</span>
+      </label>
+      <div class="cl-grid" id="checklistGrid"></div>
+    </div>
+    <div class="fg"><label class="fl">Observaciones (opcional)</label>
+      <textarea class="fi" id="mCompObs"
+        placeholder="Anotaciones extras, filtros específicos, etc."></textarea></div>
+    <div class="mact">
+      <button class="btn btn-g" onclick="closeM('mComplete')">Cancelar</button>
+      <button class="btn btn-p" onclick="doCompleteAppt()">Guardar y Completar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Service -->
+<div class="overlay" id="mSvc">
+  <div class="modal">
+    <div class="mtitle" id="mSvcTitle">NUEVO SERVICIO</div>
+    <input type="hidden" id="mSvcId"/>
+    <div class="fg"><label class="fl">Nombre</label>
+      <input class="fi" id="mSvcName" placeholder="Ej: Aceite + Filtro"/></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Precio</label>
+        <input class="fi" id="mSvcPrice" placeholder="$11.000"/></div>
+      <div class="fg"><label class="fl">Duración (min)</label>
+        <select class="fi" id="mSvcDur">
+          <option value="30">30 min</option><option value="60">60 min</option>
+          <option value="90">90 min</option><option value="120">120 min</option>
+        </select></div>
+    </div>
+    <div class="fg"><label class="fl">Fosa / Tipo</label>
+      <select class="fi" id="mSvcType">
+        <option value="auto">🚗 Auto / Camioneta</option>
+        <option value="camion">🚛 Camión</option>
+      </select></div>
+    <div class="mact">
+      <button class="btn btn-g" onclick="closeM('mSvc')">Cancelar</button>
+      <button class="btn btn-p" onclick="doSaveSvc()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR Viewer Modal -->
+<div class="overlay" id="mQRViewer">
+  <div class="modal">
+    <div class="mtitle" id="mQRTitle">QR Cliente</div>
+    <div class="qr-container">
+      <div id="qrCode"></div>
+    </div>
+    <div class="qr-url" id="qrUrl"></div>
+    <div class="fg">
+      <label class="fl">Link compartible</label>
+      <input class="fi" id="qrLinkInput" readonly/>
+      <button class="btn btn-p btn-full" onclick="copyToClipboard()">📋 Copiar link</button>
+    </div>
+    <div class="mact">
+      <button class="btn btn-g" onclick="closeM('mQRViewer')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT - MODULAR ARCHITECTURE
 ═══════════════════════════════════════ -->
 <script>
+
+/* ════════════════════════════════════════════════════════
+   FIREBASE SETUP
+════════════════════════════════════════════════════════ */
 firebase.initializeApp({
   apiKey:"AIzaSyCKu6dYKVNv1GnefclT7avPSDu7S53xBf4",
   authDomain:"lubricentroesquiu-1759a.firebaseapp.com",
@@ -224,473 +573,1437 @@ firebase.initializeApp({
 });
 const db = firebase.firestore();
 
-async function fsGet(key, fb=[]) {
-  try {
-    const s = await db.collection("lubricentro").doc(key).get();
-    return s.exists ? (s.data().data || fb) : fb;
-  } catch(e){ console.error("fsGet",key,e); return fb; }
-}
-async function fsPut(key, val) {
-  setSaving(true);
-  try { await db.collection("lubricentro").doc(key).set({data:val}); }
-  catch(e){ console.error("fsPut",key,e); toast("Error al guardar. Revisá tu conexión.","error"); }
-  setSaving(false);
-}
-function setSaving(v){
-  const el=document.getElementById("savingLbl");
-  if(el) el.style.display=v?"inline-flex":"none";
-}
+/* ════════════════════════════════════════════════════════
+   CENTRALIZED STATE & FIREBASE API
+════════════════════════════════════════════════════════ */
+const AppState = {
+  clients: [],
+  appointments: [],
+  services: [],
+  notified: {},
+  
+  async loadAll() {
+    try {
+      const [c, a, s, n] = await Promise.all([
+        this.loadFromFirebase("clients", []),
+        this.loadFromFirebase("appointments", []),
+        this.loadFromFirebase("services", DEFAULT_SVC),
+        this.loadFromFirebase("notified", {})
+      ]);
+      this.clients = c;
+      this.appointments = a;
+      this.services = s;
+      this.notified = Array.isArray(n) ? {} : n;
+      return true;
+    } catch(e) {
+      console.error("Error loading state:", e);
+      return false;
+    }
+  },
+  
+  async loadFromFirebase(key, fallback) {
+    try {
+      const doc = await db.collection("lubricentro").doc(key).get();
+      return doc.exists ? (doc.data().data || fallback) : fallback;
+    } catch(e) {
+      console.error(`Error loading ${key}:`, e);
+      return fallback;
+    }
+  },
+  
+  async saveToFirebase(key, data) {
+    showSavingIndicator(true);
+    try {
+      await db.collection("lubricentro").doc(key).set({data});
+      return true;
+    } catch(e) {
+      console.error(`Error saving ${key}:`, e);
+      toast("Error al guardar. Revisá tu conexión.", "error");
+      return false;
+    } finally {
+      showSavingIndicator(false);
+    }
+  }
+};
 
+/* ════════════════════════════════════════════════════════
+   CONSTANTS
+════════════════════════════════════════════════════════ */
 const PHONE_LUBRI = "5493513880155";
-const APP_URL     = "https://gonzitassi.github.io/lubricentroesquiu/";
-const BRANDS_LIST = ["Fiat","Renault","Volkswagen","Chevrolet","Toyota","Ford","Peugeot","Honda","Otro"];
+const APP_URL = "https://gonzitassi.github.io/lubricentroesquiu/";
+const ADMINS = [{u:"roger tassi",p:"pirata1968"}];
 const SVC_INTERVAL = { auto:{months:6,km:10000}, camion:{months:3,km:25000} };
-const HRS_MORNING   = ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"];
+const HRS_MORNING = ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"];
 const HRS_AFTERNOON = ["15:30","16:00","16:30","17:00","17:30","18:00","18:30"];
 const CHECKLIST = [
-  {id:"aceite_motor",       label:"Aceite Motor"},
-  {id:"filtro_aceite",      label:"Filtro Aceite"},
-  {id:"filtro_aire",        label:"Filtro Aire"},
-  {id:"filtro_habitaculo",  label:"Filtro Habitáculo"},
-  {id:"filtro_combustible", label:"Filtro Combustible"},
-  {id:"filtro_trampa_agua", label:"Filtro Trampa Agua"},
-  {id:"filtro_secador",     label:"Filtro Secador"},
-  {id:"engrase",            label:"Engrase"},
-  {id:"aditivos",           label:"Aditivos"},
-  {id:"aceite_caja",        label:"Aceite Caja"},
-  {id:"aceite_diferencial", label:"Aceite Diferencial"},
+  {id:"aceite_motor",label:"Aceite Motor"},
+  {id:"filtro_aceite",label:"Filtro Aceite"},
+  {id:"filtro_aire",label:"Filtro Aire"},
+  {id:"filtro_habitaculo",label:"Filtro Habitáculo"},
+  {id:"filtro_combustible",label:"Filtro Combustible"},
+  {id:"filtro_trampa_agua",label:"Filtro Trampa Agua"},
+  {id:"filtro_secador",label:"Filtro Secador"},
+  {id:"engrase",label:"Engrase"},
+  {id:"aditivos",label:"Aditivos"},
+  {id:"aceite_caja",label:"Aceite Caja"},
+  {id:"aceite_diferencial",label:"Aceite Diferencial"},
 ];
 const DEFAULT_SVC = [
-  {id:"s1",name:"Cambio de Aceite",       price:"$8.500", duration:30, type:"auto"},
-  {id:"s2",name:"Cambio de Filtro",        price:"$3.200", duration:30, type:"auto"},
-  {id:"s3",name:"Aceite + Filtro",         price:"$11.000",duration:30, type:"auto"},
-  {id:"s4",name:"Líquido de Frenos",       price:"$4.500", duration:30, type:"auto"},
-  {id:"s5",name:"Revisión General Auto",   price:"$6.000", duration:60, type:"auto"},
-  {id:"s6",name:"Rotación Neumáticos",     price:"$2.800", duration:30, type:"auto"},
-  {id:"s7",name:"Aceite Camión",           price:"$18.000",duration:60, type:"camion"},
-  {id:"s8",name:"Aceite + Filtros Camión", price:"$25.000",duration:120,type:"camion"},
-  {id:"s9",name:"Revisión Camión",         price:"$12.000",duration:120,type:"camion"},
+  {id:"s1",name:"Cambio de Aceite",price:"$8.500",duration:30,type:"auto"},
+  {id:"s2",name:"Cambio de Filtro",price:"$3.200",duration:30,type:"auto"},
+  {id:"s3",name:"Aceite + Filtro",price:"$11.000",duration:30,type:"auto"},
+  {id:"s4",name:"Líquido de Frenos",price:"$4.500",duration:30,type:"auto"},
+  {id:"s5",name:"Revisión General Auto",price:"$6.000",duration:60,type:"auto"},
+  {id:"s6",name:"Rotación Neumáticos",price:"$2.800",duration:30,type:"auto"},
+  {id:"s7",name:"Aceite Camión",price:"$18.000",duration:60,type:"camion"},
+  {id:"s8",name:"Aceite + Filtros Camión",price:"$25.000",duration:120,type:"camion"},
+  {id:"s9",name:"Revisión Camión",price:"$12.000",duration:120,type:"camion"},
 ];
 const todayISO = new Date().toISOString().split("T")[0];
 
-let CLIENTS=[], APPTS=[], SERVICES=[], ME=null, BK={};
-
-function toast(msg,type="success",ms=3400){
-  const box=document.getElementById("toastBox");
-  const el=document.createElement("div");
-  el.className=`toast toast-${type}`;
-  el.innerHTML=`<span class="toast-msg">${msg}</span>
+/* ════════════════════════════════════════════════════════
+   UI HELPERS - Toast, Saving, Loading
+════════════════════════════════════════════════════════ */
+function toast(msg, type="success", ms=3400) {
+  const box = document.getElementById("toastBox");
+  const el = document.createElement("div");
+  el.className = `toast toast-${type}`;
+  el.innerHTML = `<span class="toast-msg">${msg}</span>
     <button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
   box.appendChild(el);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("show")));
-  setTimeout(()=>{ el.classList.remove("show"); setTimeout(()=>el.remove(),300); },ms);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("show")));
+  setTimeout(() => {
+    el.classList.remove("show");
+    setTimeout(() => el.remove(), 300);
+  }, ms);
 }
 
-const fmtD   = s=>{ if(!s)return""; const[y,m,d]=s.split("-"); return`${d}/${m}/${y}`; };
-const uid    = ()=>Math.random().toString(36).substr(2,9);
-const esc    = s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/'/g,"&#39;");
-const fmtNum = n=>parseInt(n||0).toLocaleString("es-AR");
+function showSavingIndicator(show) {
+  const el = document.getElementById("savingIndicator");
+  if(el) el.classList.toggle("active", show);
+}
 
-function cleanWA(num){
-  let c=(num||"").replace(/\D/g,"");
+function showOptimisticUI(element, isLoading) {
+  if(isLoading) {
+    element.classList.add("optimistic-pending");
+    element.disabled = true;
+  } else {
+    element.classList.remove("optimistic-pending");
+    element.disabled = false;
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   FORMATTING & HELPERS
+════════════════════════════════════════════════════════ */
+const fmtD = s => {
+  if(!s) return "";
+  const[y,m,d] = s.split("-");
+  return `${d}/${m}/${y}`;
+};
+const uid = () => Math.random().toString(36).substr(2, 9);
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/'/g,"&#39;");
+const fmtNum = n => parseInt(n||0).toLocaleString("es-AR");
+
+function cleanWA(num) {
+  let c = (num||"").replace(/\D/g,"");
   if(c.startsWith("549")) return c;
-  if(c.startsWith("54"))  return "5"+c;
+  if(c.startsWith("54")) return "5"+c;
   return "549"+c;
 }
-function validateWA(num){ const c=(num||"").replace(/\D/g,""); return c.length>=8&&c.length<=15; }
-function bdg(s){
-  const m={pendiente:["b-yellow","⏳ Pendiente"],confirmado:["b-orange","✅ Confirmado"],
-           completado:["b-green","🔧 Completado"],cancelado:["b-red","❌ Cancelado"]};
-  const[c,l]=m[s]||["b-yellow",s];
-  return`<span class="badge ${c}">${l}</span>`;
+
+function validateWA(num) {
+  const c = (num||"").replace(/\D/g,"");
+  return c.length >= 8 && c.length <= 15;
 }
 
-function go(pgId){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(pgId).classList.add("active");
-  if(pgId==="pgClient") renderIdentify();
+function bdg(s) {
+  const m = {
+    pendiente: ["b-yellow","⏳ Pendiente"],
+    confirmado: ["b-orange","✅ Confirmado"],
+    completado: ["b-green","🔧 Completado"],
+    cancelado: ["b-red","❌ Cancelado"]
+  };
+  const[c,l] = m[s] || ["b-yellow",s];
+  return `<span class="badge ${c}">${l}</span>`;
 }
 
-function calcNextService(km,dateStr,vtype){
-  const iv=SVC_INTERVAL[vtype]||SVC_INTERVAL.auto;
-  const nextKm=(parseInt(km)||0)+iv.km;
-  const dt=new Date((dateStr||todayISO)+"T12:00:00");
-  dt.setMonth(dt.getMonth()+iv.months);
-  return{nextKm, nextDate:dt.toISOString().split("T")[0], iv};
+function openM(id) { document.getElementById(id).classList.add("open"); }
+function closeM(id) { document.getElementById(id).classList.remove("open"); }
+
+function toggleOther(sel, oid) {
+  const el = document.getElementById(oid);
+  if(el) el.style.display = sel.value === "Otro" ? "block" : "none";
 }
 
-function getHoursForDate(dateStr){
-  const dow=new Date(dateStr+"T12:00:00").getDay();
-  if(dow===0) return [];
-  if(dow===6) return [...HRS_MORNING];
-  return [...HRS_MORNING,...HRS_AFTERNOON];
+function getBrandVal(sid, oid) {
+  const v = document.getElementById(sid)?.value || "";
+  return v === "Otro" ? (document.getElementById(oid)?.value || "").trim() || "Otro" : v;
 }
-function isDayClosed(dateStr){ return new Date(dateStr+"T12:00:00").getDay()===0; }
 
-function getPit(svcId){
-  return(SERVICES.find(s=>s.id===svcId)?.type||"auto")==="camion"?"camion":"auto";
+function getMotor(appt) {
+  if(appt.motor) return appt.motor;
+  return AppState.clients.find(c => c.id === appt.clientId)?.motor || "—";
 }
-function getTaken(date,pit,excludeId=null){
-  const s=new Set();
-  APPTS.filter(a=>a.date===date&&a.id!==excludeId&&(a.pit||"auto")===pit)
-       .forEach(a=>(a.blockedSlots||[a.time]).forEach(t=>s.add(t)));
+
+/* ════════════════════════════════════════════════════════
+   SERVICE INTERVALS & CALCULATIONS
+════════════════════════════════════════════════════════ */
+function calcNextService(km, dateStr, vtype) {
+  const iv = SVC_INTERVAL[vtype] || SVC_INTERVAL.auto;
+  const nextKm = (parseInt(km) || 0) + iv.km;
+  const dt = new Date((dateStr || todayISO) + "T12:00:00");
+  dt.setMonth(dt.getMonth() + iv.months);
+  return {
+    nextKm,
+    nextDate: dt.toISOString().split("T")[0],
+    iv
+  };
+}
+
+function calcNextKm(val) {
+  const apptId = document.getElementById("mCompId")?.value;
+  const appt = AppState.appointments.find(a => a.id === apptId);
+  const vtype = appt ? AppState.clients.find(c => c.id === appt.clientId)?.vehicleType || "auto" : "auto";
+  const iv = SVC_INTERVAL[vtype] || SVC_INTERVAL.auto;
+  const n = parseInt(val);
+  const kmEl = document.getElementById("mCompNextKm");
+  const dtEl = document.getElementById("mCompNextDate");
+  const wrap = document.getElementById("mCompNextDateWrap");
+  
+  if(!isNaN(n)) {
+    if(kmEl) kmEl.value = n + iv.km;
+    const nd = new Date(todayISO + "T12:00:00");
+    nd.setMonth(nd.getMonth() + iv.months);
+    if(dtEl) dtEl.value = fmtD(nd.toISOString().split("T")[0]);
+    if(wrap) wrap.style.display = "block";
+  } else {
+    if(kmEl) kmEl.value = "";
+    if(dtEl) dtEl.value = "";
+    if(wrap) wrap.style.display = "none";
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   HOURS & DATE LOGIC
+════════════════════════════════════════════════════════ */
+function getHoursForDate(dateStr) {
+  const dow = new Date(dateStr + "T12:00:00").getDay();
+  if(dow === 0) return [];
+  if(dow === 6) return [...HRS_MORNING];
+  return [...HRS_MORNING, ...HRS_AFTERNOON];
+}
+
+function isDayClosed(dateStr) {
+  return new Date(dateStr + "T12:00:00").getDay() === 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   PIT & SLOT LOGIC
+════════════════════════════════════════════════════════ */
+function getPit(svcId) {
+  return (AppState.services.find(s => s.id === svcId)?.type || "auto") === "camion" ? "camion" : "auto";
+}
+
+function getTaken(date, pit, excludeId = null) {
+  const s = new Set();
+  AppState.appointments
+    .filter(a => a.date === date && a.id !== excludeId && (a.pit || "auto") === pit)
+    .forEach(a => (a.blockedSlots || [a.time]).forEach(t => s.add(t)));
   return s;
 }
-function getSlots(startTime,durMins,dateStr){
-  const n=Math.max(1,Math.ceil((durMins||30)/30));
-  const dayH=getHoursForDate(dateStr);
-  const idx=dayH.indexOf(startTime);
-  if(idx===-1||idx+n>dayH.length) return null;
-  const slots=[];
-  for(let i=0;i<n;i++){
-    if(i>0){
-      const[ph,pm]=dayH[idx+i-1].split(":").map(Number);
-      const[ch,cm]=dayH[idx+i].split(":").map(Number);
-      if((ch*60+cm)-(ph*60+pm)!==30) return null;
+
+function getSlots(startTime, durMins, dateStr) {
+  const n = Math.max(1, Math.ceil((durMins || 30) / 30));
+  const dayH = getHoursForDate(dateStr);
+  const idx = dayH.indexOf(startTime);
+  
+  if(idx === -1 || idx + n > dayH.length) return null;
+  
+  const slots = [];
+  for(let i = 0; i < n; i++) {
+    if(i > 0) {
+      const[ph, pm] = dayH[idx + i - 1].split(":").map(Number);
+      const[ch, cm] = dayH[idx + i].split(":").map(Number);
+      if((ch * 60 + cm) - (ph * 60 + pm) !== 30) return null;
     }
-    slots.push(dayH[idx+i]);
+    slots.push(dayH[idx + i]);
   }
   return slots;
 }
-function isAvail(time,durMins,takenSet,dateStr){
-  const slots=getSlots(time,durMins,dateStr);
-  return slots!==null&&!slots.some(s=>takenSet.has(s));
+
+function isAvail(time, durMins, takenSet, dateStr) {
+  const slots = getSlots(time, durMins, dateStr);
+  return slots !== null && !slots.some(s => takenSet.has(s));
 }
 
-/* ══ CLIENTE ════════════════════════════════════ */
-function renderIdentify(){
-  ME=null;
-  document.getElementById("clientNameLbl").style.display="none";
-  document.getElementById("clientArea").innerHTML=`
-    <div style="max-width:420px;padding-top:1.8rem">
-      <h2 style="font-family:'Bebas Neue';font-size:1.72rem;letter-spacing:1px;margin-bottom:.26rem">
-        BIENVENIDO</h2>
-      <p style="color:var(--muted);margin-bottom:1.1rem;font-size:.8rem">
-        Ingresá la patente de tu auto para continuar.</p>
-      <div id="cErr" class="alert ao" style="display:none"></div>
-      <div class="fg"><label class="fl">Patente del auto</label>
-        <input class="fi" id="cPat" placeholder="Ej: AB123CD"
-          oninput="this.value=this.value.toUpperCase().replace(/[\s-]/g,'')"
-          onkeydown="if(event.key==='Enter')tryIdentify()"/></div>
-      <div id="newFields" style="display:none">
-        <hr class="divider"/>
-        <p style="color:var(--orange);font-size:.8rem;margin-bottom:.8rem;font-weight:600">
-          ¡Primera vez! Completá tus datos:</p>
-        <div class="fg"><label class="fl">Nombre completo</label>
-          <input class="fi" id="cName" placeholder="Juan García"/></div>
-        <div class="fg"><label class="fl">WhatsApp (solo números)</label>
-          <input class="fi" id="cWa" type="tel" placeholder="3518516158"/></div>
-        <div class="fg"><label class="fl">Tipo de Vehículo</label>
-          <div class="vtype-btns">
-            <button class="vtype-btn sel" id="vtAuto" onclick="selVtype('auto')">🚗 Auto / Camioneta</button>
-            <button class="vtype-btn" id="vtCamion" onclick="selVtype('camion')">🚛 Camión</button>
-          </div>
-          <input type="hidden" id="cVtype" value="auto"/></div>
-        <div class="fg"><label class="fl">Marca</label>
-          <select class="fi" id="cBrand" onchange="toggleOtherBrand()">
-            <option value="">Seleccioná…</option>
-            ${BRANDS_LIST.map(b=>`<option value="${b}">${b}</option>`).join("")}
-          </select>
-          <input class="fi" id="cBrandOther" placeholder="Escribí la marca"
-            style="display:none;margin-top:.34rem"/></div>
-        <div class="fr">
-          <div class="fg"><label class="fl">Modelo</label>
-            <input class="fi" id="cModel" placeholder="Gol"/></div>
-          <div class="fg"><label class="fl">Año</label>
-            <input class="fi" id="cYear" type="number" placeholder="2020"/></div>
-        </div>
-        <div class="fg"><label class="fl">Motor</label>
-          <input class="fi" id="cMotor" placeholder="Ej: 1.6, 2.0, MWM"/></div>
-      </div>
-      <button class="btn btn-p btn-full" id="cEnterBtn" onclick="tryIdentify()">Entrar →</button>
-    </div>`;
-}
-
-function toggleOtherBrand(){
-  const sel=document.getElementById("cBrand");
-  const oth=document.getElementById("cBrandOther");
-  if(oth) oth.style.display=sel.value==="Otro"?"block":"none";
-}
-
-function selVtype(v){
-  document.getElementById("cVtype").value=v;
-  document.getElementById("vtAuto").classList.toggle("sel",v==="auto");
-  document.getElementById("vtCamion").classList.toggle("sel",v==="camion");
-}
-
-function getBrandVal(){
-  const v=document.getElementById("cBrand")?.value||"";
-  return v==="Otro"?(document.getElementById("cBrandOther")?.value||"").trim()||"Otro":v;
-}
-
-async function tryIdentify(){
-  const pat=(document.getElementById("cPat")?.value||"").trim().toUpperCase().replace(/[\s-]/g,"");
-  const err=document.getElementById("cErr");
-  const showErr=m=>{err.textContent="⚠️ "+m;err.style.display="block";};
-  if(!pat){showErr("Ingresá la patente de tu auto.");return;}
-  const found=CLIENTS.find(c=>c.patent===pat);
-  if(found){ME=found;renderClientHome();return;}
-  const nf=document.getElementById("newFields");
-  if(nf.style.display==="none"){
-    nf.style.display="block";
-    document.getElementById("cEnterBtn").textContent="Registrarme y entrar →";
-    showErr("No encontramos esa patente. Completá tus datos para registrarte.");return;
+/* ════════════════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════════════════ */
+function go(pgId) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(pgId).classList.add("active");
+  if(pgId === "pgAdmin") renderAdmin();
+  if(pgId === "pgAdminLogin") {
+    setTimeout(() => {
+      const u = document.getElementById("loginU"), p = document.getElementById("loginP");
+      if(u) u.value = "";
+      if(p) p.value = "";
+    }, 80);
   }
-  const name =document.getElementById("cName")?.value.trim()||"";
-  const wa   =document.getElementById("cWa")?.value.trim()||"";
-  const vtype=document.getElementById("cVtype")?.value||"auto";
-  const brand=getBrandVal();
-  const model=document.getElementById("cModel")?.value.trim()||"";
-  const year =document.getElementById("cYear")?.value.trim()||"";
-  const motor=document.getElementById("cMotor")?.value.trim()||"";
-  if(!name||!wa||!brand||!model||!year||!motor){showErr("Completá todos los campos.");return;}
-  if(!validateWA(wa)){showErr("WhatsApp inválido (solo números, sin espacios).");return;}
-  if(CLIENTS.find(c=>c.patent===pat)){showErr("Ya existe un cliente con esa patente.");return;}
-  const nc={id:uid(),name,whatsapp:wa,patent:pat,vehicleType:vtype,brand,model,year,motor};
-  CLIENTS.push(nc);
-  await fsPut("clients",CLIENTS);
-  ME=nc;renderClientHome();
-  toast("¡Registro exitoso! Bienvenido 🎉","success");
 }
 
-function renderClientHome(){
-  const lbl=document.getElementById("clientNameLbl");
-  lbl.textContent="👤 "+ME.name.split(" ")[0];lbl.style.display="inline";
-  const vtype=ME.vehicleType||"auto";
-  const iv=SVC_INTERVAL[vtype]||SVC_INTERVAL.auto;
-  const done=APPTS.filter(a=>a.clientId===ME.id&&a.status==="completado"&&a.km)
-    .sort((a,b)=>b.date.localeCompare(a.date));
-  let nextCard="";
-  if(done.length>0){
-    const last=done[0];
-    const ns=calcNextService(last.km,last.date,vtype);
-    nextCard=`<div class="next-svc">
-      <div class="next-svc-title">🔧 PRÓXIMO SERVICE ESTIMADO</div>
-      <div style="font-size:.86rem;margin-bottom:.14rem">
-        📏 Al llegar a <strong>${fmtNum(ns.nextKm)} km</strong></div>
-      <div style="font-size:.86rem;margin-bottom:.14rem">
-        📅 O en <strong>${fmtD(ns.nextDate)}</strong></div>
-      <div style="color:var(--muted);font-size:.72rem;margin-top:.28rem">
-        Basado en: ${fmtD(last.date)} · ${fmtNum(last.km)} km
-        ${last.oilBrand?` · ${esc(last.oilBrand)}`:""}
-        · <em>${iv.months} meses / ${fmtNum(iv.km)} km para ${vtype==="camion"?"camiones":"autos"}</em>
-      </div>
-    </div>`;
+/* ════════════════════════════════════════════════════════
+   ADMIN LOGIN
+════════════════════════════════════════════════════════ */
+function tryLogin() {
+  const u = document.getElementById("loginU").value.trim();
+  const p = document.getElementById("loginP").value;
+  const e = document.getElementById("loginErr");
+  
+  if(ADMINS.find(a => a.u === u && a.p === p)) {
+    e.style.display = "none";
+    go("pgAdmin");
+  } else {
+    e.textContent = "⚠️ Usuario o contraseña incorrectos.";
+    e.style.display = "block";
   }
-  document.getElementById("clientArea").innerHTML=`
-    <div style="padding-top:1.65rem">
-      <h2 style="font-family:'Bebas Neue';font-size:1.72rem;margin-bottom:.26rem">
-        HOLA, ${ME.name.split(" ")[0].toUpperCase()} 👋</h2>
-      <p style="color:var(--muted);margin-bottom:1.3rem;font-size:.82rem">
-        ${vtype==="camion"?"🚛":"🚗"} ${esc(ME.brand)} ${esc(ME.model)} ${ME.year}
-        — <strong>${ME.patent}</strong> · Motor: ${esc(ME.motor||"—")}
-      </p>
-      ${nextCard}
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
-        gap:.8rem;max-width:510px;margin-bottom:1.3rem">
-        <div class="lcard" onclick="renderBooking()">
-          <div class="lcard-ico">📅</div><h3>SACAR TURNO</h3><p>Nuevo turno online</p></div>
-        <div class="lcard" onclick="renderMyAppts()">
-          <div class="lcard-ico">📋</div><h3>MIS TURNOS</h3><p>Estado y próximos</p></div>
-      </div>
-      <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank">
-        📍 Ver en Google Maps</a>
-    </div>`;
 }
 
-function renderMyAppts(msg){
-  const myA=APPTS.filter(a=>a.clientId===ME.id).sort((a,b)=>b.date.localeCompare(a.date));
-  document.getElementById("clientArea").innerHTML=`
-    ${msg?`<div class="alert ag">✅ ${msg}</div>`:""}
-    <div class="sh"><div class="st">MIS TURNOS</div>
-      <button class="btn btn-p" onclick="renderBooking()">+ Nuevo</button></div>
-    ${myA.length===0?'<div class="empty">📋 No tenés turnos aún.</div>':
-      myA.map(a=>`<div class="appt-card">
-        <div>
-          <div style="font-weight:600;margin-bottom:.12rem">${esc(a.serviceName)}</div>
-          <div style="color:var(--muted);font-size:.77rem">
-            📅 ${fmtD(a.date)} a las ${a.time} · 🚗 ${esc(a.vehicleDesc)}</div>
-          ${a.km?`<div style="color:var(--muted);font-size:.7rem">KM: ${fmtNum(a.km)}</div>`:""}
-        </div>${bdg(a.status)}</div>`).join("")}
-    <button class="btn btn-g" style="margin-top:.9rem" onclick="renderClientHome()">← Volver</button>`;
+/* ════════════════════════════════════════════════════════
+   ADMIN TABS
+════════════════════════════════════════════════════════ */
+function renderAdmin() {
+  document.querySelectorAll("#adminTabs .tab").forEach((t, i) => {
+    t.classList.remove("active");
+    if(i === 0) t.classList.add("active");
+  });
+  ["tTurnos","tClientes","tRecord","tConfig"].forEach(id =>
+    document.getElementById(id).style.display = "none");
+  document.getElementById("tDash").style.display = "block";
+  drawTab("tDash");
 }
 
-function renderBooking(){
-  BK={step:1,service:null,date:todayISO,time:"",km:""};
-  while(isDayClosed(BK.date)){
-    const d=new Date(BK.date+"T12:00:00");d.setDate(d.getDate()+1);
-    BK.date=d.toISOString().split("T")[0];
-  }
-  drawBooking();
+function aTab(btn, id) {
+  document.querySelectorAll("#adminTabs .tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  ["tDash","tTurnos","tClientes","tRecord","tConfig"].forEach(x =>
+    document.getElementById(x).style.display = "none");
+  document.getElementById(id).style.display = "block";
+  drawTab(id);
 }
 
-function drawBooking(){
-  const myServices=SERVICES.filter(s=>(s.type||"auto")===(ME.vehicleType||"auto"));
-  const selSvc=BK.service?SERVICES.find(s=>s.id===BK.service):null;
-  const dur=selSvc?.duration||30;
-  const pit=BK.service?getPit(BK.service):ME.vehicleType==="camion"?"camion":"auto";
-  const dayH=getHoursForDate(BK.date);
-  const taken=getTaken(BK.date,pit);
-  const isClosed=dayH.length===0;
-  document.getElementById("clientArea").innerHTML=`
-    <div style="max-width:540px">
-      <div style="display:flex;align-items:center;gap:.55rem;margin-bottom:1.1rem">
-        <button class="back-btn" onclick="renderClientHome()">← Volver</button>
-        <h2 style="font-family:'Bebas Neue';font-size:1.52rem;letter-spacing:1px">SACAR TURNO</h2>
-      </div>
-
-      <div class="card" style="margin-bottom:.8rem">
-        <div style="display:flex;align-items:center;margin-bottom:.8rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
-          border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue';
-          font-size:.88rem;margin-right:.38rem">1</span>
-          <span style="font-family:'Bebas Neue';font-size:1.38rem;letter-spacing:1px">Elegí el servicio</span></div>
-        ${myServices.length===0
-          ?'<div class="empty">Sin servicios disponibles. Contactá al lubricentro.</div>'
-          :`<div class="sg">${myServices.map(s=>`
-            <div class="sc${BK.service===s.id?" sel":""}" onclick="bkSvc('${s.id}')">
-              <div class="sc-name">${esc(s.name)}</div>
-              <div class="sc-price">${s.price}</div>
-              <div class="sc-meta">${s.duration} min</div>
-            </div>`).join("")}</div>`}
-      </div>
-
-      ${BK.step>=2?`<div class="card" style="margin-bottom:.8rem">
-        <div style="display:flex;align-items:center;margin-bottom:.8rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
-          border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue';
-          font-size:.88rem;margin-right:.38rem">2</span>
-          <span style="font-family:'Bebas Neue';font-size:1.38rem;letter-spacing:1px">Elegí el día y horario</span></div>
-        <div class="fg"><label class="fl">Fecha</label>
-          <input type="date" class="fi" value="${BK.date}" min="${todayISO}"
-            onchange="bkDate(this.value)"/></div>
-        ${isClosed?`<div class="closed-msg">🚫 El lubricentro está cerrado los domingos.</div>`:`
-        <div class="fg">
-          <label class="fl">Horario disponible</label>
-          <div style="color:var(--muted);font-size:.72rem;margin-bottom:.36rem">
-            ${pit==="camion"?"🚛 Fosa Camiones":"🚗 Fosa Autos"}
-            ${dur>30?` · Ocupa ${dur} min (${dur/30} franjas)`:" · 30 min"}</div>
-          <div class="tg">${dayH.map(h=>{
-            const ok=isAvail(h,dur,taken,BK.date);
-            return`<button class="tb${BK.time===h?" sel":""}${!ok?" taken":""}"
-              ${!ok?"disabled":""}
-              onclick="bkTime('${h}')">${h}</button>`;
-          }).join("")}</div>
-          ${dayH.every(h=>!isAvail(h,dur,taken,BK.date))
-            ?'<div class="alert ao" style="margin-top:.7rem">⚠️ Sin horarios disponibles. Probá otra fecha.</div>':""}
-        </div>`}
-      </div>`:""}
-
-      ${BK.step>=3?`<div class="card" style="margin-bottom:.8rem">
-        <div style="display:flex;align-items:center;margin-bottom:.8rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
-          border-radius:50%;background:var(--orange);color:#fff;font-family:'Bebas Neue';
-          font-size:.88rem;margin-right:.38rem">3</span>
-          <span style="font-family:'Bebas Neue';font-size:1.38rem;letter-spacing:1px">Confirmá tu vehículo</span></div>
-        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;
-          padding:.5rem .76rem;font-size:.82rem;margin-bottom:.76rem">
-          ${ME.vehicleType==="camion"?"🚛":"🚗"}
-          <strong>${esc(ME.brand)} ${esc(ME.model)} ${ME.year}</strong>
-          — ${ME.patent} · Motor: ${esc(ME.motor||"—")}
-        </div>
-        <div class="fg"><label class="fl">Kilómetros actuales (opcional)</label>
-          <input class="fi" id="bkKm" value="${BK.km}" type="number"
-            oninput="BK.km=this.value" placeholder="85000"/></div>
-      </div>`:""}
-
-      ${BK.step>=3&&BK.service&&BK.time&&!isClosed?`<div class="sum-box">
-        <div style="font-family:'Bebas Neue';font-size:.98rem;letter-spacing:1px;
-          margin-bottom:.62rem;color:var(--orange)">RESUMEN</div>
-        <div style="display:grid;gap:.28rem;font-size:.82rem">
-          <div>🔧 <strong>${esc(selSvc?.name)}</strong></div>
-          <div>📅 <strong>${fmtD(BK.date)}</strong> a las <strong>${BK.time}</strong></div>
-          <div>${ME.vehicleType==="camion"?"🚛":"🚗"}
-            <strong>${esc(ME.brand)} ${esc(ME.model)} ${ME.year}</strong> — ${ME.patent}</div>
-          <div>⚙️ Motor: ${esc(ME.motor||"—")}</div>
-          ${BK.km?`<div>📏 ${fmtNum(BK.km)} km</div>`:""}
-        </div>
-        <button class="btn btn-p btn-full" style="margin-top:.8rem" onclick="confirmBk()">
-          ✅ Confirmar y Guardar Turno</button>
-      </div>`:""}
-    </div>`;
-}
-
-function bkSvc(id){BK.service=id;BK.time="";if(BK.step<2)BK.step=2;drawBooking();}
-function bkTime(h){BK.time=h;if(BK.step<3)BK.step=3;drawBooking();}
-function bkDate(d){
-  if(isDayClosed(d)){
-    toast("Domingos cerrado. Avanzando al lunes.","warn");
-    const nd=new Date(d+"T12:00:00");nd.setDate(nd.getDate()+1);
-    BK.date=nd.toISOString().split("T")[0];
-  } else {BK.date=d;}
-  BK.time="";drawBooking();
-}
-
-async function confirmBk(){
-  const sv=SERVICES.find(s=>s.id===BK.service);if(!sv)return;
-  if(isDayClosed(BK.date)){toast("Cerrado ese día","error");return;}
-  const dur=sv.duration||30;
-  const pit=getPit(BK.service);
-  const freshAppts=await fsGet("appointments",[]);
-  APPTS=freshAppts;
-  const taken=getTaken(BK.date,pit);
-  if(!isAvail(BK.time,dur,taken,BK.date)){
-    toast("Ese horario ya fue tomado. Elegí otro.","error");
-    BK.time="";drawBooking();return;
-  }
-  const slots=getSlots(BK.time,dur,BK.date)||[BK.time];
-  const appt={
-    id:uid(),clientId:ME.id,patent:ME.patent,
-    vehicleDesc:`${ME.brand} ${ME.model} ${ME.year}`,
-    motor:ME.motor||"",date:BK.date,time:BK.time,
-    service:BK.service,serviceName:sv.name,
-    pit,blockedSlots:slots,status:"pendiente",km:BK.km,notes:""
+function reDrawCur() {
+  const a = document.querySelector("#adminTabs .tab.active");
+  const m = {
+    "📊 Panel": "tDash",
+    "📅 Turnos": "tTurnos",
+    "👥 Clientes": "tClientes",
+    "🔔 Recordatorios": "tRecord",
+    "⚙️ Config": "tConfig"
   };
-  APPTS.push(appt);
-  await fsPut("appointments",APPTS);
-  const waMsg=`¡Hola! Reservé un turno en Lubricentro Esquiú.\n\n`+
-    `🔧 *Servicio:* ${sv.name}\n`+
-    `📅 *Fecha:* ${fmtD(BK.date)} a las ${BK.time}\n`+
-    `${ME.vehicleType==="camion"?"🚛":"🚗"} *Vehículo:* ${ME.brand} ${ME.model} ${ME.year}\n`+
-    `🔑 *Patente:* ${ME.patent}\n`+
-    `⚙️ *Motor:* ${ME.motor||"—"}\n`+
-    `🔩 *Fosa:* ${pit==="camion"?"Camiones":"Autos"}`;
-  const waURL=`https://wa.me/${PHONE_LUBRI}?text=${encodeURIComponent(waMsg)}`;
-  document.getElementById("clientArea").innerHTML=`
-    <div style="max-width:480px;padding-top:1.5rem">
-      <div class="success-banner">
-        <div class="sb-icon">🎉</div>
-        <div class="sb-title">¡TURNO GUARDADO!</div>
-        <div class="sb-sub">
-          <strong>${esc(sv.name)}</strong><br/>
-          📅 ${fmtD(BK.date)} a las ${BK.time}<br/>
-          ${ME.vehicleType==="camion"?"🚛":"🚗"} ${esc(ME.brand)} ${esc(ME.model)} — ${ME.patent}
-        </div>
-        <button class="btn-wa-big" onclick="window.open('${waURL}','_blank')">
-          📲 CONFIRMAR POR WHATSAPP</button>
-        <div class="btn-wa-big-hint">Tocá para notificar al lubricentro. Funciona en iOS y Android.</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.45rem;margin-top:.15rem">
-        <button class="btn btn-g btn-full" onclick="renderMyAppts()">📋 Ver mis turnos</button>
-        <button class="btn btn-g btn-full" onclick="renderClientHome()">← Inicio</button>
-      </div>
+  drawTab(m[a?.textContent?.trim()] || "tDash");
+}
+
+function drawTab(id) {
+  if(id === "tDash") drawDash();
+  if(id === "tTurnos") drawTurnos();
+  if(id === "tClientes") drawClientes();
+  if(id === "tRecord") drawRecord();
+  if(id === "tConfig") drawConfig();
+}
+
+/* ════════════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════════════ */
+function drawDash() {
+  const todayA = AppState.appointments.filter(a => a.date === todayISO);
+  const pending = AppState.appointments.filter(a => a.status === "pendiente");
+  const remCount = calcAllReminders().filter(r => !r.notified).length;
+  
+  document.getElementById("tDash").innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="stat-num">${todayA.length}</div><div class="stat-lbl">Hoy</div></div>
+      <div class="stat"><div class="stat-num">${pending.length}</div><div class="stat-lbl">Pendientes</div></div>
+      <div class="stat"><div class="stat-num">${AppState.clients.length}</div><div class="stat-lbl">Clientes</div></div>
+      <div class="stat"><div class="stat-num" style="color:var(--warn)">${remCount}</div><div class="stat-lbl">Recordatorios</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">TURNOS DE HOY</div>
+      ${todayA.length === 0 ? '<div class="empty">🎉 Sin turnos para hoy</div>' : `
+      <div class="tw"><table>
+        <thead><tr><th>Hora</th><th>Cliente</th><th>Patente</th><th>Motor</th><th>Servicio</th><th>Fosa</th><th>Estado</th><th></th></tr></thead>
+        <tbody>${todayA.sort((a,b) => a.time.localeCompare(b.time)).map(a => {
+          const cl = AppState.clients.find(c => c.id === a.clientId);
+          const pit = a.pit || "auto";
+          return `<tr>
+            <td><strong>${a.time}</strong></td><td>${esc(cl?.name || "—")}</td>
+            <td>${a.patent}</td><td>${esc(getMotor(a))}</td>
+            <td>${esc(a.serviceName)}</td>
+            <td><span class="pit-badge pit-${pit}">${pit === "camion" ? "🚛" : "🚗"}</span></td>
+            <td>${bdg(a.status)}</td>
+            <td style="display:flex;gap:.2rem">
+              ${a.status === "pendiente" ? `<button class="btn btn-s btn-sm" onclick="updAppt('${a.id}','confirmado')">✓ Conf.</button>` : ""}
+              ${a.status === "confirmado" ? `<button class="btn btn-g btn-sm" onclick="openComplete('${a.id}')">✓ Compl.</button>` : ""}
+            </td></tr>`;
+        }).join("")}</tbody>
+      </table></div>`}
     </div>`;
 }
 
-/* ══ INIT ════════════════════════════════════════════ */
-(async()=>{
-  try{
-    [CLIENTS,APPTS,SERVICES]=await Promise.all([
-      fsGet("clients",    []),
-      fsGet("appointments",[]),
-      fsGet("services",   DEFAULT_SVC),
-    ]);
-    if(!SERVICES.length){SERVICES=DEFAULT_SVC;await fsPut("services",SERVICES);}
-  }catch(e){
-    console.error("Init:",e);
-    SERVICES=DEFAULT_SVC;
-    toast("Error al conectar con Firebase","error",5000);
+/* ════════════════════════════════════════════════════════
+   TURNOS TAB
+════════════════════════════════════════════════════════ */
+function drawTurnos() {
+  const sorted = [...AppState.appointments].sort((a,b) => 
+    b.date.localeCompare(a.date) || a.time.localeCompare(b.time));
+  
+  document.getElementById("tTurnos").innerHTML = `
+    <div class="sh">
+      <div class="st">TODOS LOS TURNOS</div>
+      <button class="btn btn-p" onclick="openNewAppt()">+ Nuevo Turno</button>
+    </div>
+    <div class="search-bar">
+      <input id="sTurnos" placeholder="Buscar por nombre o patente…"
+        oninput="filterTbl('sTurnos','tbTurnos')"/>
+    </div>
+    <div class="card">${sorted.length === 0 ? '<div class="empty">📅 Sin turnos</div>' : `
+      <div class="tw"><table>
+        <thead><tr><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Patente</th>
+          <th>Motor</th><th>Servicio</th><th>Fosa</th><th>Estado</th><th></th></tr></thead>
+        <tbody id="tbTurnos">${sorted.map(a => {
+          const cl = AppState.clients.find(c => c.id === a.clientId);
+          const pit = a.pit || "auto";
+          return `<tr data-search="${esc(cl?.name || "")} ${a.patent}">
+            <td>${fmtD(a.date)}</td><td>${a.time}</td>
+            <td>${esc(cl?.name || "—")}</td><td>${a.patent}</td>
+            <td>${esc(getMotor(a))}</td><td>${esc(a.serviceName)}</td>
+            <td><span class="pit-badge pit-${pit}">${pit === "camion" ? "🚛" : "🚗"}</span></td>
+            <td>${bdg(a.status)}</td>
+            <td style="display:flex;gap:.2rem;flex-wrap:wrap">
+              ${a.status === "pendiente" ? `<button class="btn btn-s btn-sm" onclick="updAppt('${a.id}','confirmado')">✓</button>` : ""}
+              ${a.status === "confirmado" ? `<button class="btn btn-g btn-sm" onclick="openComplete('${a.id}')">✓</button>` : ""}
+              <button class="btn btn-d btn-sm" onclick="delAppt('${a.id}')">✕</button>
+            </td></tr>`;
+        }).join("")}</tbody>
+      </table></div>`}
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   CLIENTES TAB
+════════════════════════════════════════════════════════ */
+function drawClientes() {
+  document.getElementById("tClientes").innerHTML = `
+    <div class="sh">
+      <div class="st">CLIENTES</div>
+      <button class="btn btn-p" onclick="openNewClient()">+ Nuevo Cliente</button>
+    </div>
+    <div class="search-bar">
+      <input id="sClientes" placeholder="Buscar por nombre o patente…"
+        oninput="filterTbl('sClientes','tbClientes')"/>
+    </div>
+    <div class="card">${AppState.clients.length === 0 ? '<div class="empty">👥 Sin clientes</div>' : `
+      <div class="tw"><table>
+        <thead><tr><th>Nombre</th><th>WhatsApp</th><th>Patente</th>
+          <th>Vehículo</th><th>Motor</th><th>Turnos</th><th></th></tr></thead>
+        <tbody id="tbClientes">${AppState.clients.map(c => `
+          <tr data-search="${esc(c.name)} ${c.patent}">
+            <td><strong>${esc(c.name)}</strong></td><td>${c.whatsapp}</td>
+            <td>${c.patent}</td>
+            <td>${c.vehicleType === "camion" ? "🚛" : "🚗"} ${esc(c.brand)} ${esc(c.model)} ${c.year}</td>
+            <td>${esc(c.motor || "—")}</td>
+            <td>${AppState.appointments.filter(a => a.clientId === c.id).length}</td>
+            <td style="display:flex;gap:.2rem;flex-wrap:wrap">
+              <button class="btn btn-g btn-sm"  onclick="openViewClient('${c.id}')">Ver</button>
+              <button class="btn btn-g btn-sm"  onclick="openEditClient('${c.id}')">✏️</button>
+              <button class="btn btn-wa btn-sm" onclick="sendWAClient('${c.id}')">💬</button>
+              <button class="btn btn-d btn-sm"  onclick="delClient('${c.id}')">✕</button>
+            </td></tr>`).join("")}
+        </tbody></table></div>`}
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   RECORDATORIOS - POINT 1: INTELLIGENT REMINDERS
+════════════════════════════════════════════════════════ */
+function calcAllReminders() {
+  const result = [];
+  
+  for(const cl of AppState.clients) {
+    const vtype = cl.vehicleType || "auto";
+    const iv = SVC_INTERVAL[vtype] || SVC_INTERVAL.auto;
+    
+    // Buscar último servicio de aceite completado
+    const oilAppts = AppState.appointments
+      .filter(a => a.clientId === cl.id && a.status === "completado" && a.km)
+      .filter(a => {
+        const n = (a.serviceName || "").toLowerCase();
+        return n.includes("aceite") || n.includes("oil") || n.includes("service");
+      })
+      .sort((a,b) => b.date.localeCompare(a.date));
+    
+    if(!oilAppts.length) continue;
+    
+    const last = oilAppts[0];
+    const lastDate = new Date(last.date + "T12:00:00");
+    const lastKm = parseInt(last.km) || 0;
+    
+    // Calcular límites
+    const limitDate = new Date(lastDate);
+    limitDate.setMonth(limitDate.getMonth() + iv.months);
+    const limitKm = lastKm + iv.km;
+    
+    const now = new Date();
+    const overdueByTime = now >= limitDate;
+    
+    // Buscar km actual
+    const latestKmAppt = AppState.appointments
+      .filter(a => a.clientId === cl.id && a.km)
+      .sort((a,b) => b.date.localeCompare(a.date))[0];
+    const currentKm = latestKmAppt ? parseInt(latestKmAppt.km) || 0 : 0;
+    const overdueByKm = currentKm > 0 && currentKm >= limitKm;
+    
+    if(!overdueByTime && !overdueByKm) continue;
+    
+    const notifKey = `${cl.id}_${last.date}`;
+    const notified = !!AppState.notified[notifKey];
+    
+    // Calcular urgencia
+    let urgencia = "soon";
+    const daysOverdue = Math.floor((now - limitDate) / (1000 * 60 * 60 * 24));
+    if(daysOverdue >= 0) urgencia = "urgent";
+    else if(daysOverdue >= -7) urgencia = "week";
+    
+    result.push({
+      cl, last, limitDate, limitKm, currentKm,
+      overdueByTime, overdueByKm, notified, notifKey, vtype, iv, urgencia, daysOverdue
+    });
   }
-  document.getElementById("appLoader").style.display="none";
+  
+  return result;
+}
+
+function drawRecord() {
+  const all = calcAllReminders();
+  const pending = all.filter(r => !r.notified);
+  const done = all.filter(r => r.notified);
+  
+  // Agrupar por urgencia
+  const urgent = pending.filter(r => r.urgencia === "urgent");
+  const week = pending.filter(r => r.urgencia === "week");
+  const soon = pending.filter(r => r.urgencia === "soon");
+  
+  document.getElementById("tRecord").innerHTML = `
+    <div class="sh">
+      <div class="st">RECORDATORIOS DE ACEITE</div>
+      <span style="color:var(--muted);font-size:.8rem">
+        ${pending.length} pendiente${pending.length !== 1 ? "s" : ""} · ${done.length} avisado${done.length !== 1 ? "s" : ""}</span>
+    </div>
+    
+    ${urgent.length > 0 ? `
+      <button class="btn btn-p btn-full" style="margin-bottom:1rem;background:var(--danger)" 
+        onclick="sendAllUrgentReminders()">
+        📲 ENVIAR A TODOS LOS ${urgent.length} URGENTES
+      </button>
+    ` : ""}
+    
+    <div class="reminder-summary">
+      <div class="reminder-stat">
+        <div class="reminder-stat-num" style="color:var(--danger)">${urgent.length}</div>
+        <div class="reminder-stat-label">🔴 URGENTE</div>
+      </div>
+      <div class="reminder-stat">
+        <div class="reminder-stat-num" style="color:var(--warn)">${week.length}</div>
+        <div class="reminder-stat-label">🟠 ESTA SEMANA</div>
+      </div>
+      <div class="reminder-stat">
+        <div class="reminder-stat-num" style="color:var(--orange)">${soon.length}</div>
+        <div class="reminder-stat-label">🟡 PRÓXIMAS 2 SEM</div>
+      </div>
+    </div>
+    
+    ${all.length === 0 ? '<div class="alert ag">✅ Ningún cliente necesita recordatorio.</div>' : ""}
+    
+    ${urgent.length > 0 ? `
+      <div style="margin-bottom:1.2rem">
+        <div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:1px;
+          color:var(--danger);margin-bottom:.7rem">🔴 URGENTE - VENCER HOY</div>
+        ${urgent.map(r => remCard(r)).join("")}
+      </div>` : ""}
+    
+    ${week.length > 0 ? `
+      <div style="margin-bottom:1.2rem">
+        <div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:1px;
+          color:var(--warn);margin-bottom:.7rem">🟠 ESTA SEMANA</div>
+        ${week.map(r => remCard(r)).join("")}
+      </div>` : ""}
+    
+    ${soon.length > 0 ? `
+      <div style="margin-bottom:1.2rem">
+        <div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:1px;
+          color:var(--orange);margin-bottom:.7rem">🟡 PRÓXIMAS 2 SEMANAS</div>
+        ${soon.map(r => remCard(r)).join("")}
+      </div>` : ""}
+    
+    ${done.length > 0 ? `
+      <div style="margin-top:1.2rem">
+        <div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:1px;
+          color:var(--muted);margin-bottom:.7rem">✅ YA AVISADOS</div>
+        ${done.map(r => remCard(r)).join("")}
+      </div>` : ""}`;
+}
+
+function remCard(r) {
+  const cl = r.cl;
+  const reasons = [];
+  if(r.overdueByTime) reasons.push(`<span class="reminder-badge reminder-time">📅 Tiempo</span>`);
+  if(r.overdueByKm) reasons.push(`<span class="reminder-badge reminder-km">📏 KM</span>`);
+  
+  return `<div class="reminder-card ${r.notified ? "notified" : r.urgencia}">
+    <div class="reminder-head">
+      <div class="reminder-info">
+        <h4>${cl.vehicleType === "camion" ? "🚛" : "🚗"} ${esc(cl.name)}</h4>
+        <p>Patente: <strong>${cl.patent}</strong> · ${esc(cl.brand)} ${esc(cl.model)} ${cl.year}<br/>
+          Último aceite: ${fmtD(r.last.date)} · ${fmtNum(parseInt(r.last.km) || 0)} km<br/>
+          ${reasons.join(" ")} · Vence: ${fmtD(r.limitDate.toISOString().split("T")[0])} / ${fmtNum(r.limitKm)} km</p>
+      </div>
+      <div class="reminder-actions">
+        ${!r.notified ? `
+          <button class="btn btn-wa btn-sm" onclick="sendReminder('${esc(r.cl.id)}','${esc(r.last.date)}','${cl.patent}','${r.notifKey}')">📲 WA</button>
+          <button class="btn btn-s btn-sm" onclick="markNotified('${esc(r.notifKey)}')">✓ Ya avisado</button>
+        ` : `<span style="color:var(--success);font-size:.76rem;font-weight:600">✅ Avisado</span>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+async function markNotified(key) {
+  AppState.notified[key] = {ts: Date.now()};
+  const saved = await AppState.saveToFirebase("notified", AppState.notified);
+  if(saved) {
+    toast("Marcado como avisado ✔", "success");
+    drawRecord();
+  }
+}
+
+function sendReminder(cid, lastDate, patent, notifKey) {
+  const cl = AppState.clients.find(c => c.id === cid);
+  if(!cl) return;
+  
+  const iv = SVC_INTERVAL[cl.vehicleType || "auto"] || SVC_INTERVAL.auto;
+  const msg = `Hola ${cl.name.split(" ")[0]}! 👋 Te recuerda *Lubricentro Esquiú* que tu ` +
+    `*${cl.brand} ${cl.model}* (Patente: *${patent}*) ya cumplió *${iv.months} meses* o ` +
+    `superó los *${fmtNum(iv.km)} km* desde el último cambio de aceite del ${fmtD(lastDate)}.\n\n` +
+    `¡Es momento de cuidar tu motor! 🔧\n\nSacá tu turno: ${APP_URL}`;
+  
+  window.open(`https://wa.me/${cleanWA(cl.whatsapp)}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+function sendAllUrgentReminders() {
+  const all = calcAllReminders();
+  const urgent = all.filter(r => r.urgencia === "urgent" && !r.notified);
+  
+  if(!urgent.length) {
+    toast("No hay clientes urgentes para avisar", "warn");
+    return;
+  }
+  
+  let count = 0;
+  const interval = setInterval(() => {
+    if(count >= urgent.length) {
+      clearInterval(interval);
+      toast(`✔️ Se enviaron ${urgent.length} recordatorios`, "success");
+      setTimeout(() => drawRecord(), 1000);
+      return;
+    }
+    
+    const r = urgent[count];
+    const cl = r.cl;
+    const iv = SVC_INTERVAL[r.vtype] || SVC_INTERVAL.auto;
+    
+    const msg = `Hola ${cl.name.split(" ")[0]}! 👋 Te recuerda *Lubricentro Esquiú* que tu ` +
+      `*${cl.brand} ${cl.model}* (Patente: *${r.last.patent || cl.patent}*) ya cumplió *${iv.months} meses* o ` +
+      `superó los *${fmtNum(iv.km)} km* desde el último cambio de aceite del ${fmtD(r.last.date)}.\n\n` +
+      `¡Es momento de cuidar tu motor! 🔧\n\nSacá tu turno: ${APP_URL}`;
+    
+    // Guardar como "avisado"
+    AppState.notified[r.notifKey] = {ts: Date.now()};
+    
+    // Abrir en nueva pestaña (se abre automático)
+    window.open(`https://wa.me/${cleanWA(cl.whatsapp)}?text=${encodeURIComponent(msg)}`, "_blank");
+    
+    count++;
+  }, 800); // 800ms entre cada envío (para evitar bloqueo)
+}
+
+/* ════════════════════════════════════════════════════════
+   CONFIG - SERVICES
+════════════════════════════════════════════════════════ */
+function drawConfig() {
+  const autos = AppState.services.filter(s => (s.type || "auto") === "auto");
+  const camiones = AppState.services.filter(s => s.type === "camion");
+  
+  const tbl = svcs => svcs.length === 0 ?
+    '<div class="empty" style="padding:.8rem">Sin servicios</div>' :
+    `<div class="tw"><table>
+      <thead><tr><th>Nombre</th><th>Precio</th><th>Duración</th><th></th></tr></thead>
+      <tbody>${svcs.map(s => `<tr>
+        <td><strong>${esc(s.name)}</strong></td>
+        <td style="color:var(--orange)">${s.price}</td>
+        <td>${s.duration} min</td>
+        <td style="display:flex;gap:.2rem">
+          <button class="btn btn-g btn-sm" onclick="openEditSvc('${s.id}')">✏️</button>
+          <button class="btn btn-d btn-sm" onclick="delSvc('${s.id}')">✕</button>
+        </td></tr>`).join("")}
+      </tbody></table></div>`;
+  
+  document.getElementById("tConfig").innerHTML = `
+    <div class="sh"><div class="st">SERVICIOS</div>
+      <button class="btn btn-p" onclick="openNewSvc()">+ Nuevo Servicio</button></div>
+    <div class="alert ab" style="margin-bottom:.9rem">
+      ℹ️ Autos: service cada <strong>6 meses / 10.000 km</strong> &nbsp;·&nbsp;
+      Camiones: cada <strong>3 meses / 25.000 km</strong>
+    </div>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">🚗 FOSA AUTOS / CAMIONETAS</div>${tbl(autos)}</div>
+    <div class="card"><div class="card-title">🚛 FOSA CAMIONES</div>${tbl(camiones)}</div>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   FILTER TABLE
+════════════════════════════════════════════════════════ */
+function filterTbl(inputId, tbodyId) {
+  const q = document.getElementById(inputId)?.value.toLowerCase() || "";
+  document.querySelectorAll(`#${tbodyId} tr`).forEach(r => {
+    r.classList.toggle("hidden-row", q !== "" && !(r.dataset.search || r.textContent).toLowerCase().includes(q));
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   AUTOCOMPLETE FOR NEW APPOINTMENT
+════════════════════════════════════════════════════════ */
+let _acSelectedClient = null;
+let _acFocusIdx = -1;
+
+function acSearch(q) {
+  const list = document.getElementById("mAClientList");
+  const clr = document.getElementById("mAClientClear");
+  if(clr) clr.className = "autocomplete-clear" + (q ? " visible" : "");
+  _acFocusIdx = -1;
+  
+  if(!q || q.trim().length < 1) {
+    list.style.display = "none";
+    return;
+  }
+  
+  const term = q.toLowerCase();
+  const matches = AppState.clients.filter(c =>
+    c.name.toLowerCase().includes(term) ||
+    c.patent.toLowerCase().includes(term)
+  ).slice(0, 8);
+  
+  if(!matches.length) {
+    list.innerHTML = `<div class="autocomplete-empty">Sin resultados para "${esc(q)}"</div>`;
+    list.style.display = "block";
+    return;
+  }
+  
+  list.innerHTML = matches.map((c, i) => `
+    <div class="autocomplete-item" data-idx="${i}" data-cid="${c.id}"
+      onmousedown="acSelect('${c.id}')">
+      <div class="autocomplete-item-name">${esc(c.name)}</div>
+      <div class="autocomplete-item-sub">
+        ${c.vehicleType === "camion" ? "🚛" : "🚗"} ${esc(c.brand)} ${esc(c.model)} ${c.year}
+        — ${c.patent} · Motor: ${esc(c.motor || "—")}
+      </div>
+    </div>`).join("");
+  
+  list.style.display = "block";
+}
+
+function acKeyNav(e) {
+  const list = document.getElementById("mAClientList");
+  if(list.style.display === "none") return;
+  
+  const items = [...list.querySelectorAll(".autocomplete-item")];
+  if(!items.length) return;
+  
+  if(e.key === "ArrowDown") {
+    e.preventDefault();
+    _acFocusIdx = (_acFocusIdx + 1) % items.length;
+    items.forEach((el, i) => el.classList.toggle("ac-focused", i === _acFocusIdx));
+  } else if(e.key === "ArrowUp") {
+    e.preventDefault();
+    _acFocusIdx = (_acFocusIdx - 1 + items.length) % items.length;
+    items.forEach((el, i) => el.classList.toggle("ac-focused", i === _acFocusIdx));
+  } else if(e.key === "Enter" && _acFocusIdx >= 0) {
+    e.preventDefault();
+    const cid = items[_acFocusIdx].dataset.cid;
+    if(cid) acSelect(cid);
+  } else if(e.key === "Escape") {
+    list.style.display = "none";
+  }
+}
+
+function acSelect(cid) {
+  const cl = AppState.clients.find(c => c.id === cid);
+  if(!cl) return;
+  
+  _acSelectedClient = cl;
+  document.getElementById("mApptClientId").value = cl.id;
+  document.getElementById("mAClientSearch").value = cl.name;
+  document.getElementById("mAClientList").style.display = "none";
+  
+  const clr = document.getElementById("mAClientClear");
+  if(clr) clr.className = "autocomplete-clear visible";
+  
+  const preview = document.getElementById("mAClientPreview");
+  const body = document.getElementById("mAClientPreviewBody");
+  if(preview && body) {
+    body.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:.35rem .9rem;font-size:.86rem">
+        <span>${cl.vehicleType === "camion" ? "🚛" : "🚗"} <strong>${esc(cl.brand)} ${esc(cl.model)} ${cl.year}</strong></span>
+        <span>🔑 ${cl.patent}</span>
+        <span>⚙️ Motor: ${esc(cl.motor || "—")}</span>
+        <span>📱 ${cl.whatsapp}</span>
+      </div>`;
+    preview.className = "client-preview visible";
+  }
+  
+  syncApptSvcs(cl.vehicleType || "auto");
+}
+
+function acClear() {
+  _acSelectedClient = null;
+  document.getElementById("mApptClientId").value = "";
+  document.getElementById("mAClientSearch").value = "";
+  document.getElementById("mAClientList").style.display = "none";
+  document.getElementById("mAClientPreview").className = "client-preview";
+  const clr = document.getElementById("mAClientClear");
+  if(clr) clr.className = "autocomplete-clear";
+  document.getElementById("mAService").innerHTML = "";
+  document.getElementById("mATime").innerHTML = "";
+}
+
+document.addEventListener("click", e => {
+  if(!e.target.closest(".autocomplete-wrap")) {
+    const list = document.getElementById("mAClientList");
+    if(list) list.style.display = "none";
+  }
+});
+
+/* ════════════════════════════════════════════════════════
+   ADMIN ACTIONS
+════════════════════════════════════════════════════════ */
+async function updAppt(id, status) {
+  const appt = AppState.appointments.find(a => a.id === id);
+  if(!appt) return;
+  
+  // Optimistic UI
+  const btn = event?.target;
+  if(btn) showOptimisticUI(btn, true);
+  
+  appt.status = status;
+  
+  // NO enviar mensaje automático en confirmación
+  // El admin decide cuándo y cómo comunicar
+  
+  const saved = await AppState.saveToFirebase("appointments", AppState.appointments);
+  
+  if(btn) showOptimisticUI(btn, false);
+  
+  if(saved) {
+    toast(`Estado actualizado a ${status}`, "success");
+    reDrawCur();
+  }
+}
+
+async function delAppt(id) {
+  if(!confirm("¿Eliminar este turno?")) return;
+  
+  AppState.appointments = AppState.appointments.filter(a => a.id !== id);
+  const saved = await AppState.saveToFirebase("appointments", AppState.appointments);
+  
+  if(saved) {
+    toast("Turno eliminado", "success");
+    reDrawCur();
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   COMPLETE APPOINTMENT - POINT 3: LIBRETITO
+════════════════════════════════════════════════════════ */
+let clItems = {};
+
+function renderChecklistUI() {
+  const grid = document.getElementById("checklistGrid");
+  if(!grid) return;
+  
+  grid.innerHTML = CHECKLIST.map(item => {
+    const st = clItems[item.id] || null;
+    const cls = st === "done" ? "cl-done" : st === "skip" ? "cl-skip" : "cl-neutral";
+    const ico = st === "done" ? "✔" : st === "skip" ? "✖" : "○";
+    return `<button class="cl-btn ${cls}" onclick="toggleCl('${item.id}')">
+      <span class="cl-ico">${ico}</span>${esc(item.label)}</button>`;
+  }).join("");
+}
+
+function toggleCl(id) {
+  const cur = clItems[id] || null;
+  clItems[id] = cur === null ? "done" : cur === "done" ? "skip" : null;
+  renderChecklistUI();
+}
+
+function openComplete(id) {
+  document.getElementById("mCompId").value = id;
+  document.getElementById("mCompKm").value = "";
+  document.getElementById("mCompNextKm").value = "";
+  document.getElementById("mCompNextDate").value = "";
+  document.getElementById("mCompNextDateWrap").style.display = "none";
+  document.getElementById("mCompOil").value = "";
+  document.getElementById("mCompObs").value = "";
+  clItems = {};
+  renderChecklistUI();
+  openM("mComplete");
+}
+
+async function doCompleteAppt() {
+  const id = document.getElementById("mCompId").value;
+  const km = document.getElementById("mCompKm").value.trim();
+  const oil = document.getElementById("mCompOil").value.trim();
+  const obs = document.getElementById("mCompObs").value.trim();
+  
+  if(!km) {
+    toast("El kilometraje es obligatorio", "error");
+    return;
+  }
+  if(!oil) {
+    toast("La marca de aceite es obligatoria", "error");
+    return;
+  }
+  
+  const appt = AppState.appointments.find(a => a.id === id);
+  if(!appt) return;
+  
+  const cl = AppState.clients.find(c => c.id === appt.clientId);
+  const vtype = cl?.vehicleType || "auto";
+  const {nextKm, nextDate} = calcNextService(km, todayISO, vtype);
+  
+  // Armar lista de filtros cambiados
+  const cl2 = clItems || {};
+  const doneItems = CHECKLIST.filter(c => cl2[c.id] === "done").map(c => c.label);
+  const filtrosText = doneItems.length > 0 ? doneItems.join(", ") : "Según lo acordado";
+  
+  // Guardar primero
+  Object.assign(appt, {
+    status: "completado",
+    km,
+    nextKm,
+    nextDate,
+    oilBrand: oil,
+    notes: obs,
+    checklist: {...clItems}
+  });
+  
+  const saved = await AppState.saveToFirebase("appointments", AppState.appointments);
+  
+  if(!saved) {
+    toast("Error al guardar", "error");
+    return;
+  }
+  
+  // Si guardó correctamente, generar y enviar mensaje
+  const nombre = cl?.name.split(" ")[0] || "Cliente";
+  const mensaje = `Hola, ${nombre}! 👋 Te avisamos desde Lubricentro Esquiú que ya completamos el service de tu ${cl?.brand} ${cl?.model}.
+
+Acá te dejamos tu Libretito Digital para que lo tengas a mano 📝:
+
+🗓️ Fecha: ${fmtD(appt.date)} a las ${appt.time}
+🏎️ KMs actuales: ${fmtNum(parseInt(km))}
+🛢️ Aceite: ${oil}
+🔧 Filtros: ${filtrosText}
+⚠️ Próximo Service: a los ${fmtNum(nextKm)} KMs (aprox. ${fmtD(nextDate)})
+
+${obs ? `💬 Observaciones: ${obs}\n` : ""}
+PD: Si te sirvió nuestra atención, nos ayuda mucho que nos dejes 5 estrellas acá: https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8 ⭐⭐⭐⭐⭐
+
+¡Gracias por confiar en nosotros!`;
+  
+  // Abrir WhatsApp
+  const waUrl = `https://wa.me/${cleanWA(cl?.whatsapp)}?text=${encodeURIComponent(mensaje)}`;
+  window.open(waUrl, "_blank");
+  
+  closeM("mComplete");
+  toast("Service guardado ✔ Abriendo WhatsApp...", "success");
+  reDrawCur();
+}
+
+/* ════════════════════════════════════════════════════════
+   LIBRETITO CARD - SHARED HELPER
+════════════════════════════════════════════════════════ */
+function buildLibretitoCard(a) {
+  const cl2 = a.checklist || {};
+  const doneItems = CHECKLIST.filter(c => cl2[c.id] === "done");
+  const skipItems = CHECKLIST.filter(c => cl2[c.id] === "skip");
+  
+  return `
+    <div class="libretito-card">
+      <div class="libretito-header">
+        <div>
+          <div class="libretito-service">🔧 ${esc(a.serviceName)}</div>
+          <div class="libretito-date">📅 ${fmtD(a.date)} a las ${a.time} · 🚗 ${esc(a.vehicleDesc || "")}</div>
+        </div>
+        ${bdg(a.status)}
+      </div>
+
+      <div class="libretito-pills">
+        ${a.km ? `<div class="libretito-pill pill-km">
+          <span class="libretito-pill-label">📏 KM registrado</span>
+          <span class="libretito-pill-value">${fmtNum(a.km)} km</span>
+        </div>` : ""}
+        ${a.oilBrand ? `<div class="libretito-pill pill-oil">
+          <span class="libretito-pill-label">🛢 Aceite usado</span>
+          <span class="libretito-pill-value">${esc(a.oilBrand)}</span>
+        </div>` : ""}
+        ${a.nextKm ? `<div class="libretito-pill pill-next">
+          <span class="libretito-pill-label">🎯 Próximo service</span>
+          <span class="libretito-pill-value">${fmtNum(a.nextKm)} km${a.nextDate ? `<br/><span style="font-size:.78rem;font-weight:400;color:var(--muted)">${fmtD(a.nextDate)}</span>` : ""}</span>
+        </div>` : ""}
+      </div>
+
+      ${(doneItems.length || skipItems.length) ? `
+        <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.8px;margin-bottom:.5rem;font-weight:600;">ÍTEMS DEL SERVICE</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.36rem;margin-bottom:.8rem;">
+          ${doneItems.map(c => `
+            <div style="display:flex;align-items:center;gap:.38rem;font-size:.84rem;
+              font-weight:600;padding:.36rem .58rem;border-radius:7px;
+              background:rgba(34,197,94,.1);color:var(--success);">
+              <span style="font-size:.9rem;">✔</span>${esc(c.label)}
+            </div>`).join("")}
+          ${skipItems.map(c => `
+            <div style="display:flex;align-items:center;gap:.38rem;font-size:.84rem;
+              font-weight:600;padding:.36rem .58rem;border-radius:7px;
+              background:rgba(239,68,68,.08);color:var(--danger);">
+              <span style="font-size:.9rem;">✖</span>${esc(c.label)}
+            </div>`).join("")}
+        </div>` : ""}
+
+      ${a.notes ? `
+        <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.8px;margin-bottom:.32rem;font-weight:600;">💬 OBSERVACIONES</div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:9px;
+          padding:.75rem .9rem;font-size:.9rem;color:var(--text);line-height:1.65;">
+          ${esc(a.notes)}</div>` : ""}
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   VIEW CLIENT - CON QR (POINT 3)
+════════════════════════════════════════════════════════ */
+function openViewClient(id) {
+  const cl = AppState.clients.find(c => c.id === id);
+  if(!cl) return;
+  
+  const ca = AppState.appointments.filter(a => a.clientId === id)
+    .sort((a,b) => b.date.localeCompare(a.date));
+  const vtype = cl.vehicleType || "auto";
+  const iv = SVC_INTERVAL[vtype] || SVC_INTERVAL.auto;
+  
+  document.getElementById("mVCName").textContent = cl.name;
+  document.getElementById("mVCBody").innerHTML = `
+    <div style="color:var(--muted);font-size:.8rem;margin-bottom:.2rem">📱 ${cl.whatsapp}</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+      padding:.5rem .75rem;font-size:.82rem;margin-bottom:.8rem;">
+      ${cl.vehicleType === "camion" ? "🚛" : "🚗"}
+      ${esc(cl.brand)} ${esc(cl.model)} ${cl.year}
+      — <strong>${cl.patent}</strong> · Motor: ${esc(cl.motor || "—")}
+    </div>
+    <div class="alert ab" style="margin-bottom:.8rem;font-size:.74rem">
+      ℹ️ Service cada <strong>${iv.months} meses</strong> o <strong>${fmtNum(iv.km)} km</strong>
+    </div>
+    <button class="btn btn-p btn-full" style="margin-bottom:1rem" onclick="openQRModal('${cl.id}', '${esc(cl.name)}')">
+      🔗 Generar QR compartible
+    </button>
+    <div style="font-family:'Bebas Neue';font-size:.98rem;letter-spacing:1px;
+      margin-bottom:.65rem;color:var(--orange)">HISTORIAL COMPLETO</div>
+    ${ca.length === 0
+      ? '<div style="color:var(--muted);font-size:.8rem">Sin turnos aún.</div>'
+      : ca.map(a => buildLibretitoCard(a)).join("")}`;
+  
+  openM("mViewClient");
+}
+
+/* ════════════════════════════════════════════════════════
+   QR GENERATION - POINT 3
+════════════════════════════════════════════════════════ */
+function openQRModal(clientId, clientName) {
+  const qrUrl = `${APP_URL}?client=${clientId}&view=libretito`;
+  
+  // Clear previous QR
+  const qrContainer = document.getElementById("qrCode");
+  qrContainer.innerHTML = "";
+  
+  // Generate QR
+  new QRCode(qrContainer, {
+    text: qrUrl,
+    width: 200,
+    height: 200,
+    colorDark: "#f0ede8",
+    colorLight: "#1e1e21",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+  
+  document.getElementById("mQRTitle").textContent = `QR - ${clientName}`;
+  document.getElementById("qrUrl").textContent = qrUrl;
+  document.getElementById("qrLinkInput").value = qrUrl;
+  
+  closeM("mViewClient");
+  openM("mQRViewer");
+}
+
+function copyToClipboard() {
+  const input = document.getElementById("qrLinkInput");
+  input.select();
+  document.execCommand("copy");
+  toast("Link copiado al portapapeles 📋", "success");
+}
+
+/* ════════════════════════════════════════════════════════
+   CLIENT CRUD
+════════════════════════════════════════════════════════ */
+function openNewClient() {
+  document.getElementById("mClientTitle").textContent = "NUEVO CLIENTE";
+  document.getElementById("mClientId").value = "";
+  ["mCName","mCWa","mCPatent","mCModel","mCYear","mCMotor","mCBrandOther"]
+    .forEach(id => { const el = document.getElementById(id); if(el) el.value = ""; });
+  const br = document.getElementById("mCBrand");
+  if(br) br.value = "";
+  const vt = document.getElementById("mCVtype");
+  if(vt) vt.value = "auto";
+  const oth = document.getElementById("mCBrandOther");
+  if(oth) oth.style.display = "none";
+  openM("mClient");
+}
+
+function openEditClient(id) {
+  const c = AppState.clients.find(x => x.id === id);
+  if(!c) return;
+  
+  document.getElementById("mClientTitle").textContent = "EDITAR CLIENTE";
+  document.getElementById("mClientId").value = c.id;
+  document.getElementById("mCName").value = c.name || "";
+  document.getElementById("mCWa").value = c.whatsapp || "";
+  document.getElementById("mCPatent").value = c.patent || "";
+  document.getElementById("mCVtype").value = c.vehicleType || "auto";
+  document.getElementById("mCModel").value = c.model || "";
+  document.getElementById("mCYear").value = c.year || "";
+  document.getElementById("mCMotor").value = c.motor || "";
+  
+  const known = ["Fiat","Renault","Volkswagen","Chevrolet","Toyota","Ford","Peugeot","Honda"];
+  if(known.includes(c.brand)) {
+    document.getElementById("mCBrand").value = c.brand;
+    document.getElementById("mCBrandOther").style.display = "none";
+  } else {
+    document.getElementById("mCBrand").value = "Otro";
+    document.getElementById("mCBrandOther").value = c.brand || "";
+    document.getElementById("mCBrandOther").style.display = "block";
+  }
+  
+  openM("mClient");
+}
+
+async function doSaveClient() {
+  const editId = document.getElementById("mClientId").value;
+  const name = document.getElementById("mCName").value.trim();
+  const wa = document.getElementById("mCWa").value.trim();
+  const patent = document.getElementById("mCPatent").value.trim().toUpperCase().replace(/[\s-]/g,"");
+  const vtype = document.getElementById("mCVtype").value;
+  const brand = getBrandVal("mCBrand", "mCBrandOther");
+  const model = document.getElementById("mCModel").value.trim();
+  const year = document.getElementById("mCYear").value.trim();
+  const motor = document.getElementById("mCMotor").value.trim();
+  
+  if(!name || !patent || !brand || !model || !year || !motor) {
+    toast("Todos los campos son obligatorios", "error");
+    return;
+  }
+  if(!validateWA(wa)) {
+    toast("WhatsApp inválido (solo números, 8-15 dígitos)", "error");
+    return;
+  }
+  if(!editId && AppState.clients.find(c => c.patent === patent)) {
+    toast("Ya existe un cliente con esa patente", "error");
+    return;
+  }
+  
+  const obj = {name, whatsapp: wa, patent, vehicleType: vtype, brand, model, year, motor};
+  
+  if(editId) {
+    AppState.clients = AppState.clients.map(c => c.id === editId ? {...c, ...obj} : c);
+  } else {
+    AppState.clients.push({id: uid(), ...obj});
+  }
+  
+  const saved = await AppState.saveToFirebase("clients", AppState.clients);
+  
+  if(saved) {
+    closeM("mClient");
+    toast(editId ? "Cliente actualizado" : "Cliente registrado", "success");
+    drawTab("tClientes");
+  }
+}
+
+async function delClient(id) {
+  if(!confirm("¿Eliminar este cliente y todos sus turnos?")) return;
+  
+  AppState.clients = AppState.clients.filter(c => c.id !== id);
+  AppState.appointments = AppState.appointments.filter(a => a.clientId !== id);
+  
+  const [c1, c2] = await Promise.all([
+    AppState.saveToFirebase("clients", AppState.clients),
+    AppState.saveToFirebase("appointments", AppState.appointments)
+  ]);
+  
+  if(c1 && c2) {
+    toast("Cliente eliminado", "success");
+    drawTab("tClientes");
+  }
+}
+
+function sendWAClient(cid) {
+  const cl = AppState.clients.find(c => c.id === cid);
+  if(!cl) return;
+  
+  window.open(`https://wa.me/${cleanWA(cl.whatsapp)}?text=${encodeURIComponent(
+    `Hola ${cl.name.split(" ")[0]}! Te contactamos del Lubricentro Esquiú. ¿En qué podemos ayudarte?`
+  )}`, "_blank");
+}
+
+/* ════════════════════════════════════════════════════════
+   NEW APPOINTMENT MODAL
+════════════════════════════════════════════════════════ */
+function openNewAppt() {
+  document.getElementById("mApptTitle").textContent = "NUEVO TURNO";
+  document.getElementById("mApptId").value = "";
+  acClear();
+  document.getElementById("mADate").value = todayISO;
+  document.getElementById("mADate").min = todayISO;
+  document.getElementById("mAKm").value = "";
+  
+  document.getElementById("mAService").innerHTML = `<option value="">— Seleccioná un cliente primero —</option>`;
+  document.getElementById("mATime").innerHTML = `<option value="">— Seleccioná un cliente y servicio —</option>`;
+  
+  openM("mAppt");
+}
+
+function syncApptSvcs(vtype) {
+  const vt = vtype || (AppState.clients.find(c => c.id === document.getElementById("mApptClientId")?.value)?.vehicleType) || "auto";
+  const svcs = AppState.services.filter(s => (s.type || "auto") === vt);
+  
+  document.getElementById("mAService").innerHTML = svcs.length ?
+    svcs.map(s => `<option value="${s.id}">${esc(s.name)} — ${s.price}</option>`).join("") :
+    `<option value="">Sin servicios para este tipo</option>`;
+  
+  buildAdminTimes();
+}
+
+function buildAdminTimes() {
+  const svcId = document.getElementById("mAService")?.value;
+  const dt = document.getElementById("mADate")?.value;
+  const apptId = document.getElementById("mApptId")?.value || null;
+  
+  if(!svcId || !dt) {
+    document.getElementById("mATime").innerHTML = `<option value="">— Elegí servicio y fecha —</option>`;
+    return;
+  }
+  
+  const svc = AppState.services.find(s => s.id === svcId);
+  const dur = svc?.duration || 30;
+  const pit = getPit(svcId);
+  const dayH = getHoursForDate(dt);
+  const taken = getTaken(dt, pit, apptId);
+  const tmSel = document.getElementById("mATime");
+  
+  if(!dayH.length) {
+    tmSel.innerHTML = `<option value="">Cerrado este día</option>`;
+    return;
+  }
+  
+  tmSel.innerHTML = dayH.map(h => {
+    const ok = isAvail(h, dur, taken, dt);
+    return `<option value="${h}" ${ok ? "" : "disabled"}>${h}${ok ? "" : " (ocupado)"}</option>`;
+  }).join("");
+}
+
+async function doSaveAppt() {
+  const cid = document.getElementById("mApptClientId").value;
+  const svcId = document.getElementById("mAService").value;
+  const dt = document.getElementById("mADate").value;
+  const tm = document.getElementById("mATime").value;
+  const km = document.getElementById("mAKm").value;
+  const btn = document.getElementById("mApptSaveBtn");
+  
+  if(!cid) {
+    toast("Seleccioná un cliente usando el buscador", "error");
+    return;
+  }
+  if(!svcId || !dt || !tm) {
+    toast("Completá todos los campos", "error");
+    return;
+  }
+  if(isDayClosed(dt)) {
+    toast("El lubricentro está cerrado ese día", "error");
+    return;
+  }
+  
+  // Optimistic UI
+  showOptimisticUI(btn, true);
+  
+  const cl = AppState.clients.find(c => c.id === cid);
+  const sv = AppState.services.find(s => s.id === svcId);
+  const dur = sv?.duration || 30;
+  const pit = getPit(svcId);
+  
+  // Refresh from Firebase for consistency
+  const freshAppts = await AppState.loadFromFirebase("appointments", []);
+  AppState.appointments = freshAppts;
+  
+  const taken = getTaken(dt, pit);
+  if(!isAvail(tm, dur, taken, dt)) {
+    showOptimisticUI(btn, false);
+    toast("Ese horario ya está ocupado", "error");
+    buildAdminTimes();
+    return;
+  }
+  
+  const slots = getSlots(tm, dur, dt) || [tm];
+  
+  AppState.appointments.push({
+    id: uid(),
+    clientId: cid,
+    patent: cl?.patent || "",
+    vehicleDesc: `${cl?.brand || ""} ${cl?.model || ""} ${cl?.year || ""}`.trim(),
+    motor: cl?.motor || "",
+    date: dt,
+    time: tm,
+    service: svcId,
+    serviceName: sv?.name || "",
+    pit,
+    blockedSlots: slots,
+    status: "pendiente",
+    km,
+    notes: ""
+  });
+  
+  const saved = await AppState.saveToFirebase("appointments", AppState.appointments);
+  
+  showOptimisticUI(btn, false);
+  
+  if(saved) {
+    closeM("mAppt");
+    toast("Turno guardado ✔", "success");
+    drawTab("tTurnos");
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   SERVICES CRUD
+════════════════════════════════════════════════════════ */
+function openNewSvc() {
+  document.getElementById("mSvcTitle").textContent = "NUEVO SERVICIO";
+  ["mSvcId","mSvcName","mSvcPrice"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("mSvcDur").value = "30";
+  document.getElementById("mSvcType").value = "auto";
+  openM("mSvc");
+}
+
+function openEditSvc(id) {
+  const s = AppState.services.find(x => x.id === id);
+  if(!s) return;
+  
+  document.getElementById("mSvcTitle").textContent = "EDITAR SERVICIO";
+  document.getElementById("mSvcId").value = s.id;
+  document.getElementById("mSvcName").value = s.name;
+  document.getElementById("mSvcPrice").value = s.price;
+  document.getElementById("mSvcDur").value = String(s.duration || 30);
+  document.getElementById("mSvcType").value = s.type || "auto";
+  
+  openM("mSvc");
+}
+
+async function doSaveSvc() {
+  const id = document.getElementById("mSvcId").value;
+  const name = document.getElementById("mSvcName").value.trim();
+  const price = document.getElementById("mSvcPrice").value.trim();
+  const dur = parseInt(document.getElementById("mSvcDur").value);
+  const type = document.getElementById("mSvcType").value;
+  
+  if(!name || !price) {
+    toast("Nombre y precio son obligatorios", "error");
+    return;
+  }
+  
+  if(id) {
+    AppState.services = AppState.services.map(s => 
+      s.id === id ? {...s, name, price, duration: dur, type} : s);
+  } else {
+    AppState.services.push({id: uid(), name, price, duration: dur, type});
+  }
+  
+  const saved = await AppState.saveToFirebase("services", AppState.services);
+  
+  if(saved) {
+    closeM("mSvc");
+    toast("Servicio guardado", "success");
+    drawConfig();
+  }
+}
+
+async function delSvc(id) {
+  if(!confirm("¿Eliminar este servicio?")) return;
+  
+  AppState.services = AppState.services.filter(s => s.id !== id);
+  const saved = await AppState.saveToFirebase("services", AppState.services);
+  
+  if(saved) {
+    toast("Servicio eliminado", "success");
+    drawConfig();
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+(async () => {
+  const loaded = await AppState.loadAll();
+  
+  if(!AppState.services.length) {
+    AppState.services = DEFAULT_SVC;
+    await AppState.saveToFirebase("services", AppState.services);
+  }
+  
+  document.getElementById("appLoader").style.display = "none";
+  
+  if(!loaded) {
+    toast("Error al conectar con Firebase", "error", 5000);
+  }
+  
   go("pgLanding");
 })();
+
+// Login cleanup
+document.addEventListener("DOMContentLoaded", () => {
+  const u = document.getElementById("loginU"), p = document.getElementById("loginP");
+  if(u) u.value = "";
+  if(p) p.value = "";
+  setTimeout(() => {
+    if(u) u.value = "";
+    if(p) p.value = "";
+  }, 200);
+});
+
 </script>
 </body>
 </html>
