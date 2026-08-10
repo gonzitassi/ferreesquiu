@@ -705,6 +705,10 @@ const uid = () => Math.random().toString(36).substr(2, 9);
 const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/'/g,"&#39;");
 const fmtNum = n => parseInt(n||0).toLocaleString("es-AR");
 
+function isSafariIOS() {
+  return /Safari/.test(navigator.userAgent) && /iPhone|iPad|iPod/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+}
+
 function cleanWA(num) {
   let c = (num||"").replace(/\D/g,"");
   if(c.startsWith("549")) return c;
@@ -1197,7 +1201,13 @@ function sendReminder(cid, lastDate, patent, notifKey) {
     `superó los *${fmtNum(iv.km)} km* desde el último cambio de aceite del ${fmtD(lastDate)}.\n\n` +
     `¡Es momento de cuidar tu motor! 🔧\n\nSacá tu turno: ${APP_URL}`;
   
-  window.open(`https://wa.me/${cleanWA(cl.whatsapp)}?text=${encodeURIComponent(msg)}`, "_blank");
+  const phone = cleanWA(cl.whatsapp);
+  
+  if(isSafariIOS()) {
+    window.location.href = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+  } else {
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
 }
 
 function sendAllUrgentReminders() {
@@ -1231,7 +1241,13 @@ function sendAllUrgentReminders() {
     AppState.notified[r.notifKey] = {ts: Date.now()};
     
     // Abrir en nueva pestaña (se abre automático)
-    window.open(`https://wa.me/${cleanWA(cl.whatsapp)}?text=${encodeURIComponent(msg)}`, "_blank");
+    const phone = cleanWA(cl.whatsapp);
+    
+    if(isSafariIOS()) {
+      window.location.href = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+    } else {
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+    }
     
     count++;
   }, 800); // 800ms entre cada envío (para evitar bloqueo)
@@ -1531,8 +1547,13 @@ PD: Si te sirvió nuestra atención, nos ayuda mucho que nos dejes 5 estrellas a
 ¡Gracias por confiar en nosotros!`;
   
   // Abrir WhatsApp
-  const waUrl = `https://wa.me/${cleanWA(cl?.whatsapp)}?text=${encodeURIComponent(mensaje)}`;
-  window.open(waUrl, "_blank");
+  const phone = cleanWA(cl?.whatsapp);
+  
+  if(isSafariIOS()) {
+    window.location.href = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(mensaje)}`;
+  } else {
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(mensaje)}`, "_blank");
+  }
   
   closeM("mComplete");
   toast("Service guardado ✔ Abriendo WhatsApp...", "success");
