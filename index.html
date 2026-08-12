@@ -252,40 +252,58 @@ select.fi option{background:var(--bg2);}
 
 <!-- ═══════════ LANDING ═══════════ -->
 <div class="page" id="pgLanding">
-  <div style="position:relative;width:100%;height:40vh;overflow:hidden;margin-bottom:2rem;border-radius:12px;background:linear-gradient(135deg,#1e1e21 0%,#0e0e0f 100%)">
-    <img src="data:image/jpeg;base64,/9j/4ShgRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMA" style="width:100%;height:100%;object-fit:cover;opacity:.6" alt="Lubricentro"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.3),rgba(14,14,15,.8))"></div>
-    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:2rem">
-      <div style="font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:2px;margin-bottom:.5rem">LUBRICENTRO <span style="color:var(--orange)">ESQUIÚ</span></div>
-      <div style="font-size:.9rem;color:#ccc;letter-spacing:1px">MÁS DE 30 AÑOS DE EXPERIENCIA</div>
-    </div>
+  <!-- HERO CON LOGO -->
+  <div style="background:linear-gradient(135deg,#1a1a1f 0%,#0f0f12 100%);padding:3rem 2rem;text-align:center;border-bottom:2px solid var(--orange)">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAATmCAIAAAAKnjl9AAAAAXNSR0IArs4c6QAAAIRlWElmTU0AKgAAAAgABQESAAMAAAABAAEA" alt="Logo" style="height:80px;margin-bottom:1.5rem;filter:drop-shadow(0 2px 8px rgba(255,140,0,.3))"/>
+    <div style="font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:3px;margin-bottom:.3rem">LUBRICENTRO <span style="color:var(--orange)">ESQUIÚ</span></div>
+    <div style="font-size:.95rem;letter-spacing:1px;color:#aaa">TURNOS ONLINE · CÓRDOBA</div>
   </div>
-  
-  <div style="max-width:600px;margin:0 auto;padding:0 2rem;text-align:center">
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:2rem">
-      <div style="font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:1.2rem">
-        <div style="margin-bottom:.8rem">📍 <strong>C. de la Pulpería 292, Villa Esquiú, Córdoba</strong></div>
-        <div style="margin-bottom:.8rem">📞 <strong>351 388-0155</strong></div>
-        <div style="margin-bottom:.8rem">⏰ <strong>Lun-Vie: 08:00-13:00 / 15:30-19:00 | Sáb: 08:00-13:00</strong></div>
-        <div>⭐ <strong>4.9★ en Google (Miles de clientes satisfechos)</strong></div>
+
+  <!-- BOTONES PRINCIPALES - ARRIBA -->
+  <div style="max-width:900px;margin:0 auto;padding:3rem 2rem">
+    <h2 style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:2px;text-align:center;margin-bottom:2rem">¿QUÉ QUERÉS HACER?</h2>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:3rem">
+      <div class="lcard" onclick="renderClientLogin()" style="cursor:pointer;border:2px solid var(--orange);padding:2rem;text-align:center;transition:all .3s">
+        <div style="font-size:3rem;margin-bottom:1rem">🚗</div>
+        <h3 style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:1px;margin-bottom:.5rem">SOY CLIENTE</h3>
+        <p style="color:var(--muted);font-size:.9rem;margin:0">Accedé con tu patente</p>
+      </div>
+      <div class="lcard" onclick="go('pgRegister')" style="cursor:pointer;padding:2rem;text-align:center;transition:all .3s">
+        <div style="font-size:3rem;margin-bottom:1rem">✏️</div>
+        <h3 style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:1px;margin-bottom:.5rem">REGISTRARME</h3>
+        <p style="color:var(--muted);font-size:.9rem;margin:0">Crea tu cuenta ahora</p>
       </div>
     </div>
 
-    <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:1.5rem">¿QUÉ QUERÉS HACER?</h2>
-    
-    <div class="land-cards" style="justify-content:center;margin-bottom:1.5rem">
-      <div class="lcard" onclick="renderClientLogin()" style="cursor:pointer;border:2px solid var(--orange)">
-        <div class="lcard-ico">🚗</div><h3>SOY CLIENTE</h3><p>Accedé con tu patente</p>
-      </div>
-      <div class="lcard" onclick="go('pgRegister')" style="cursor:pointer">
-        <div class="lcard-ico">✏️</div><h3>QUIERO REGISTRARME</h3><p>Crea tu cuenta ahora</p>
+    <!-- FOTO DEL LOCAL -->
+    <div style="margin-bottom:3rem;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
+      <img src="data:image/jpeg;base64,/9j/4ShgRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMA" alt="Lubricentro" style="width:100%;height:auto;display:block;max-height:400px;object-fit:cover"/>
+    </div>
+
+    <!-- INFO RÁPIDA -->
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.8rem;margin-bottom:2rem">
+      <h3 style="font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:1px;margin-bottom:1.2rem;color:var(--orange)">CONTACTO E INFORMACIÓN</h3>
+      <div style="font-size:.95rem;line-height:1.8;color:var(--muted)">
+        <div style="margin-bottom:.8rem"><strong style="color:#fff">📍 Ubicación:</strong> C. de la Pulpería 292, Villa Esquiú, Córdoba</div>
+        <div style="margin-bottom:.8rem"><strong style="color:#fff">📞 Teléfono:</strong> 351 388-0155</div>
+        <div style="margin-bottom:.8rem"><strong style="color:#fff">⏰ Horarios:</strong> Lun-Vie 08:00-13:00 / 15:30-19:00 | Sáb 08:00-13:00</div>
+        <div style="margin-bottom:.8rem"><strong style="color:#fff">📧 Email:</strong> lubricentro@hotmail.com</div>
+        <div><strong style="color:#fff">⭐ Calificación:</strong> 4.9★ en Google (Miles de clientes satisfechos)</div>
       </div>
     </div>
-    
-    <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank" style="margin-bottom:1rem">
-      📍 Ver ubicación en Google Maps</a><br/>
-    <button class="btn btn-wa" style="padding:.62rem 1.3rem;font-size:.9rem;margin-top:.5rem;width:100%;max-width:300px"
-      onclick="window.open('https://wa.me/5493513880155','_blank')">💬 Consultas por WhatsApp</button>
+
+    <!-- BOTONES DE CONTACTO -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem">
+      <a href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank" class="btn" style="background:var(--bg3);border:1px solid var(--border);text-decoration:none;text-align:center;padding:.8rem;border-radius:8px;transition:all .3s;cursor:pointer">
+        📍 Google Maps</a>
+      <button class="btn btn-wa" onclick="window.open('https://wa.me/5493513880155','_blank')" style="padding:.8rem;cursor:pointer">
+        💬 WhatsApp</button>
+    </div>
+
+    <div style="text-align:center;color:var(--muted);font-size:.85rem;padding:1rem;border-top:1px solid var(--border)">
+      <p>Lubricentro Esquiú • Más de 30 años de experiencia en servicios automotrices</p>
+    </div>
   </div>
 </div>
 
@@ -695,21 +713,28 @@ async function doRegisterClient() {
   toast("¡Registro exitoso! Bienvenido 🎉", "success");
 }
 
+document.addEventListener("change", (e) => {
+  if (e.target.id === "cBrand") {
+    document.getElementById("otherBrandDiv").style.display = 
+      e.target.value === "Otra" ? "block" : "none";
+  }
+});
+
 function renderClientLogin() {
   go("pgClient");
   document.querySelector(".topbar-r").innerHTML = `<button class="back-btn" onclick="go('pgLanding')">← Volver</button>`;
   document.getElementById("clientArea").innerHTML = `
     <div style="padding:3rem 2rem;max-width:400px;margin:0 auto;text-align:center;">
       <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:1.2rem">ACCEDE A TU LIBRETITO</h2>
-      <p style="color:var(--muted);margin-bottom:1.8rem;font-size:.95rem">Ingresá la patente de tu vehículo para ver tu historial de servicios y sacar turnos</p>
+      <p style="color:var(--muted);margin-bottom:1.8rem;font-size:.95rem">Ingresá la patente de tu vehículo para ver tu historial de servicios</p>
       <div class="fg"><label class="fl">Patente</label>
-        <input class="fi" id="cPatLogin" placeholder="EJ: OII609" style="font-size:1rem;text-transform:uppercase;letter-spacing:2px;text-align:center"
+        <input class="fi" id="cPatLogin" placeholder="EJ: OII609" style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;text-align:center"
           onkeydown="if(event.key==='Enter')tryIdentify()"/></div>
       <div id="cErrLogin" class="alert ar" style="display:none;margin-bottom:.8rem;font-size:.8rem"></div>
       <button class="btn btn-p btn-full" onclick="tryIdentify()">Acceder →</button>
       <p style="color:var(--muted);font-size:.85rem;margin-top:1.5rem">¿Primera vez? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgRegister')">Registrate aquí</span></p>
     </div>`;
-  document.getElementById("cPatLogin").focus();
+  setTimeout(() => document.getElementById("cPatLogin")?.focus(), 100);
 }
 
 function tryIdentify() {
