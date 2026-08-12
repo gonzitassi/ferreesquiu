@@ -252,20 +252,41 @@ select.fi option{background:var(--bg2);}
 
 <!-- ═══════════ LANDING ═══════════ -->
 <div class="page" id="pgLanding">
-  <div class="logo">LUBRICENTRO <span>ESQUIÚ</span></div>
-  <div class="land-sub">Turnos Online · Córdoba</div>
-  <div class="land-cards">
-    <div class="lcard" onclick="renderClientLogin()">
-      <div class="lcard-ico">🚗</div><h3>SOY CLIENTE</h3><p>Accedé con tu patente</p>
-    </div>
-    <div class="lcard" onclick="go('pgRegister')">
-      <div class="lcard-ico">✏️</div><h3>QUIERO REGISTRARME</h3><p>Crea tu cuenta ahora</p>
+  <div style="position:relative;width:100%;height:40vh;overflow:hidden;margin-bottom:2rem;border-radius:12px;background:linear-gradient(135deg,#1e1e21 0%,#0e0e0f 100%)">
+    <img src="data:image/jpeg;base64,/9j/4ShgRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMA" style="width:100%;height:100%;object-fit:cover;opacity:.6" alt="Lubricentro"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.3),rgba(14,14,15,.8))"></div>
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:2rem">
+      <div style="font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:2px;margin-bottom:.5rem">LUBRICENTRO <span style="color:var(--orange)">ESQUIÚ</span></div>
+      <div style="font-size:.9rem;color:#ccc;letter-spacing:1px">MÁS DE 30 AÑOS DE EXPERIENCIA</div>
     </div>
   </div>
-  <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank">
-    📍 Ver en Google Maps</a><br/>
-  <button class="btn btn-wa" style="padding:.62rem 1.3rem;font-size:.9rem;margin-top:.4rem"
-    onclick="window.open('https://wa.me/5493513880155','_blank')">💬 Consultas por WhatsApp</button>
+  
+  <div style="max-width:600px;margin:0 auto;padding:0 2rem;text-align:center">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:2rem">
+      <div style="font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:1.2rem">
+        <div style="margin-bottom:.8rem">📍 <strong>C. de la Pulpería 292, Villa Esquiú, Córdoba</strong></div>
+        <div style="margin-bottom:.8rem">📞 <strong>351 388-0155</strong></div>
+        <div style="margin-bottom:.8rem">⏰ <strong>Lun-Vie: 08:00-13:00 / 15:30-19:00 | Sáb: 08:00-13:00</strong></div>
+        <div>⭐ <strong>4.9★ en Google (Miles de clientes satisfechos)</strong></div>
+      </div>
+    </div>
+
+    <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:1.5rem">¿QUÉ QUERÉS HACER?</h2>
+    
+    <div class="land-cards" style="justify-content:center;margin-bottom:1.5rem">
+      <div class="lcard" onclick="renderClientLogin()" style="cursor:pointer;border:2px solid var(--orange)">
+        <div class="lcard-ico">🚗</div><h3>SOY CLIENTE</h3><p>Accedé con tu patente</p>
+      </div>
+      <div class="lcard" onclick="go('pgRegister')" style="cursor:pointer">
+        <div class="lcard-ico">✏️</div><h3>QUIERO REGISTRARME</h3><p>Crea tu cuenta ahora</p>
+      </div>
+    </div>
+    
+    <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank" style="margin-bottom:1rem">
+      📍 Ver ubicación en Google Maps</a><br/>
+    <button class="btn btn-wa" style="padding:.62rem 1.3rem;font-size:.9rem;margin-top:.5rem;width:100%;max-width:300px"
+      onclick="window.open('https://wa.me/5493513880155','_blank')">💬 Consultas por WhatsApp</button>
+  </div>
 </div>
 
 <!-- ═══════════ CLIENT APP ═══════════ -->
@@ -285,7 +306,7 @@ select.fi option{background:var(--bg2);}
   <div class="topbar">
     <div class="tbrand">LUBRICENTRO <span>ESQUIÚ</span></div>
     <div class="topbar-r">
-      <button class="back-btn" onclick="go('pgLanding')">← Inicio</button>
+      <button class="back-btn" onclick="go('pgLanding')">← Volver</button>
     </div>
   </div>
   <div class="content">
@@ -339,7 +360,7 @@ select.fi option{background:var(--bg2);}
       
       <button class="btn btn-p btn-full" onclick="doRegisterClient()">Registrarse →</button>
       
-      <p style="color:var(--muted);font-size:.8rem;margin-top:1rem;text-align:center">¿Ya tenés cuenta? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="renderClientLogin()">Accedé aquí</span></p>
+      <p style="color:var(--muted);font-size:.8rem;margin-top:1rem;text-align:center">¿Ya tenés cuenta? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgLanding');setTimeout(()=>renderClientLogin(),50)">Accedé aquí</span></p>
     </div>
   </div>
 </div>
@@ -641,47 +662,15 @@ function selVtype(v) {
   document.getElementById("vtCamion").classList.toggle("sel", v === "camion");
 }
 
-function renderClientLogin() {
-  go("pgClient");
-  document.querySelector(".topbar-r").innerHTML = `<button class="back-btn" onclick="go('pgLanding')">← Inicio</button>`;
-  document.getElementById("clientArea").innerHTML = `
-    <div style="padding:2rem;max-width:400px;margin:0 auto;text-align:center;">
-      <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:1.2rem">ACCEDE A TU LIBRETITO</h2>
-      <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">Ingresá la patente de tu vehículo para ver tu historial de servicios</p>
-      <div class="fg"><label class="fl">Patente</label>
-        <input class="fi" id="cPat" placeholder="EJ: OII609" 
-          onkeydown="if(event.key==='Enter')tryIdentify()"/></div>
-      <div id="cErr" class="alert ar" style="display:none;margin-bottom:.8rem;font-size:.8rem"></div>
-      <button class="btn btn-p btn-full" onclick="tryIdentify()">Acceder →</button>
-      <p style="color:var(--muted);font-size:.8rem;margin-top:1rem">¿Primera vez? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgLanding');setTimeout(()=>go('pgRegister'),100)">Registrate aquí</span></p>
-    </div>`;
-}
-
 async function tryIdentify() {
   const pat = (document.getElementById("cPat")?.value || "").trim().toUpperCase().replace(/[\s-]/g, "");
   const err = document.getElementById("cErr");
   if (!pat) { err.textContent = "⚠️ Ingresá la patente de tu auto."; err.style.display = "block"; return; }
   const found = CLIENTS.find(c => c.patent === pat);
-  if (!found) { err.textContent = "⚠️ No encontramos esa patente. Registrate aquí →"; err.style.display = "block"; return; }
+  if (!found) { err.textContent = "⚠️ No encontramos esa patente. Registrate en la otra pestaña."; err.style.display = "block"; return; }
   ME = found;
   renderClientHome();
 }
-
-function getBrandVal(selectId, otherId) {
-  const sel = document.getElementById(selectId).value;
-  return sel === "Otra" ? (document.getElementById(otherId)?.value.trim() || "") : sel;
-}
-
-function validateWA(wa) {
-  return /^(\+?549|\+|54)?[ ]?[0-9]{10,15}$/.test(wa.replace(/[\s-]/g, ""));
-}
-
-document.addEventListener("change", (e) => {
-  if (e.target.id === "cBrand") {
-    document.getElementById("otherBrandDiv").style.display = 
-      e.target.value === "Otra" ? "block" : "none";
-  }
-});
 
 async function doRegisterClient() {
   const name = document.getElementById("cName")?.value.trim() || "";
@@ -702,16 +691,50 @@ async function doRegisterClient() {
   CLIENTS.push(nc);
   await fsPut("clients", CLIENTS);
   ME = nc;
-  go("pgClient");
   renderClientHome();
   toast("¡Registro exitoso! Bienvenido 🎉", "success");
 }
 
-function renderClientHome() {
-  document.querySelector(".topbar-r").innerHTML = `
-    <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;">👤 ${ME.name.split(" ")[0]}</span>
-    <button class="back-btn" onclick="go('pgLanding')">← Salir</button>`;
+function renderClientLogin() {
   go("pgClient");
+  document.querySelector(".topbar-r").innerHTML = `<button class="back-btn" onclick="go('pgLanding')">← Volver</button>`;
+  document.getElementById("clientArea").innerHTML = `
+    <div style="padding:3rem 2rem;max-width:400px;margin:0 auto;text-align:center;">
+      <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:1.2rem">ACCEDE A TU LIBRETITO</h2>
+      <p style="color:var(--muted);margin-bottom:1.8rem;font-size:.95rem">Ingresá la patente de tu vehículo para ver tu historial de servicios y sacar turnos</p>
+      <div class="fg"><label class="fl">Patente</label>
+        <input class="fi" id="cPatLogin" placeholder="EJ: OII609" style="font-size:1rem;text-transform:uppercase;letter-spacing:2px;text-align:center"
+          onkeydown="if(event.key==='Enter')tryIdentify()"/></div>
+      <div id="cErrLogin" class="alert ar" style="display:none;margin-bottom:.8rem;font-size:.8rem"></div>
+      <button class="btn btn-p btn-full" onclick="tryIdentify()">Acceder →</button>
+      <p style="color:var(--muted);font-size:.85rem;margin-top:1.5rem">¿Primera vez? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgRegister')">Registrate aquí</span></p>
+    </div>`;
+  document.getElementById("cPatLogin").focus();
+}
+
+function tryIdentify() {
+  const pat = (document.getElementById("cPatLogin")?.value || "").trim().toUpperCase().replace(/[\s-]/g, "");
+  const err = document.getElementById("cErrLogin");
+  if (!pat) { 
+    err.textContent = "⚠️ Ingresá la patente de tu auto."; 
+    err.style.display = "block"; 
+    return; 
+  }
+  const found = CLIENTS.find(c => c.patent === pat);
+  if (!found) { 
+    err.textContent = "⚠️ No encontramos esa patente. Registrate para crear una cuenta."; 
+    err.style.display = "block"; 
+    return; 
+  }
+  ME = found;
+  renderClientHome();
+}
+
+function renderClientHome() {
+  go("pgClient");
+  const lbl = document.getElementById("clientNameLbl");
+  lbl.textContent = "👤 " + ME.name.split(" ")[0];
+  lbl.style.display = "inline";
   const vtype = ME.vehicleType || "auto";
   const iv = SVC_INTERVAL[vtype] || SVC_INTERVAL.auto;
   const done = APPTS.filter(a => a.clientId === ME.id && a.status === "completado" && a.km)
@@ -745,7 +768,7 @@ function renderClientHome() {
 function renderMyAppts() {
   const myA = APPTS.filter(a => a.clientId === ME.id).sort((a, b) => b.date.localeCompare(a.date));
   document.querySelector(".topbar-r").innerHTML = `
-    <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;">${esc(ME.name)}</span>
+    <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;">👤 ${ME.name.split(" ")[0]}</span>
     <button class="back-btn" onclick="renderClientHome()">← Volver</button>`;
   document.getElementById("clientArea").innerHTML = `
     <div class="sh"><div class="st">MIS TURNOS</div><button class="btn btn-p" onclick="renderBooking()">+ Nuevo</button></div>
@@ -759,7 +782,7 @@ function renderHistorial() {
   const iv = SVC_INTERVAL[vtype] || SVC_INTERVAL.auto;
   const done = APPTS.filter(a => a.clientId === ME.id && a.status === "completado").sort((a, b) => b.date.localeCompare(a.date));
   document.querySelector(".topbar-r").innerHTML = `
-    <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;">${esc(ME.name)}</span>
+    <span id="clientNameLbl" style="color:var(--muted);font-size:.78rem;">👤 ${ME.name.split(" ")[0]}</span>
     <button class="back-btn" onclick="renderClientHome()">← Volver</button>`;
   document.getElementById("clientArea").innerHTML = `
     <div class="sh"><div class="st">📖 MI LIBRETITO</div></div>
