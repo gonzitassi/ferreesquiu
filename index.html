@@ -252,57 +252,20 @@ select.fi option{background:var(--bg2);}
 
 <!-- ═══════════ LANDING ═══════════ -->
 <div class="page" id="pgLanding">
-  <!-- HERO CON LOGO -->
-  <div style="background:linear-gradient(135deg,#1a1a1f 0%,#0f0f12 100%);padding:2rem 2rem;text-align:center;border-bottom:2px solid var(--orange)">
-    <div style="font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:3px;margin-bottom:.3rem">LUBRICENTRO <span style="color:var(--orange)">ESQUIÚ</span></div>
-    <div style="font-size:.95rem;letter-spacing:1px;color:#aaa">TURNOS ONLINE · CÓRDOBA</div>
-  </div>
-
-  <!-- BOTONES PRINCIPALES - ARRIBA (SIN TÍTULO) -->
-  <div style="max-width:900px;margin:0 auto;padding:2rem 2rem">
-    
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.5rem">
-      <div class="lcard" onclick="renderClientLogin()" style="cursor:pointer;border:2px solid var(--orange);padding:2rem;text-align:center;transition:all .3s">
-        <div style="font-size:3rem;margin-bottom:1rem">🚗</div>
-        <h3 style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:1px;margin-bottom:.5rem">SOY CLIENTE</h3>
-        <p style="color:var(--muted);font-size:.9rem;margin:0">Accedé con tu patente</p>
-      </div>
-      <div class="lcard" onclick="go('pgRegister')" style="cursor:pointer;padding:2rem;text-align:center;transition:all .3s">
-        <div style="font-size:3rem;margin-bottom:1rem">✏️</div>
-        <h3 style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:1px;margin-bottom:.5rem">REGISTRARME</h3>
-        <p style="color:var(--muted);font-size:.9rem;margin:0">Crea tu cuenta ahora</p>
-      </div>
+  <div class="logo">LUBRICENTRO <span>ESQUIÚ</span></div>
+  <div class="land-sub">Turnos Online · Córdoba</div>
+  <div class="land-cards">
+    <div class="lcard" onclick="renderClientLogin()">
+      <div class="lcard-ico">🚗</div><h3>SOY CLIENTE</h3><p>Accedé con tu patente</p>
     </div>
-
-    <!-- FOTO DEL LOCAL -->
-    <div style="margin-bottom:2.5rem;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
-      <img src="https://imgur.com/raw/yZLSBps.jpg" alt="Lubricentro" style="width:100%;height:auto;display:block;max-height:400px;object-fit:cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-family=%22Arial%22%3ELubricentro%3C/text%3E%3C/svg%3E'"/>
-    </div>
-
-    <!-- INFO RÁPIDA -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.8rem;margin-bottom:2rem">
-      <h3 style="font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:1px;margin-bottom:1.2rem;color:var(--orange)">CONTACTO E INFORMACIÓN</h3>
-      <div style="font-size:.95rem;line-height:1.8;color:var(--muted)">
-        <div style="margin-bottom:.8rem"><strong style="color:#fff">📍 Ubicación:</strong> C. de la Pulpería 292, Villa Esquiú, Córdoba</div>
-        <div style="margin-bottom:.8rem"><strong style="color:#fff">📞 Teléfono:</strong> 351 388-0155</div>
-        <div style="margin-bottom:.8rem"><strong style="color:#fff">⏰ Horarios:</strong> Lun-Vie 08:00-13:00 / 15:30-19:00 | Sáb 08:00-13:00</div>
-        <div style="margin-bottom:.8rem"><strong style="color:#fff">📧 Email:</strong> lubricentro@hotmail.com</div>
-        <div><strong style="color:#fff">⭐ Calificación:</strong> 4.9★ en Google (Miles de clientes satisfechos)</div>
-      </div>
-    </div>
-
-    <!-- BOTONES DE CONTACTO -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem">
-      <a href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank" class="btn" style="background:var(--bg3);border:1px solid var(--border);text-decoration:none;text-align:center;padding:.8rem;border-radius:8px;transition:all .3s;cursor:pointer">
-        📍 Google Maps</a>
-      <button class="btn btn-wa" onclick="window.open('https://wa.me/5493513880155','_blank')" style="padding:.8rem;cursor:pointer">
-        💬 WhatsApp</button>
-    </div>
-
-    <div style="text-align:center;color:var(--muted);font-size:.85rem;padding:1rem;border-top:1px solid var(--border)">
-      <p>Lubricentro Esquiú • Más de 30 años de experiencia en servicios automotrices</p>
+    <div class="lcard" onclick="go('pgRegister')">
+      <div class="lcard-ico">✏️</div><h3>REGISTRARME</h3><p>Crea tu cuenta ahora</p>
     </div>
   </div>
+  <a class="maps-link" href="https://maps.app.goo.gl/yZLSBpsfbydDjWVJ8" target="_blank">
+    📍 Ver en Google Maps</a><br/>
+  <button class="btn btn-wa" style="padding:.62rem 1.3rem;font-size:.9rem;margin-top:.4rem"
+    onclick="window.open('https://wa.me/5493513880155','_blank')">💬 Consultas por WhatsApp</button>
 </div>
 
 <!-- ═══════════ CLIENT APP ═══════════ -->
@@ -326,57 +289,74 @@ select.fi option{background:var(--bg2);}
     </div>
   </div>
   <div class="content">
-    <div style="padding:2rem;max-width:500px;margin:0 auto;">
-      <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:.4rem">CREAR CUENTA</h2>
-      <p style="color:var(--muted);margin-bottom:1.6rem;font-size:.9rem">Registrate para gestionar tus turnos y acceder a tu Libretito Digital</p>
-      <div id="cErr" class="alert ar" style="display:none;margin-bottom:.8rem;font-size:.8rem"></div>
-      
-      <div class="fg"><label class="fl">Nombre</label>
-        <input class="fi" id="cName" placeholder="Tu nombre completo"/></div>
-      
-      <div class="fg"><label class="fl">WhatsApp</label>
-        <input class="fi" id="cWa" placeholder="+549 3513 880155" type="tel"/></div>
-      
-      <div class="fg"><label class="fl">Patente</label>
-        <input class="fi" id="cPatReg" placeholder="EJ: OII609" 
-          onchange="this.value=this.value.toUpperCase().replace(/[\s-]/g,'')"/></div>
-      
-      <div class="fg"><label class="fl">Tipo de Vehículo</label>
-        <select class="fi" id="cVtype">
-          <option value="auto">🚗 Auto/Camioneta liviana</option>
-          <option value="camion">🚛 Camión/Vehículo pesado</option>
-        </select></div>
-      
-      <div class="fg"><label class="fl">Marca</label>
-        <select class="fi" id="cBrand">
-          <option value="">Seleccionar marca</option>
-          <option value="Peugeot">Peugeot</option>
-          <option value="Ford">Ford</option>
-          <option value="Chevrolet">Chevrolet</option>
-          <option value="Volkswagen">Volkswagen</option>
-          <option value="Renault">Renault</option>
-          <option value="Fiat">Fiat</option>
-          <option value="Toyota">Toyota</option>
-          <option value="Honda">Honda</option>
-          <option value="Hyundai">Hyundai</option>
-          <option value="Otra">Otra</option>
-        </select></div>
-      
-      <div class="fg" id="otherBrandDiv" style="display:none;"><label class="fl">Especificar Marca</label>
-        <input class="fi" id="cBrandOther" placeholder="Ingresá la marca"/></div>
-      
-      <div class="fg"><label class="fl">Modelo</label>
-        <input class="fi" id="cModel" placeholder="EJ: 208 o Fiesta"/></div>
-      
-      <div class="fg"><label class="fl">Año</label>
-        <input class="fi" id="cYear" placeholder="2020" type="number" min="1990" max="2030"/></div>
-      
-      <div class="fg"><label class="fl">Motor (cc)</label>
-        <input class="fi" id="cMotor" placeholder="1600" type="number"/></div>
-      
-      <button class="btn btn-p btn-full" onclick="doRegisterClient()">Registrarse →</button>
-      
-      <p style="color:var(--muted);font-size:.8rem;margin-top:1rem;text-align:center">¿Ya tenés cuenta? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgLanding');setTimeout(()=>renderClientLogin(),50)">Accedé aquí</span></p>
+    <div style="max-width:450px;margin:0 auto">
+      <div class="card">
+        <h2 style="font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:1px;margin-bottom:1.5rem">REGISTRAR CLIENTE</h2>
+        <div id="rErr" class="alert ar" style="display:none;margin-bottom:1rem"></div>
+        
+        <div class="fg">
+          <label class="fl">Nombre *</label>
+          <input class="fi" id="rName" placeholder="Tu nombre completo"/>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">WhatsApp *</label>
+          <input class="fi" id="rWa" placeholder="351 XXXXXXXX" type="tel"/>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">Patente *</label>
+          <input class="fi" id="rPat" placeholder="EJ: OII609" onchange="this.value=this.value.toUpperCase().replace(/[\\s-]/g,'')"/>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">Tipo de Vehículo *</label>
+          <select class="fi" id="rVtype">
+            <option value="">Seleccionar...</option>
+            <option value="auto">Auto/Camioneta</option>
+            <option value="camion">Camión/Pesado</option>
+          </select>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">Marca *</label>
+          <select class="fi" id="rBrand">
+            <option value="">Seleccionar...</option>
+            <option value="Peugeot">Peugeot</option>
+            <option value="Ford">Ford</option>
+            <option value="Chevrolet">Chevrolet</option>
+            <option value="Volkswagen">Volkswagen</option>
+            <option value="Renault">Renault</option>
+            <option value="Fiat">Fiat</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Honda">Honda</option>
+            <option value="Hyundai">Hyundai</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        
+        <div class="fg" id="rOtherBrandDiv" style="display:none">
+          <label class="fl">Especificar Marca *</label>
+          <input class="fi" id="rBrandOther" placeholder="Marca del vehículo"/>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">Modelo *</label>
+          <input class="fi" id="rModel" placeholder="EJ: 208"/>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">Año *</label>
+          <input class="fi" id="rYear" placeholder="2020" type="number" min="1990" max="2030"/>
+        </div>
+        
+        <div class="fg">
+          <label class="fl">Motor (cc) *</label>
+          <input class="fi" id="rMotor" placeholder="1600" type="number"/>
+        </div>
+        
+        <button class="btn btn-p btn-full" onclick="doRegister()" style="margin-top:1rem">Registrarse →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -678,6 +658,16 @@ function selVtype(v) {
   document.getElementById("vtCamion").classList.toggle("sel", v === "camion");
 }
 
+async function tryIdentify() {
+  const pat = (document.getElementById("cPat")?.value || "").trim().toUpperCase().replace(/[\s-]/g, "");
+  const err = document.getElementById("cErr");
+  if (!pat) { err.textContent = "⚠️ Ingresá la patente de tu auto."; err.style.display = "block"; return; }
+  const found = CLIENTS.find(c => c.patent === pat);
+  if (!found) { err.textContent = "⚠️ No encontramos esa patente. Registrate en la otra pestaña."; err.style.display = "block"; return; }
+  ME = found;
+  renderClientHome();
+}
+
 async function doRegisterClient() {
   const name = document.getElementById("cName")?.value.trim() || "";
   const wa = document.getElementById("cWa")?.value.trim() || "";
@@ -702,9 +692,9 @@ async function doRegisterClient() {
 }
 
 document.addEventListener("change", (e) => {
-  if (e.target.id === "cBrand") {
-    document.getElementById("otherBrandDiv").style.display = 
-      e.target.value === "Otra" ? "block" : "none";
+  if (e.target.id === "rBrand") {
+    document.getElementById("rOtherBrandDiv").style.display = 
+      e.target.value === "Otro" ? "block" : "none";
   }
 });
 
@@ -712,39 +702,63 @@ function renderClientLogin() {
   go("pgClient");
   document.querySelector(".topbar-r").innerHTML = `<button class="back-btn" onclick="go('pgLanding')">← Volver</button>`;
   document.getElementById("clientArea").innerHTML = `
-    <div style="padding:3rem 2rem;max-width:400px;margin:0 auto;text-align:center;">
-      <h2 style="font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:1px;margin-bottom:1.2rem">ACCEDE A TU LIBRETITO</h2>
-      <p style="color:var(--muted);margin-bottom:1.8rem;font-size:.95rem">Ingresá la patente de tu vehículo para ver tu historial de servicios</p>
-      <div class="fg"><label class="fl">Patente</label>
-        <input class="fi" id="cPatLogin" placeholder="EJ: OII609" style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;text-align:center"
-          onkeydown="if(event.key==='Enter')tryIdentify()"/></div>
-      <div id="cErrLogin" class="alert ar" style="display:none;margin-bottom:.8rem;font-size:.8rem"></div>
-      <button class="btn btn-p btn-full" onclick="tryIdentify()">Acceder →</button>
-      <p style="color:var(--muted);font-size:.85rem;margin-top:1.5rem">¿Primera vez? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgRegister')">Registrate aquí</span></p>
+    <div style="max-width:400px;margin:0 auto">
+      <div class="card" style="text-align:center">
+        <h2 style="font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:1px;margin-bottom:1.5rem">ACCEDE A TU LIBRETITO</h2>
+        <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">Ingresá tu patente para acceder</p>
+        <div class="fg">
+          <label class="fl" style="text-align:left">Patente</label>
+          <input class="fi" id="cPatLogin" placeholder="EJ: OII609" style="text-transform:uppercase;text-align:center;letter-spacing:2px"
+            onkeydown="if(event.key==='Enter')tryIdentify()"/>
+        </div>
+        <div id="cErrLogin" class="alert ar" style="display:none;margin-bottom:1rem;font-size:.8rem"></div>
+        <button class="btn btn-p btn-full" onclick="tryIdentify()">Acceder →</button>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:1rem">¿No tenés cuenta? <span style="color:var(--orange);cursor:pointer;font-weight:600" onclick="go('pgRegister')">Registrate aquí</span></p>
+      </div>
     </div>`;
   setTimeout(() => document.getElementById("cPatLogin")?.focus(), 100);
 }
 
 function tryIdentify() {
-  const pat = (document.getElementById("cPatLogin")?.value || "").trim().toUpperCase().replace(/[\s-]/g, "");
+  const pat = (document.getElementById("cPatLogin")?.value || "").trim().toUpperCase().replace(/[\\s-]/g, "");
   const err = document.getElementById("cErrLogin");
-  if (!pat) { 
-    err.textContent = "⚠️ Ingresá la patente de tu auto."; 
-    err.style.display = "block"; 
-    return; 
-  }
+  if (!pat) { err.textContent = "⚠️ Ingresá la patente"; err.style.display = "block"; return; }
   const found = CLIENTS.find(c => c.patent === pat);
-  if (!found) { 
-    err.textContent = "⚠️ No encontramos esa patente. Registrate para crear una cuenta."; 
-    err.style.display = "block"; 
-    return; 
-  }
+  if (!found) { err.textContent = "⚠️ Patente no encontrada. Registrate."; err.style.display = "block"; return; }
   ME = found;
   renderClientHome();
 }
 
-function renderClientHome() {
+async function doRegister() {
+  const name = document.getElementById("rName")?.value.trim() || "";
+  const wa = document.getElementById("rWa")?.value.trim() || "";
+  const pat = (document.getElementById("rPat")?.value || "").trim().toUpperCase().replace(/[\\s-]/g, "");
+  const vtype = document.getElementById("rVtype")?.value || "";
+  const brand = document.getElementById("rBrand")?.value === "Otro" ? 
+    (document.getElementById("rBrandOther")?.value.trim() || "") : 
+    (document.getElementById("rBrand")?.value || "");
+  const model = document.getElementById("rModel")?.value.trim() || "";
+  const year = document.getElementById("rYear")?.value.trim() || "";
+  const motor = document.getElementById("rMotor")?.value.trim() || "";
+  const err = document.getElementById("rErr");
+  
+  if (!name || !wa || !pat || !vtype || !brand || !model || !year || !motor) {
+    err.textContent = "⚠️ Completá todos los campos"; err.style.display = "block"; return;
+  }
+  if (CLIENTS.find(c => c.patent === pat)) { 
+    err.textContent = "⚠️ Esa patente ya existe"; err.style.display = "block"; return;
+  }
+  
+  const nc = { id: uid(), name, whatsapp: wa, patent: pat, vehicleType: vtype, brand, model, year, motor };
+  CLIENTS.push(nc);
+  await fsPut("clients", CLIENTS);
+  ME = nc;
   go("pgClient");
+  renderClientHome();
+  toast("¡Registro exitoso! Bienvenido 🎉", "success");
+}
+
+function renderClientHome() {
   const lbl = document.getElementById("clientNameLbl");
   lbl.textContent = "👤 " + ME.name.split(" ")[0];
   lbl.style.display = "inline";
