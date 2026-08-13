@@ -253,17 +253,15 @@ select.fi option{background:var(--bg2);}
 <!-- ═══════════ LANDING ═══════════ -->
 <div class="page" id="pgLanding">
   <!-- HERO CON LOGO -->
-  <div style="background:linear-gradient(135deg,#1a1a1f 0%,#0f0f12 100%);padding:3rem 2rem;text-align:center;border-bottom:2px solid var(--orange)">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAATmCAIAAAAKnjl9AAAAAXNSR0IArs4c6QAAAIRlWElmTU0AKgAAAAgABQESAAMAAAABAAEA" alt="Logo" style="height:80px;margin-bottom:1.5rem;filter:drop-shadow(0 2px 8px rgba(255,140,0,.3))"/>
+  <div style="background:linear-gradient(135deg,#1a1a1f 0%,#0f0f12 100%);padding:2rem 2rem;text-align:center;border-bottom:2px solid var(--orange)">
     <div style="font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:3px;margin-bottom:.3rem">LUBRICENTRO <span style="color:var(--orange)">ESQUIÚ</span></div>
     <div style="font-size:.95rem;letter-spacing:1px;color:#aaa">TURNOS ONLINE · CÓRDOBA</div>
   </div>
 
-  <!-- BOTONES PRINCIPALES - ARRIBA -->
-  <div style="max-width:900px;margin:0 auto;padding:3rem 2rem">
-    <h2 style="font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:2px;text-align:center;margin-bottom:2rem">¿QUÉ QUERÉS HACER?</h2>
+  <!-- BOTONES PRINCIPALES - ARRIBA (SIN TÍTULO) -->
+  <div style="max-width:900px;margin:0 auto;padding:2rem 2rem">
     
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:3rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.5rem">
       <div class="lcard" onclick="renderClientLogin()" style="cursor:pointer;border:2px solid var(--orange);padding:2rem;text-align:center;transition:all .3s">
         <div style="font-size:3rem;margin-bottom:1rem">🚗</div>
         <h3 style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:1px;margin-bottom:.5rem">SOY CLIENTE</h3>
@@ -277,8 +275,8 @@ select.fi option{background:var(--bg2);}
     </div>
 
     <!-- FOTO DEL LOCAL -->
-    <div style="margin-bottom:3rem;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
-      <img src="data:image/jpeg;base64,/9j/4ShgRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMA" alt="Lubricentro" style="width:100%;height:auto;display:block;max-height:400px;object-fit:cover"/>
+    <div style="margin-bottom:2.5rem;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)">
+      <img src="https://imgur.com/raw/yZLSBps.jpg" alt="Lubricentro" style="width:100%;height:auto;display:block;max-height:400px;object-fit:cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-family=%22Arial%22%3ELubricentro%3C/text%3E%3C/svg%3E'"/>
     </div>
 
     <!-- INFO RÁPIDA -->
@@ -678,16 +676,6 @@ function selVtype(v) {
   document.getElementById("cVtype").value = v;
   document.getElementById("vtAuto").classList.toggle("sel", v === "auto");
   document.getElementById("vtCamion").classList.toggle("sel", v === "camion");
-}
-
-async function tryIdentify() {
-  const pat = (document.getElementById("cPat")?.value || "").trim().toUpperCase().replace(/[\s-]/g, "");
-  const err = document.getElementById("cErr");
-  if (!pat) { err.textContent = "⚠️ Ingresá la patente de tu auto."; err.style.display = "block"; return; }
-  const found = CLIENTS.find(c => c.patent === pat);
-  if (!found) { err.textContent = "⚠️ No encontramos esa patente. Registrate en la otra pestaña."; err.style.display = "block"; return; }
-  ME = found;
-  renderClientHome();
 }
 
 async function doRegisterClient() {
