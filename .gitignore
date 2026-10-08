@@ -1,0 +1,11 @@
+node_modules/
+.local-data/
+.env
+.sites-runtime/
+work/
+outputs/
+dist/client/
+dist/server/
+dist/.openai/
+
+private/

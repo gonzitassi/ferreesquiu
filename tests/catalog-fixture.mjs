@@ -1,0 +1,1 @@
+export const INITIAL_IMPORT={source:'Datos sinteticos de prueba',rows:Array.from({length:80},(_,i)=>({sku:'TEST-'+String(i+1).padStart(3,'0'),name:'Producto de prueba '+(i+1),brand:'TEST',priceCents:10000+i*100}))};
