@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#001730">
+  <meta name="description" content="Ferretería y Lubricentro Esquiú. Negocio familiar con más de 35 años de trayectoria en Villa Esquiú, Córdoba.">
+  <title>Ferretería y Lubricentro Esquiú · Villa Esquiú, Córdoba</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="data.js"></script><script defer src="store.js"></script><script defer src="receipt.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <a href="#content" class="skip-link">Saltar al contenido</a>
+  <div class="topline"><div class="container"><span>🇦🇷 Villa Esquiú, Córdoba <span class="top-extra">&nbsp; | &nbsp; Ferretería y Lubricentro &nbsp; | &nbsp; Más de 35 años junto a vos</span></span><a href="#/contacto">Contacto</a></div></div>
+  <div class="sticky-header">
+    <header class="site-header"><div class="container header-row">
+      <a class="brand" href="#/" aria-label="ESQUIÚ, inicio"><strong>ESQUIÚ</strong><span>FERRETERÍA Y LUBRICENTRO</span></a>
+      <form class="search" id="searchForm" role="search"><label class="sr-only" for="searchCategory">Categoría</label><select id="searchCategory"><option value="">Todas las categorías</option></select><label class="sr-only" for="searchInput">Buscar productos</label><input type="search" id="searchInput" placeholder="Buscá herramientas, productos, códigos..." autocomplete="off"><button type="submit"><span data-icon="search"></span> Buscar</button></form>
+      <div class="header-actions"><button class="icon-button mobile-search-toggle" aria-label="Abrir buscador" data-open-dialog="searchDialog"><span data-icon="search"></span></button><a href="#/cuenta" class="icon-button desktop-action" aria-label="Mi cuenta"><span data-icon="user"></span></a><button class="icon-button desktop-action" aria-label="Ver favoritos" data-open-dialog="favoritesDialog"><span data-icon="heart"></span><span class="counter" id="favCount" hidden>0</span></button><button class="icon-button" aria-label="Ver carrito" data-open-dialog="cartDialog"><span data-icon="cart"></span><span class="counter" id="cartCount" hidden>0</span></button><button class="icon-button menu-toggle" aria-label="Abrir menú" data-open-dialog="menuDialog"><span data-icon="menu"></span></button></div>
+    </div></header>
+    <nav class="nav" aria-label="Navegación principal"><div class="container nav-row"><a class="nav-offers" href="#/ofertas">OFERTAS 🔥</a><a href="#/">INICIO</a><div class="shop-menu"><a href="#/tienda">TIENDA</a><button id="megaToggle" aria-expanded="false" aria-controls="megaMenu" aria-label="Abrir categorías">⌄</button><div id="megaMenu" class="mega-menu" hidden></div></div><a href="#/rubro/jardin-y-aire-libre">PRIMAVERA | VERANO ☀️</a><a href="#/tienda">FERRETERÍA</a><a href="#/lubricentro">LUBRICENTRO</a><a href="#/rubro/herramientas">HERRAMIENTAS</a><a class="business-cta" href="#/empresas"><span data-icon="briefcase"></span>Atención empresas</a></div></nav>
+  </div>
+  <main id="content" tabindex="-1"></main>
+  <div class="benefit-strip"><div class="container" id="benefits"></div></div>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div><a class="brand brand-footer" href="#/"><strong>ESQUIÚ</strong><span>FERRETERÍA Y LUBRICENTRO</span></a><p>Un negocio familiar con más de 35 años de trayectoria. Ferretería, lubricentro y atención cercana en Villa Esquiú, Córdoba.</p></div><div><h3>PRODUCTOS</h3><ul id="footerCategories"></ul></div><div><h3>MÁS INFO</h3><ul><li><a href="#/empresas">Atención empresas</a></li><li><a href="#/contacto">Contactanos</a></li><li><a href="#/como-comprar">Cómo comprar</a></li><li><a href="#/envios">Envíos y retiros</a></li><li><a href="#/cuenta">Mi cuenta</a></li></ul></div><div><h3>CONTACTO</h3><div id="footerContact"></div></div></div><div class="copyright">© 2026 Ferretería y Lubricentro Esquiú.</div></div></footer>
+  <button class="contact-float" aria-label="Abrir opciones de contacto" data-open-dialog="contactDialog"><span data-icon="message"></span></button>
+  <dialog class="drawer" id="cartDialog" aria-labelledby="cartDialogTitle"><header class="dialog-head"><h2 id="cartDialogTitle">TU CARRITO</h2><button class="icon-button" data-close-dialog aria-label="Cerrar carrito"><span data-icon="close"></span></button></header><div class="dialog-body" id="cartDrawerBody"></div></dialog>
+  <dialog class="drawer" id="favoritesDialog" aria-labelledby="favoritesDialogTitle"><header class="dialog-head"><h2 id="favoritesDialogTitle">TUS FAVORITOS</h2><button class="icon-button" data-close-dialog aria-label="Cerrar favoritos"><span data-icon="close"></span></button></header><div class="dialog-body" id="favoritesDrawerBody"></div></dialog>
+  <dialog class="drawer menu-drawer" id="menuDialog" aria-labelledby="menuDialogTitle"><header class="dialog-head"><h2 id="menuDialogTitle">ESQUIÚ</h2><button class="icon-button" data-close-dialog aria-label="Cerrar menú"><span data-icon="close"></span></button></header><div class="dialog-body"><nav aria-label="Menú móvil"><a href="#/">Inicio</a><a href="#/ofertas">Ofertas 🔥</a><a href="#/tienda">Tienda</a><details open><summary>Explorá por rubro</summary><div id="mobileCategories"></div></details><a href="#/lubricentro">Lubricentro</a><a href="#/empresas">Atención empresas</a><a href="#/favoritos">Favoritos</a><a href="#/cuenta">Mi cuenta</a><a href="#/contacto">Contactanos</a></nav></div></dialog>
+  <dialog class="search-dialog" id="searchDialog" aria-labelledby="searchDialogTitle"><header class="dialog-head"><h2 id="searchDialogTitle">Buscá en ESQUIÚ</h2><button class="icon-button" data-close-dialog aria-label="Cerrar buscador"><span data-icon="close"></span></button></header><form class="mobile-search-form" id="mobileSearchForm" role="search"><label class="sr-only" for="mobileSearchInput">Buscar productos</label><input type="search" id="mobileSearchInput" placeholder="Herramientas, productos, códigos..." required><button class="btn" type="submit">Buscar <span data-icon="search"></span></button></form></dialog>
+  <dialog class="contact-dialog" id="contactDialog" aria-labelledby="contactDialogTitle"><header class="dialog-head"><h2 id="contactDialogTitle">Contactanos</h2><button class="icon-button" data-close-dialog aria-label="Cerrar contacto"><span data-icon="close"></span></button></header><div class="dialog-body" id="contactDialogBody"></div></dialog>
+  <dialog class="product-dialog" id="quickDialog" aria-labelledby="quickTitle"><button class="icon-button quick-close" data-close-dialog aria-label="Cerrar vista rápida"><span data-icon="close"></span></button><div id="quickBody"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <noscript><p>Activá JavaScript para usar el buscador, el carrito y la navegación de la tienda.</p></noscript>
+</body>
+</html>
