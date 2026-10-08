@@ -41,7 +41,13 @@ async function saveSetting(p: any, user: any) { const key = text(p.key, "la secc
 }
 
 async function api(req: Request, origin: string) {
-  const route = new URL(req.url).pathname.split("/functions/v1/esquiu-api")[1] || "/"; const method = req.method;
+  const pathname = new URL(req.url).pathname;
+  const functionMarker = "/esquiu-api";
+  const markerIndex = pathname.indexOf(functionMarker);
+  const route = markerIndex >= 0
+    ? pathname.slice(markerIndex + functionMarker.length) || "/"
+    : pathname.replace(/^\/functions\/v1/, "") || "/";
+  const method = req.method;
   try {
     if (route === "/api/public/site" && method === "GET") { const c = await config(); delete c.versions; delete c.payment; return json({ ...c, stockMode: "untracked", orderMode: "confirmation" }, 200, origin); }
     if (route === "/api/public/products" && method === "GET") { const rows = await data<any[]>(db.from("products").select("*").eq("published", true).eq("active", true).order("name")); return json(rows.map(publicProduct), 200, origin); }
