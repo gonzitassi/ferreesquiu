@@ -20,7 +20,7 @@
   async function load(){
     try{
       let rows=ESQUIU_DATA.products;
-      if(ESQUIU_DATA.integrations.catalogEndpoint){const r=await fetch(ESQUIU_DATA.integrations.catalogEndpoint);if(!r.ok)throw Error('Catálogo no disponible.');rows=await r.json()}
+      if(ESQUIU_DATA.integrations.catalogEndpoint){const r=await EsquiuApi.fetch(ESQUIU_DATA.integrations.catalogEndpoint);if(!r.ok)throw Error('Catálogo no disponible.');rows=await r.json()}
       state.products=validateProducts(rows);state.status='ready';state.error=null;
       state.cart=state.cart.filter(r=>state.products.some(p=>p.id===r.id)&&Number.isInteger(r.qty)&&r.qty>0).map(r=>({id:r.id,qty:Math.min(r.qty,limit(state.products.find(p=>p.id===r.id)))})).filter(r=>r.qty>0);
       state.favorites=state.favorites.filter(id=>state.products.some(p=>p.id===id));save();
