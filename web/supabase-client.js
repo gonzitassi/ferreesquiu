@@ -14,11 +14,11 @@
   window.EsquiuApi={
     fetch:request,
     async getSession(){return session()},
-    async getUser(){const s=await session();if(!s)return null;return auth('user',null,'GET').catch(()=>null)},
+    async getUser(){const s=await session();if(!s)return null;const response=await fetch(URL+'/auth/v1/user',{headers:{apikey:KEY,Authorization:'Bearer '+s.access_token}});const user=await response.json().catch(()=>null);return response.ok?user:null},
     async signIn(email,password){const s=await auth('token?grant_type=password',{email,password});s.expires_at=Math.floor(Date.now()/1000)+s.expires_in;save(s);return s},
     async signUp(email,password){return auth('signup?redirect_to='+encodeURIComponent(CUSTOMER_REDIRECT),{email,password})},
     async sendPasswordRecovery(email){return auth('recover?redirect_to='+encodeURIComponent(CUSTOMER_REDIRECT),{email})},
-    async updatePassword(password){const s=await session();if(!s)throw Error('La sesión venció. Volvé a ingresar desde el enlace de recuperación.');return auth('user',{password},'PUT')},
+    async updatePassword(password){const s=await session();if(!s)throw Error('La sesión venció. Volvé a ingresar desde el enlace de recuperación.');const response=await fetch(URL+'/auth/v1/user',{method:'PUT',headers:{apikey:KEY,Authorization:'Bearer '+s.access_token,'Content-Type':'application/json'},body:JSON.stringify({password})});const data=await response.json().catch(()=>({}));if(!response.ok)throw Error(data.msg||data.message||'No se pudo actualizar la contraseña.');return data},
     async signOut(){const s=read();try{if(s)await fetch(URL+'/auth/v1/logout',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+s.access_token}})}finally{localStorage.removeItem(SESSION);sessionStorage.removeItem('esquiu.password-recovery')}}
   };
 })();
