@@ -32,3 +32,9 @@
   .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-hero img:not(.mobile-scene){width:min(54%,260px);height:82%}
   .hero-slider .hero-arrow{top:50%;width:42px;height:48px}
 }
+@media(max-width:900px){
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-copy{position:absolute;display:block;visibility:visible;opacity:1;color:#fff;text-align:left}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-copy small{display:inline-block;transform:rotate(-3deg);background:#ffe000;color:#001730;padding:6px 10px;font-size:clamp(12px,2.2vw,17px);font-weight:900;font-style:italic}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-copy strong{display:block;margin-top:14px;color:#fff;font-size:clamp(28px,5.3vw,42px);font-weight:900;font-style:italic;line-height:1.02;text-shadow:0 2px 12px #001730}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-copy em{color:#ffe000;font-style:inherit}
+}
