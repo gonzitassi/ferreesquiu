@@ -38,3 +38,6 @@
   .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-copy strong{display:block;margin-top:14px;color:#fff;font-size:clamp(28px,5.3vw,42px);font-weight:900;font-style:italic;line-height:1.02;text-shadow:0 2px 12px #001730}
   .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-copy em{color:#ffe000;font-style:inherit}
 }
+
+/* Fill the wide desktop hero; mobile keeps the tall mascot composition. */
+@media(min-width:901px){.hero-slider.has-custom-hero .slide>img{object-fit:cover!important;object-position:center}}
