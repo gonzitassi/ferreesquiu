@@ -81,3 +81,40 @@
 @media(max-width:900px){
  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-hero img.mobile-banner-image{position:absolute!important;inset:0!important;right:auto!important;bottom:auto!important;z-index:2!important;width:100%!important;height:100%!important;max-width:none;padding:8px 12px;object-fit:contain;object-position:center}
 }
+
+
+/* ESQUIÚ: banner móvil a sangre y carrito como panel ligero */
+#cartDialog.drawer{
+  top:126px;
+  right:max(12px,calc((100vw - 1440px)/2 + 24px));
+  bottom:auto;
+  width:min(430px,calc(100vw - 24px));
+  height:auto;
+  max-height:min(70dvh,560px);
+  border-radius:14px;
+  z-index:80;
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+#cartDialog .dialog-head{padding:14px 18px}
+#cartDialog .dialog-body{padding:16px 18px}
+@media(max-width:900px){
+  #cartDialog.drawer{top:112px;right:12px}
+}
+@media(max-width:600px){
+  .hero-slider.has-custom-hero{height:clamp(340px,58svh,440px)}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-hero{background:none}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-hero::after{display:none}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-scene{display:none}
+  .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-banner-image{
+    padding:0!important;
+    object-fit:cover!important;
+    object-position:center center!important;
+  }
+  #cartDialog.drawer{
+    top:94px;
+    right:10px;
+    width:calc(100vw - 20px);
+    max-height:min(68dvh,520px);
+  }
+}
