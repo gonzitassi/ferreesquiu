@@ -77,3 +77,7 @@
  .drawer{width:min(100%,430px)}
  .dialog-body{padding:16px}
 }
+
+@media(max-width:900px){
+ .hero-slider.has-custom-hero .slide.is-custom-slide .mobile-hero img.mobile-banner-image{position:absolute!important;inset:0!important;right:auto!important;bottom:auto!important;z-index:2!important;width:100%!important;height:100%!important;max-width:none;padding:8px 12px;object-fit:contain;object-position:center}
+}
