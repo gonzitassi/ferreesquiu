@@ -135,3 +135,15 @@
 .lusqtoff-banner img{display:block;width:100%;height:auto}
 .lusqtoff-cta{display:flex;justify-content:flex-end;margin-top:14px}
 @media(max-width:600px){.lusqtoff-section{padding-top:18px}.lusqtoff-banner{border-radius:10px}.lusqtoff-cta .btn{width:100%}}
+
+
+/* Landing de marca Lüsqtoff: hero y carrusel, como la página de Husqvarna. */
+.lusqtoff-brand-hero{padding:22px 0 8px}
+.lusqtoff-brand-hero img{display:block;width:100%;height:auto;border-radius:14px}
+.lusqtoff-brand-products{padding-top:22px}
+.lusqtoff-brand-products .section-head{align-items:center}
+.lusqtoff-brand-products .section-head h1{margin:0;font-size:26px;line-height:1.15;font-weight:800}
+.lusqtoff-brand-products .section-head p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 48px)/4)}
+@media(max-width:900px){.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 32px)/3)}}
+@media(max-width:600px){.lusqtoff-brand-hero{padding:14px 0 0}.lusqtoff-brand-hero img{border-radius:12px}.lusqtoff-brand-products{padding-top:24px}.lusqtoff-brand-products .section-head h1{font-size:20px}.lusqtoff-brand-products .section-head p{font-size:11px}.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 10px)/2)}}
