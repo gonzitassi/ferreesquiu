@@ -127,3 +127,11 @@
 #cartDialog .remove{margin-top:4px}
 #cartDialog .summary-row.total{margin:8px 0;padding-top:9px;font-size:16px}
 #cartDialog .dialog-body>.btn{min-height:42px;padding:10px 14px;font-size:13px}
+
+/* Destacado de marca Lüsqtoff, con la imagen completa también en móvil. */
+.lusqtoff-section{padding-top:30px}
+.lusqtoff-banner{display:block;overflow:hidden;border:1px solid var(--border);border-radius:14px;background:#151515;transition:transform .2s,box-shadow .2s}
+.lusqtoff-banner:hover{transform:translateY(-2px);box-shadow:0 10px 28px #00173024}
+.lusqtoff-banner img{display:block;width:100%;height:auto}
+.lusqtoff-cta{display:flex;justify-content:flex-end;margin-top:14px}
+@media(max-width:600px){.lusqtoff-section{padding-top:18px}.lusqtoff-banner{border-radius:10px}.lusqtoff-cta .btn{width:100%}}
