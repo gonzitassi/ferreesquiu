@@ -148,3 +148,5 @@
 .lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 48px)/4)}
 @media(max-width:900px){.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 32px)/3)}}
 @media(max-width:600px){.lusqtoff-brand-hero{padding:14px 0 0}.lusqtoff-brand-hero img{border-radius:12px}.lusqtoff-brand-products{padding-top:24px}.lusqtoff-brand-products .section-head h1{font-size:20px}.lusqtoff-brand-products .section-head p{font-size:11px}.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 10px)/2)}}
+
+.promo span{display:inline-flex;align-items:center;min-height:30px;padding:7px 11px;border-radius:7px;background:var(--yellow);color:var(--navy);font-weight:800;line-height:1.2}.promo:hover span,.promo:focus-visible span{background:#fff}.service-actions{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 0}.service-actions .btn{white-space:normal;text-align:center}@media(max-width:600px){.service-actions .btn{width:100%}}
