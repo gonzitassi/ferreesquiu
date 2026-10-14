@@ -1,4 +1,4 @@
-import { renderReplenishment, setReplenishmentHandlers } from './replenishment.js';
+import { renderReplenishment, setReplenishmentHandlers } from './replenishment.js?v=fix1';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),money=c=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS'}).format(c/100),date=t=>new Date(t).toLocaleString('es-AR');
 const statusNames={pending:'A confirmar',confirmed:'Disponibilidad confirmada',awaiting_payment:'Esperando pago',paid:'Pago registrado',fulfilled:'Entregado',cancelled:'Cancelado'};
 let session,products=[],cfg={},importData,importPreview,currentOrder,toastTimer,renderVersion=0;
