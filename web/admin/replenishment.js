@@ -71,7 +71,7 @@ export function setReplenishmentHandlers({api,toast}) {
       }
     } catch(error) { button.disabled=false;notify(error.message||'No se pudo completar la acción.'); }
   });
-});
+}
 
 const $$ = (s,root=document) => [...root.querySelectorAll(s)];
 export async function renderReplenishment(view='overview',params=new URLSearchParams()) { return loadAndRender(view,params.get('supplier')); }
