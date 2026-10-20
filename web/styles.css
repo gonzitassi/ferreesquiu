@@ -138,15 +138,111 @@
 @media(max-width:600px){.lusqtoff-section{padding-top:18px}.lusqtoff-banner{border-radius:10px}.lusqtoff-cta .btn{width:100%}}
 
 
-/* Landing de marca Lüsqtoff: hero y carrusel, como la página de Husqvarna. */
+/* Página de marca Lüsqtoff: catálogo vertical en computadora y celular. */
 .lusqtoff-brand-hero{padding:22px 0 8px}
 .lusqtoff-brand-hero img{display:block;width:100%;height:auto;border-radius:14px}
 .lusqtoff-brand-products{padding-top:22px}
 .lusqtoff-brand-products .section-head{align-items:center}
 .lusqtoff-brand-products .section-head h1{margin:0;font-size:26px;line-height:1.15;font-weight:800}
 .lusqtoff-brand-products .section-head p{margin:8px 0 0;color:var(--muted);font-size:13px}
-.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 48px)/4)}
-@media(max-width:900px){.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 32px)/3)}}
-@media(max-width:600px){.lusqtoff-brand-hero{padding:14px 0 0}.lusqtoff-brand-hero img{border-radius:12px}.lusqtoff-brand-products{padding-top:24px}.lusqtoff-brand-products .section-head h1{font-size:20px}.lusqtoff-brand-products .section-head p{font-size:11px}.lusqtoff-brand-products .offer-track>.product-card{min-width:calc((100% - 10px)/2)}}
+@media(max-width:600px){.lusqtoff-brand-hero{padding:14px 0 0}.lusqtoff-brand-hero img{border-radius:12px}.lusqtoff-brand-products{padding-top:24px}.lusqtoff-brand-products .section-head h1{font-size:20px}.lusqtoff-brand-products .section-head p{font-size:11px}}
 
 .promo span{display:inline-flex;align-items:center;min-height:30px;padding:7px 11px;border-radius:7px;background:var(--yellow);color:var(--navy);font-weight:800;line-height:1.2}.promo:hover span,.promo:focus-visible span{background:#fff}.service-actions{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 0}.service-actions .btn{white-space:normal;text-align:center}@media(max-width:600px){.service-actions .btn{width:100%}}
+
+/* WhatsApp: botones consistentes y ondas suaves en el acceso flotante. */
+.btn.whatsapp-cta,
+.btn[href^="https://wa.me/"],
+.btn[href^="https://api.whatsapp.com/"],
+.btn[href^="https://web.whatsapp.com/"]{
+  min-height:46px;
+  padding:12px 20px;
+  border:1px solid #128143;
+  border-radius:12px;
+  background:linear-gradient(135deg,#168b49,#11783e);
+  color:#fff;
+  font-weight:700;
+  box-shadow:0 4px 12px #11783e24;
+  transition:background .2s,box-shadow .2s,transform .2s;
+}
+.btn.whatsapp-cta:hover,
+.btn[href^="https://wa.me/"]:hover,
+.btn[href^="https://api.whatsapp.com/"]:hover,
+.btn[href^="https://web.whatsapp.com/"]:hover{
+  background:linear-gradient(135deg,#11783e,#0c6432);
+  border-color:#0c6432;
+  color:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 7px 18px #11783e38;
+}
+.btn.whatsapp-cta:focus-visible,
+.btn[href^="https://wa.me/"]:focus-visible,
+.btn[href^="https://api.whatsapp.com/"]:focus-visible,
+.btn[href^="https://web.whatsapp.com/"]:focus-visible,
+.contact-float:focus-visible{
+  outline:3px solid #11783e;
+  outline-offset:4px;
+}
+.contact-text>.btn[href^="https://wa.me/"]{
+  display:flex;
+  width:fit-content;
+  min-width:min(100%,250px);
+  margin:12px 0 26px;
+}
+.contact-float{
+  display:grid;
+  place-items:center;
+  width:56px;
+  height:56px;
+  isolation:isolate;
+  overflow:visible;
+  background:linear-gradient(145deg,#25d366,#16a34a);
+  box-shadow:0 5px 20px #12814345;
+  transition:transform .2s,box-shadow .2s;
+}
+.contact-float::before,
+.contact-float::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  z-index:-1;
+  border:2px solid #25d366;
+  border-radius:50%;
+  opacity:0;
+  pointer-events:none;
+  animation:whatsapp-radar 3.2s ease-out infinite;
+}
+.contact-float::after{animation-delay:1.6s}
+.contact-float:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px #12814355;
+}
+.contact-float svg{display:block;width:30px;height:30px}
+@keyframes whatsapp-radar{
+  0%{transform:scale(1);opacity:.5}
+  75%,100%{transform:scale(1.65);opacity:0}
+}
+.lusqtoff-product-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
+  align-items:stretch;
+}
+.lusqtoff-product-grid>.product-card{min-width:0}
+.lusqtoff-product-grid .product-card h3{overflow-wrap:anywhere}
+@media(max-width:1100px){
+  .lusqtoff-product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+}
+@media(max-width:700px){
+  .lusqtoff-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:600px){
+  .contact-float{width:52px;height:52px;right:18px;bottom:max(20px,env(safe-area-inset-bottom))}
+  .contact-text>.btn[href^="https://wa.me/"]{width:100%;min-width:0}
+  .lusqtoff-product-grid .product-price{font-size:clamp(13px,3.8vw,16px)}
+}
+@media(max-width:340px){
+  .lusqtoff-product-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .contact-float::before,.contact-float::after{display:none}
+}
