@@ -246,3 +246,22 @@
 @media(prefers-reduced-motion:reduce){
   .contact-float::before,.contact-float::after{display:none}
 }
+
+/* Visible store shortcuts on mobile and sorting shared by every catalog. */
+.mobile-quick-nav{display:none}
+.product-sort{display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;font-weight:600}
+.product-sort select{min-height:44px;max-width:100%;padding:10px 32px 10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--light);color:var(--navy);font-weight:600;cursor:pointer}
+.catalog-toolbar{flex-wrap:wrap;gap:12px}
+@media(max-width:900px){
+  .mobile-quick-nav{display:block;border-top:1px solid #eef1f5;border-bottom:1px solid var(--border);background:#fff}
+  .mobile-quick-nav .container{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding-top:5px;padding-bottom:5px}
+  .mobile-quick-nav a{display:flex;align-items:center;justify-content:center;min-height:40px;padding:8px 4px;border-radius:8px;font-size:12px;font-weight:800}
+  .mobile-quick-nav a:hover,.mobile-quick-nav a[aria-current="page"]{background:var(--yellow);color:var(--navy)}
+  #cartDialog.drawer{top:145px}
+}
+@media(max-width:600px){
+  .lusqtoff-brand-products .section-head{flex-direction:column;align-items:stretch;gap:16px}
+  .product-sort{width:100%;justify-content:space-between;gap:8px}
+  .product-sort select{flex:1;min-width:0;max-width:230px;font-size:12px}
+  .catalog-toolbar>span{width:100%}
+}
