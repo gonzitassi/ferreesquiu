@@ -265,3 +265,15 @@
   .product-sort select{flex:1;min-width:0;max-width:230px;font-size:12px}
   .catalog-toolbar>span{width:100%}
 }
+
+/* Account shortcut remains available on small screens. */
+.account-shortcut[aria-current="page"]{background:var(--light);border-radius:10px}
+.customer-account-card .account-heading strong{overflow-wrap:anywhere}
+.customer-account-card>.empty-state{padding:20px 0}
+@media(max-width:380px){
+  .header-row{gap:8px}
+  .header-row .brand strong{font-size:26px}
+  .header-row .brand span{font-size:6.3px;letter-spacing:.2px}
+  .header-actions{gap:1px}
+  .header-actions .icon-button{width:36px;height:44px;padding:6px}
+}
