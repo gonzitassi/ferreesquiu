@@ -8,8 +8,8 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=customer-orders-20261021">
-  <script src="supabase-client.js?v=customer-account2"></script><script defer src="data.js"></script><script defer src="store.js"></script><script defer src="receipt.js"></script><script defer src="app.js?v=customer-orders-20261021"></script>
+  <link rel="stylesheet" href="styles.css?v=mobile-logos-20261028">
+  <script src="supabase-client.js?v=customer-account2"></script><script defer src="data.js"></script><script defer src="store.js"></script><script defer src="receipt.js"></script><script defer src="app.js?v=mobile-logos-20261028"></script>
 </head>
 <body>
   <a href="#content" class="skip-link">Saltar al contenido</a>
@@ -21,7 +21,8 @@
       <div class="header-actions"><button class="icon-button mobile-search-toggle" aria-label="Abrir buscador" data-open-dialog="searchDialog"><span data-icon="search"></span></button><a href="#/cuenta" class="icon-button account-shortcut" aria-label="Mi cuenta" title="Mi cuenta"><span data-icon="user"></span></a><button class="icon-button desktop-action" aria-label="Ver favoritos" data-open-dialog="favoritesDialog"><span data-icon="heart"></span><span class="counter" id="favCount" hidden>0</span></button><button class="icon-button" aria-label="Ver carrito" data-open-dialog="cartDialog"><span data-icon="cart"></span><span class="counter" id="cartCount" hidden>0</span></button><button class="icon-button menu-toggle" aria-label="Abrir menú" data-open-dialog="menuDialog"><span data-icon="menu"></span></button></div>
     </div></header>
     <nav class="nav" aria-label="Navegación principal"><div class="container nav-row"><a class="nav-offers" href="#/ofertas">OFERTAS 🔥</a><a href="#/">INICIO</a><div class="shop-menu"><a href="#/tienda">TIENDA</a><button id="megaToggle" aria-expanded="false" aria-controls="megaMenu" aria-label="Abrir categorías">⌄</button><div id="megaMenu" class="mega-menu" hidden></div></div><a href="#/rubro/jardin-y-aire-libre">PRIMAVERA | VERANO ☀️</a><a href="#/ferreteria">FERRETERÍA</a><a href="#/lubricentro">LUBRICENTRO</a><a href="#/rubro/herramientas">HERRAMIENTAS</a><a href="#/marca/lusqtoff">LÜSQTOFF</a><a href="#/marca/dogo">DOGO</a></div></nav>
-    <nav class="mobile-quick-nav" aria-label="Accesos a la tienda"><div class="container"><a href="#/tienda">Tienda</a><a href="#/marca/lusqtoff">Lüsqtoff</a><a href="#/marca/dogo">DOGO</a></div></nav>
+    <form class="mobile-sticky-search container" id="stickySearchForm" role="search"><label class="sr-only" for="stickySearchInput">Buscar productos</label><input id="stickySearchInput" type="search" placeholder="Buscá productos, marcas o códigos..." autocomplete="off"><button type="submit" aria-label="Buscar"><span data-icon="search"></span></button></form>
+    <nav class="mobile-quick-nav" aria-label="Accesos a la tienda"><div class="container"><a class="quick-store" href="#/tienda"><span data-icon="tools"></span> TIENDA</a><a class="quick-lusqtoff" href="#/marca/lusqtoff" aria-label="Lüsqtoff"><img src="assets/logo-lusqtoff-cliente.png" alt="Lüsqtoff"></a><a class="quick-dogo" href="#/marca/dogo" aria-label="DOGO"><img src="assets/logo-dogo-cliente.png" alt="DOGO"></a></div></nav>
   </div>
   <main id="content" tabindex="-1"></main>
   <div class="benefit-strip"><div class="container" id="benefits"></div></div>

@@ -277,3 +277,29 @@
   .header-actions{gap:1px}
   .header-actions .icon-button{width:36px;height:44px;padding:6px}
 }
+
+/* Barra de búsqueda y accesos de marca en celulares. */
+.mobile-sticky-search{display:none}
+@media(max-width:900px){
+ .mobile-search-toggle{display:none}
+ .mobile-sticky-search{display:flex;gap:0;padding-top:4px;padding-bottom:8px}
+ .mobile-sticky-search input{min-width:0;flex:1;height:42px;padding:0 14px;border:1px solid var(--border);border-right:0;border-radius:10px 0 0 10px;background:var(--light);font-size:13px}
+ .mobile-sticky-search button{width:48px;height:42px;border:0;border-radius:0 10px 10px 0;background:var(--navy);color:white}
+ .mobile-quick-nav .container{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+ .mobile-quick-nav .container::-webkit-scrollbar{display:none}
+ .mobile-quick-nav a{flex:1 0 auto;min-width:88px;height:44px;padding:3px 9px;border:1px solid #e5e9ef;overflow:hidden}
+ .mobile-quick-nav .quick-store{gap:5px;background:var(--navy);color:var(--yellow);border-color:var(--navy)}
+ .quick-store svg{width:17px;height:17px}
+ .mobile-quick-nav .quick-lusqtoff{min-width:118px;background:white}
+ .quick-lusqtoff img{width:116px;height:40px;object-fit:cover}
+ .mobile-quick-nav .quick-dogo{background:#ffdc00;border-color:#ffdc00}
+ .quick-dogo img{width:42px;height:40px;object-fit:contain}
+ #cartDialog.drawer{top: min(200px, 27vh)}
+}
+@media(max-width:600px){
+ .promo-stack{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:165px;gap:10px}
+ .promo{min-width:0;padding:12px;border-radius:12px}
+ .promo small{font-size:9px;line-height:1.2}
+ .promo strong{font-size:clamp(15px,4.4vw,20px);line-height:1.1;overflow-wrap:anywhere}
+ .promo span{font-size:9px;min-height:28px;padding:6px}
+}
