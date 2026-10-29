@@ -303,3 +303,8 @@
  .promo strong{font-size:clamp(15px,4.4vw,20px);line-height:1.1;overflow-wrap:anywhere}
  .promo span{font-size:9px;min-height:28px;padding:6px}
 }
+
+/* Mostrar las imágenes de los accesos sin oscurecerlas. */
+.promo img{opacity:1}
+.promo:after{display:none}
+.promo strong,.promo small{text-shadow:0 1px 5px #001730,0 1px 3px #001730}
