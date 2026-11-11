@@ -45,7 +45,17 @@ function stockQuantity(value: unknown, label: string, allowZero = true) {
   return Math.round(value * 1000) / 1000;
 }
 function stockItem(row: any, rule?: any) {
-  return { sku: row.sku, name: row.product_name, category: row.category, stock: Number(row.current_stock), minStock: Number(rule?.min_stock ?? row.min_stock ?? 0), supplier: rule?.supplier_override?.trim() || row.supplier || "", suggestedQty: rule?.suggested_quantity == null ? null : Number(rule.suggested_quantity), priceCents: Number(row.price_cents) };
+  return { sku: row.sku, name: row.product_name, brand: row.brand || "", category: row.category, stock: row.current_stock == null ? null : Number(row.current_stock), minStock: (rule?.min_stock ?? row.min_stock) == null ? null : Number(rule?.min_stock ?? row.min_stock), supplier: rule?.supplier_override?.trim() || row.supplier || "", suggestedQty: rule?.suggested_quantity == null ? null : Number(rule.suggested_quantity), priceCents: Number(row.price_cents) };
+}
+async function latestStockSource() {
+  const snapshot = await data<any>(db.from("stock_snapshots").select("id,source,item_count,imported_by,imported_at").order("imported_at", { ascending: false }).limit(1).maybeSingle());
+  if (snapshot) {
+    const rows = await data<any[]>(db.from("stock_snapshot_items").select("sku,product_name,category,current_stock,min_stock,supplier,price_cents").eq("snapshot_id", snapshot.id).order("product_name").limit(500));
+    return { snapshot, rows, sample: false };
+  }
+  const sample = await data<any[]>(db.rpc("esquiu_alegon_muestra"));
+  const rows = sample.map(p => ({ sku: p.codigo, product_name: p.descripcion, brand: p.marca, category: "", current_stock: p.stock_alegon, min_stock: null, supplier: "", price_cents: Math.round(Number(p.precio_exportado) * 100) }));
+  return { snapshot: null, rows, sample: true };
 }
 async function replenishmentApi(route: string, method: string, req: Request, user: any, origin: string) {
   const base = "/api/admin/replenishment";
@@ -54,17 +64,14 @@ async function replenishmentApi(route: string, method: string, req: Request, use
     return json({ rows }, 200, origin);
   }
   if (route === base && method === "GET") {
-    const snapshot = await data<any>(db.from("stock_snapshots").select("id,source,item_count,imported_by,imported_at").order("imported_at", { ascending: false }).limit(1).maybeSingle());
-    let items: any[] = [];
-    if (snapshot) {
-      const sourceRows = await data<any[]>(db.from("stock_snapshot_items").select("sku,product_name,category,current_stock,min_stock,supplier,price_cents").eq("snapshot_id", snapshot.id).order("product_name").limit(500));
-      const rules = sourceRows.length ? await data<any[]>(db.from("stock_item_rules").select("sku,min_stock,supplier_override,suggested_quantity").in("sku", sourceRows.map(row => row.sku))) : [];
-      const bySku = new Map(rules.map(rule => [rule.sku, rule])); items = sourceRows.map(row => stockItem(row, bySku.get(row.sku)));
-    }
+    const { snapshot, rows: sourceRows, sample } = await latestStockSource();
+    const rules = sourceRows.length ? await data<any[]>(db.from("stock_item_rules").select("sku,min_stock,supplier_override,suggested_quantity").in("sku", sourceRows.map(row => row.sku))) : [];
+    const bySku = new Map(rules.map(rule => [rule.sku, rule]));
+    const items = sourceRows.map(row => stockItem(row, bySku.get(row.sku)));
     const orders = await data<any[]>(db.from("replenishment_orders").select("id,code,supplier,status,item_count,total_cents,created_by,created_at,sent_at,received_at").order("created_at", { ascending: false }).limit(100));
     const ids = orders.map(order => order.id), lines = ids.length ? await data<any[]>(db.from("replenishment_order_items").select("order_id,sku,product_name,quantity,unit_price_cents").in("order_id", ids)) : [];
     const linesByOrder = new Map<string, any[]>(); for (const line of lines) { const list = linesByOrder.get(line.order_id) || []; list.push(line); linesByOrder.set(line.order_id, list); }
-    return json({ snapshot: snapshot ? { ...snapshot, importedAt: Number(snapshot.imported_at) } : null, items, orders: orders.map(order => ({ id: order.id, code: order.code, supplier: order.supplier, status: order.status, itemCount: order.item_count, totalCents: Number(order.total_cents), createdBy: order.created_by, createdAt: Number(order.created_at), sentAt: order.sent_at == null ? null : Number(order.sent_at), receivedAt: order.received_at == null ? null : Number(order.received_at), items: (linesByOrder.get(order.id) || []).map(line => ({ sku: line.sku, name: line.product_name, quantity: Number(line.quantity), unitPriceCents: Number(line.unit_price_cents) })) })) }, 200, origin);
+    return json({ snapshot: snapshot ? { ...snapshot, importedAt: Number(snapshot.imported_at) } : null, sample, items, orders: orders.map(order => ({ id: order.id, code: order.code, supplier: order.supplier, status: order.status, itemCount: order.item_count, totalCents: order.total_cents == null ? null : Number(order.total_cents), createdBy: order.created_by, createdAt: Number(order.created_at), sentAt: order.sent_at == null ? null : Number(order.sent_at), receivedAt: order.received_at == null ? null : Number(order.received_at), items: (linesByOrder.get(order.id) || []).map(line => ({ sku: line.sku, name: line.product_name, quantity: Number(line.quantity), unitPriceCents: line.unit_price_cents == null ? null : Number(line.unit_price_cents) })) })) }, 200, origin);
   }
   if (route === `${base}/import` && method === "POST") {
     const p = await body(req, 1_500_000); if (!Array.isArray(p.rows) || !p.rows.length || p.rows.length > 500) fail(400, "Importá entre 1 y 500 productos por archivo.");
@@ -76,20 +83,21 @@ async function replenishmentApi(route: string, method: string, req: Request, use
   }
   const ruleMatch = route.match(/^\/api\/admin\/replenishment\/rules\/([^/]+)$/);
   if (ruleMatch && method === "PUT") {
-    const sku = decodeURIComponent(ruleMatch[1]), p = await body(req, 3000), minimum = stockQuantity(p.minStock, "el stock mínimo"), suggested = stockQuantity(p.suggestedQty, "la sugerencia"), supplier = text(p.supplier || "", "el proveedor", 180, false);
-    const latest = await data<any>(db.from("stock_snapshots").select("id").order("imported_at", { ascending: false }).limit(1).maybeSingle()), exists = latest ? await data<any>(db.from("stock_snapshot_items").select("sku").eq("snapshot_id", latest.id).eq("sku", sku).maybeSingle()) : null;
+    const sku = decodeURIComponent(ruleMatch[1]), p = await body(req, 3000), minimum = p.minStock == null ? null : stockQuantity(p.minStock, "el stock mínimo"), suggested = p.suggestedQty == null ? null : stockQuantity(p.suggestedQty, "la sugerencia"), supplier = text(p.supplier || "", "el proveedor", 180, false);
+    const { rows: currentRows } = await latestStockSource(), exists = currentRows.some(row => row.sku === sku);
     if (!exists) fail(404, "El producto no está en la última importación.");
     await data(db.from("stock_item_rules").upsert({ sku, min_stock: minimum, supplier_override: supplier || null, suggested_quantity: suggested, updated_by: user.email, updated_at: now() }, { onConflict: "sku" }).select("sku"));
     await audit(user, "stock-rule", sku, { minimum, suggested, supplier }); return json({ saved: true }, 200, origin);
   }
   if (route === `${base}/orders` && method === "POST") {
     const p = await body(req, 100_000); if (!Array.isArray(p.items) || !p.items.length || p.items.length > 200) fail(400, "Elegí entre 1 y 200 productos para el pedido.");
-    const snapshot = await data<any>(db.from("stock_snapshots").select("id").order("imported_at", { ascending: false }).limit(1).maybeSingle()); if (!snapshot) fail(409, "Importá primero un archivo de stock.");
-    const sourceRows = await data<any[]>(db.from("stock_snapshot_items").select("sku,product_name,supplier,price_cents").eq("snapshot_id", snapshot.id)), rules = sourceRows.length ? await data<any[]>(db.from("stock_item_rules").select("sku,supplier_override").in("sku", sourceRows.map(row => row.sku))) : [];
+    const { rows: sourceRows, sample } = await latestStockSource();
+    if (!sourceRows.length) fail(409, "Importá primero un archivo de stock.");
+    const rules = await data<any[]>(db.from("stock_item_rules").select("sku,supplier_override").in("sku", sourceRows.map(row => row.sku)));
     const bySku = new Map(sourceRows.map(row => [row.sku, row])), ruleBySku = new Map(rules.map(rule => [rule.sku, rule])), groups = new Map<string, any[]>(), seen = new Set<string>();
-    for (const item of p.items) { const sku = text(item.sku, "el código", 80); if (seen.has(sku)) fail(400, `Producto repetido: ${sku}.`); seen.add(sku); const source = bySku.get(sku); if (!source) fail(409, `El producto ${sku} ya no está en el último snapshot. Actualizá la página.`); const quantity = stockQuantity(item.quantity, `la cantidad para ${sku}`, false), supplier = ruleBySku.get(sku)?.supplier_override?.trim() || source.supplier || "Sin proveedor", list = groups.get(supplier) || []; list.push({ sku, product_name: source.product_name, quantity, unit_price_cents: Number(source.price_cents) }); groups.set(supplier, list); }
+    for (const item of p.items) { const sku = text(item.sku, "el código", 80); if (seen.has(sku)) fail(400, `Producto repetido: ${sku}.`); seen.add(sku); const source = bySku.get(sku); if (!source) fail(409, `El producto ${sku} ya no está en el último snapshot. Actualizá la página.`); const quantity = stockQuantity(item.quantity, `la cantidad para ${sku}`, false), supplier = ruleBySku.get(sku)?.supplier_override?.trim() || source.supplier || "Sin proveedor", list = groups.get(supplier) || []; if (sample && supplier === "Sin proveedor") fail(400, `Asigná y guardá el proveedor de ${sku} antes de preparar el pedido.`); list.push({ sku, product_name: source.product_name, quantity, unit_price_cents: sample ? null : Number(source.price_cents) }); groups.set(supplier, list); }
     const created: any[] = [];
-    for (const [supplier, lines] of groups) { const orderId = id(), time = now(), code = `REP-${orderId.slice(0, 8).toUpperCase()}`, total = lines.reduce((sum, line) => sum + Math.round(line.unit_price_cents * line.quantity), 0); await data(db.from("replenishment_orders").insert({ id: orderId, code, supplier, status: "draft", item_count: lines.length, total_cents: total, created_by: user.email, created_at: time })); try { await data(db.from("replenishment_order_items").insert(lines.map(line => ({ ...line, order_id: orderId })))); } catch (error) { await db.from("replenishment_orders").delete().eq("id", orderId); throw error; } created.push({ id: orderId, code, supplier, itemCount: lines.length, totalCents: total }); }
+    for (const [supplier, lines] of groups) { const orderId = id(), time = now(), code = `REP-${orderId.slice(0, 8).toUpperCase()}`, total = sample ? null : lines.reduce((sum, line) => sum + Math.round(line.unit_price_cents * line.quantity), 0); await data(db.from("replenishment_orders").insert({ id: orderId, code, supplier, status: "draft", item_count: lines.length, total_cents: total, created_by: user.email, created_at: time })); try { await data(db.from("replenishment_order_items").insert(lines.map(line => ({ ...line, order_id: orderId })))); } catch (error) { await db.from("replenishment_orders").delete().eq("id", orderId); throw error; } created.push({ id: orderId, code, supplier, itemCount: lines.length, totalCents: total }); }
     await audit(user, "replenishment-order", created.map(order => order.code).join(","), { suppliers: created.length, products: p.items.length }); return json({ created: created.length, orders: created }, 201, origin);
   }
   const orderMatch = route.match(/^\/api\/admin\/replenishment\/orders\/([0-9a-f-]{36})$/);
