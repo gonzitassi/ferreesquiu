@@ -82,6 +82,7 @@ const $$ = (s,root=document) => [...root.querySelectorAll(s)];
 export async function renderReplenishment(view='overview',params=new URLSearchParams()) { return loadAndRender(view,params.get('supplier')); }
 
 async function loadAndRender(view='overview',supplier=null) {
+  if(view==='muestra')return sampleView(await apiCall('replenishment/alegon-sample'));
   stockData=await apiCall('replenishment');
   if(view==='alegon')return alegonView();
   if(view==='import')return importView();
@@ -92,7 +93,7 @@ async function loadAndRender(view='overview',supplier=null) {
 }
 
 function tabs(active) {
-  return `<nav class="stock-tabs" aria-label="Secciones de stock">${[['overview','Hoy'],['stock','Stock'],['suppliers','Proveedores'],['orders','Pedidos'],['import','Importar'],['alegon','Archivos ALEGON']].map(([key,label])=>`<a class="${active===key?'active':''}" href="#/replenishment?view=${key}">${label}</a>`).join('')}</nav>`;
+  return `<nav class="stock-tabs" aria-label="Secciones de stock">${[['overview','Hoy'],['stock','Stock'],['suppliers','Proveedores'],['orders','Pedidos'],['import','Importar'],['alegon','Archivos ALEGON'],['muestra','Muestra guardada']].map(([key,label])=>`<a class="${active===key?'active':''}" href="#/replenishment?view=${key}">${label}</a>`).join('')}</nav>`;
 }
 function title(view,heading,subtitle,actions='') {
   return `<div class="page-head"><div><p class="stock-eyebrow">STOCK Y REPOSICIÓN</p><h1>${heading}</h1><p class="muted">${subtitle}</p></div><div class="actions">${actions}</div></div>${tabs(view)}`;
@@ -134,6 +135,11 @@ function ordersView() {
   const statuses={draft:'Borrador',sent:'Enviado',received:'Recibido'};
   const rows=(stockData.orders||[]).map(order=>`<article class="replenishment-order"><div class="order-head"><div><p class="stock-eyebrow">${esc(order.code)}</p><h2>${esc(order.supplier)}</h2><span class="muted">${esc(stamp(order.createdAt))} · ${order.itemCount} productos</span></div><span class="badge ${esc(order.status)}">${statuses[order.status]||esc(order.status)}</span></div><div class="order-lines">${order.items.map(item=>`<div><span>${esc(item.sku)} · ${esc(item.name)}</span><b>${units(item.quantity)} u. · ${money(item.unitPriceCents)}</b></div>`).join('')}</div><div class="order-total"><span>Total estimado</span><strong>${money(order.totalCents)}</strong></div><div class="stock-card-actions"><button class="btn outline" data-copy-replenishment="${esc(order.id)}">Copiar mensaje</button>${order.status==='draft'?`<button class="btn" data-replenishment-status="${esc(order.id)}" data-next-status="sent">Marcar enviado</button>`:''}${order.status==='sent'?`<button class="btn yellow" data-replenishment-status="${esc(order.id)}" data-next-status="received">Marcar recibido</button>`:''}</div><p class="muted order-note">Copiá el texto y envialo manualmente por WhatsApp o correo. No se envía automáticamente.</p></article>`).join('');
   return title('orders','Pedidos a proveedores','Historial de pedidos preparados desde Esquiú.')+`<div class="notice stock-safety">Los estados y pedidos son registros internos de Esquiú. Marcar un pedido no actualiza el stock de Alegon.</div><div class="order-grid">${rows||'<div class="empty">Todavía no hay pedidos. Desde Stock podés preparar uno.</div>'}</div>`;
+}
+function sampleView(result) {
+  const rows=Array.isArray(result.rows)?result.rows:[];
+  const price=value=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',minimumFractionDigits:2,maximumFractionDigits:3}).format(Number(value));
+  return title('muestra','Muestra guardada en Supabase','Cinco productos Lüsqtoff de la exportación compartida.')+`<div class="notice stock-safety"><strong>Muestra inicial:</strong> el stock proviene de ALEGON y está pendiente de conteo físico. El precio exportado debe confirmarse antes de usarlo para vender o comprar. Esta copia no se actualiza automáticamente.</div><section class="panel"><div class="panel-title"><div><h2>Productos de la muestra</h2><p class="muted">Los datos se consultan en Supabase para administradores. No modifican ALEGON ni la tienda.</p></div><button class="btn outline" data-stock-refresh>Actualizar vista</button></div><div class="table-wrap"><table><thead><tr><th>Código</th><th>Marca</th><th>Producto</th><th>Precio exportado</th><th>Stock registrado</th><th>Conteo físico</th></tr></thead><tbody>${rows.map(row=>`<tr><td>${esc(row.codigo)}</td><td>${esc(row.marca)}</td><td>${esc(row.descripcion)}</td><td>${price(row.precio_exportado)}</td><td>${row.stock_alegon==null?'Sin dato':esc(row.stock_alegon)}</td><td>${row.stock_fisico_verificado?'Verificado':'Pendiente'}</td></tr>`).join('')||'<tr><td colspan="6">No hay productos en la muestra.</td></tr>'}</tbody></table></div></section>`;
 }
 function alegonView() {
   return title('alegon','Revisar archivos de ALEGON','Uní precios y stock por código antes de decidir cómo importarlos.')+`<div class="notice stock-safety"><strong>Vista previa local:</strong> los datos pegados solo se procesan en este navegador y se pierden al salir de la sección. No se guardan ni se envían. El stock de ALEGON está pendiente de conteo físico; el precio debe verificarse.</div><div class="panel"><label class="field">1. Pegá las líneas de precios<textarea id="alegonPrices" rows="6" placeholder="Código;marca;descripción;código adicional;precio;indicador"></textarea></label><label class="field">2. Pegá las líneas de stock<textarea id="alegonStock" rows="6" placeholder="Identificador;código;cantidad"></textarea></label><button class="btn yellow" data-alegon-preview>Ver productos</button><div id="alegonResults" aria-live="polite"></div></div>`;

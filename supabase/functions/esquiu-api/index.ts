@@ -7,7 +7,7 @@ const db = createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: fal
 const owners = new Set((Deno.env.get("ADMIN_EMAILS") || "gonzitassi@gmail.com").split(",").map(x => x.trim().toLowerCase()).filter(Boolean));
 const roles = ["admin", "catalog", "orders"];
 const statuses = ["pending", "confirmed", "awaiting_payment", "paid", "fulfilled", "cancelled"];
-const origins = new Set(["https://gonzitassi.github.io", "http://127.0.0.1:4190", "http://localhost:4190"]);
+const origins = new Set(["https://ferreteriaesquiu.netlify.app", "https://gonzitassi.github.io", "http://127.0.0.1:4190", "http://localhost:4190"]);
 const json = (data: unknown, status = 200, origin = "") => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...(origin ? { "access-control-allow-origin": origin, "access-control-allow-methods": "GET,POST,PUT,OPTIONS", "access-control-allow-headers": "authorization, apikey, content-type, idempotency-key, x-file-name, x-esquiu-admin", "access-control-max-age": "86400", vary: "Origin" } : {}) } });
 class HttpError extends Error { constructor(readonly status: number, message: string) { super(message); } }
 const fail = (status: number, message: string): never => { throw new HttpError(status, message); };
@@ -49,6 +49,10 @@ function stockItem(row: any, rule?: any) {
 }
 async function replenishmentApi(route: string, method: string, req: Request, user: any, origin: string) {
   const base = "/api/admin/replenishment";
+  if (route === `${base}/alegon-sample` && method === "GET") {
+    const rows = await data<any[]>(db.rpc("esquiu_alegon_muestra"));
+    return json({ rows }, 200, origin);
+  }
   if (route === base && method === "GET") {
     const snapshot = await data<any>(db.from("stock_snapshots").select("id,source,item_count,imported_by,imported_at").order("imported_at", { ascending: false }).limit(1).maybeSingle());
     let items: any[] = [];
@@ -156,4 +160,5 @@ async function importRows(p: any, user: any, preview: boolean, origin: string) {
 async function upload(req: Request, user: any, origin: string) { const type=req.headers.get("content-type")||"", raw=new Uint8Array(await req.arrayBuffer()); if(!new Set(["image/png","image/jpeg","image/webp"]).has(type))fail(400,"Usá PNG, JPG o WebP."); if(raw.length<12||raw.length>5_000_000)fail(413,"La imagen está vacía o supera los 5 MB."); const sig=Array.from(raw.slice(0,12));const ok=type==="image/png"?sig.slice(0,8).join(",")==="137,80,78,71,13,10,26,10":type==="image/jpeg"?sig[0]===255&&sig[1]===216&&sig[2]===255:String.fromCharCode(...sig.slice(0,4))==="RIFF"&&String.fromCharCode(...sig.slice(8,12))==="WEBP";if(!ok)fail(400,"El contenido no coincide con el formato de la imagen.");const mediaId=id(),key=`images/${mediaId}`,name=text(req.headers.get("x-file-name")||"imagen","el nombre",180);const uploaded=await db.storage.from("esquiu-images").upload(key,raw,{contentType:type,upsert:false});if(uploaded.error)throw Error(uploaded.error.message);const url=db.storage.from("esquiu-images").getPublicUrl(key).data.publicUrl;try{await data(db.from("media").insert({id:mediaId,key,content_type:type,size:raw.length,name,created_by:user.email,created_at:now()}));await audit(user,"upload",mediaId);}catch(e){await db.storage.from("esquiu-images").remove([key]);throw e;}return json({id:mediaId,url},201,origin); }
 
 Deno.serve(async req => { const origin=req.headers.get("origin")||""; if(origin&&!origins.has(origin))return json({error:"Origen no permitido."},403); if(req.method==="OPTIONS")return new Response(null,{status:204,headers:{"access-control-allow-origin":origin,"access-control-allow-methods":"GET,POST,PUT,OPTIONS","access-control-allow-headers":"authorization, apikey, content-type, idempotency-key, x-file-name, x-esquiu-admin","access-control-max-age":"86400","vary":"Origin"}}); return await api(req,origin||"https://gonzitassi.github.io"); });
+
 
